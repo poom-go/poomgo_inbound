@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>고객사 등록 가이드</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <style>
     :root {
       --bg: #F3F4F6;
@@ -114,6 +112,7 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      flex-wrap: wrap;
     }
 
     .step-badge {
@@ -261,6 +260,8 @@
       font-weight: 800;
       font-size: 17px;
       transition: 0.2s;
+      border: 0;
+      cursor: pointer;
     }
 
     .btn-link:hover {
@@ -497,17 +498,9 @@
       align-items: center;
     }
 
-    .fake-input.w-sm {
-      min-width: 120px;
-    }
-
-    .fake-input.w-md {
-      min-width: 220px;
-    }
-
-    .fake-input.w-lg {
-      min-width: 420px;
-    }
+    .fake-input.w-sm { min-width: 120px; }
+    .fake-input.w-md { min-width: 220px; }
+    .fake-input.w-lg { min-width: 420px; }
 
     .highlight-red {
       color: #DC2626;
@@ -572,6 +565,19 @@
       font-weight: 700;
     }
 
+    .next-guide-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .next-guide-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #0040D1;
+    }
+
     @media (max-width: 600px) {
       .header h1 {
         font-size: 26px;
@@ -628,13 +634,7 @@
           </p>
         </div>
         <div class="img-container">
-          <img
-            id="step1Img"
-            class="zoomable"
-            src=""
-            data-zoom-src=""
-            alt="Step 1 이미지"
-          >
+          <img id="step1Img" class="zoomable" src="" data-zoom-src="" alt="Step 1 이미지">
           <div class="img-hint">클릭해서 확대</div>
         </div>
       </div>
@@ -651,7 +651,6 @@
             <span class="group-label">사업자 및 브랜드 정보</span>
 
             <div class="form-wrap">
-
               <div class="form-card">
                 <div class="card-head">
                   <div class="head-left">
@@ -925,13 +924,7 @@
         </p>
 
         <div class="img-container" style="margin-bottom: 24px;">
-          <img
-            id="step3Img"
-            class="zoomable"
-            src=""
-            data-zoom-src=""
-            alt="Step 3 이미지"
-          >
+          <img id="step3Img" class="zoomable" src="" data-zoom-src="" alt="Step 3 이미지">
           <div class="img-hint">클릭해서 확대</div>
         </div>
 
@@ -982,6 +975,54 @@
       </div>
     </section>
 
+    <section class="step-card">
+      <div class="step-head">
+        <span class="step-badge">Next</span>
+        <h2 class="step-title">다음 단계 안내</h2>
+      </div>
+      <div class="step-body">
+        <div class="desc-box" style="margin-bottom:16px;">
+          <p class="desc-text" style="margin:0;">
+            고객사 등록이 완료되었다면 아래 체크 후
+            <b>풀필먼트 연동하기</b> 단계로 이동해주세요.
+          </p>
+        </div>
+
+        <div class="form-card" style="margin-top:0;">
+          <div class="form-body">
+            <div class="form-row">
+              <div class="form-label">등록 완료 확인<span class="req-dot">*</span></div>
+              <div class="form-field">
+                <div class="next-guide-box">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:#111827;">
+                    <input type="checkbox" id="registerDoneCheck" />
+                    고객사 등록 완료를 확인했습니다.
+                  </label>
+
+                  <div class="submit-guide">
+                    체크 완료 후 아래 버튼을 클릭하면 다음 단계로 이동합니다.
+                  </div>
+
+                  <a
+                    href="./fulfillment.html"
+                    id="nextStepBtn"
+                    class="btn-link"
+                    style="pointer-events:none; opacity:.45;"
+                  >
+                    풀필먼트 연동하기
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"></path>
+                      <path d="M13 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <div class="img-modal" id="imgModal">
@@ -1015,11 +1056,7 @@
         step1Thumb: driveThumb('19WBv4xUmSRX1ZBShKHh8hpfmFd-fLY_P', 1600),
         step1Zoom: driveThumb('19WBv4xUmSRX1ZBShKHh8hpfmFd-fLY_P', 4000),
         step3Thumb: driveThumb('1LmDFZOvxjhhJ6CwCn4DzFkoD3uNiDRhr', 1600),
-        step3Zoom: driveThumb('1LmDFZOvxjhhJ6CwCn4DzFkoD3uNiDRhr', 4000),
-        optionalMemberThumb1: driveThumb('1Z-bil0A-oTwj29BvatqP07sduxUNnvzp', 1600),
-        optionalMemberZoom1: driveThumb('1Z-bil0A-oTwj29BvatqP07sduxUNnvzp', 4000),
-        optionalMemberThumb2: driveThumb('14M7LsewbLGPIEUkp99wpRaJwjqb-2Zxm', 1600),
-        optionalMemberZoom2: driveThumb('14M7LsewbLGPIEUkp99wpRaJwjqb-2Zxm', 4000)
+        step3Zoom: driveThumb('1LmDFZOvxjhhJ6CwCn4DzFkoD3uNiDRhr', 4000)
       }
     };
 
@@ -1036,15 +1073,14 @@
 
       model.alertItems.forEach(item => {
         const li = document.createElement('li');
-
         const strongClass = item.strong === '네이버' ? 'em-naver' : 'em-poomgo';
+
         li.innerHTML = `
           ${item.lead}
           <b class="${strongClass}">${item.strong}</b>
           ${item.tail}
           ${item.sub ? `<div style="font-size:13px; color:#6B7280; margin-top:2px;">${item.sub}</div>` : ''}
         `;
-
         list.appendChild(li);
       });
     }
@@ -1083,10 +1119,35 @@
       });
     }
 
+    function bindNextStep() {
+      const check = document.getElementById('registerDoneCheck');
+      const btn = document.getElementById('nextStepBtn');
+      if (!check || !btn) return;
+
+      const saved = localStorage.getItem('customerRegisterDone') === 'Y';
+      check.checked = saved;
+      btn.style.pointerEvents = saved ? 'auto' : 'none';
+      btn.style.opacity = saved ? '1' : '.45';
+
+      check.addEventListener('change', () => {
+        const enabled = check.checked;
+
+        if (enabled) {
+          localStorage.setItem('customerRegisterDone', 'Y');
+        } else {
+          localStorage.removeItem('customerRegisterDone');
+        }
+
+        btn.style.pointerEvents = enabled ? 'auto' : 'none';
+        btn.style.opacity = enabled ? '1' : '.45';
+      });
+    }
+
     renderHeader();
     renderAlerts();
     renderImages();
     bindImageModal();
+    bindNextStep();
   </script>
 </body>
 </html>
