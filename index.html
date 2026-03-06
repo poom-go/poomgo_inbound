@@ -51,11 +51,56 @@
       color:var(--muted);
       font-size:14px;
       font-weight:700;
+      line-height:1.6;
+    }
+
+    .progressInline{
+      margin-top:14px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+    }
+
+    .progressHead{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .progressTitle{
+      margin:0;
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .progressMeta{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .bar{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background:#E5E7EB;
+      overflow:hidden;
+    }
+
+    .barFill{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg, #0040D1, #2F6BFF);
+      transition:width .25s ease;
     }
 
     .layout{
       display:grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns:320px 1fr;
       gap:16px;
       align-items:start;
     }
@@ -115,14 +160,6 @@
       line-height:1.5;
     }
 
-    .stepNavMeta{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      line-height:1.4;
-    }
-
     .navBtn{
       border:1px solid var(--line);
       background:#fff;
@@ -137,50 +174,6 @@
     .main{
       padding:18px;
       min-height:500px;
-    }
-
-    .progressBox{
-      margin-bottom:14px;
-      padding:16px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
-    }
-
-    .progressHead{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .progressTitle{
-      margin:0;
-      font-size:15px;
-      font-weight:900;
-    }
-
-    .progressMeta{
-      font-size:13px;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    .bar{
-      width:100%;
-      height:12px;
-      border-radius:999px;
-      background:#E5E7EB;
-      overflow:hidden;
-    }
-
-    .barFill{
-      width:0%;
-      height:100%;
-      background:linear-gradient(90deg, #0040D1, #2F6BFF);
-      transition:width .25s ease;
     }
 
     .stageCard{
@@ -220,13 +213,6 @@
       font-size:22px;
       font-weight:900;
       line-height:1.35;
-    }
-
-    .stageCode{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
     }
 
     .doneBtn{
@@ -305,13 +291,23 @@
       word-break:break-word;
     }
 
+    .pathText a,
+    .desc a,
+    .highlight a,
+    .checklist a {
+      color: var(--poomgo);
+      font-weight: 900;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
     .desc{
       padding:14px;
       font-size:14px;
       font-weight:800;
       color:#1F2937;
       line-height:1.7;
-      white-space:pre-line;
+      white-space:normal;
     }
 
     .highlight{
@@ -472,6 +468,14 @@
     <div class="top">
       <h1 class="title" id="pageTitle">온보딩 가이드</h1>
       <p class="sub" id="pageSubtitle">데이터를 불러오는 중입니다.</p>
+
+      <div class="progressInline">
+        <div class="progressHead">
+          <p class="progressTitle">진행률</p>
+          <div class="progressMeta" id="progressMeta">0 / 0 단계 완료</div>
+        </div>
+        <div class="bar"><div class="barFill" id="barFill"></div></div>
+      </div>
     </div>
 
     <div class="layout">
@@ -481,14 +485,6 @@
       </aside>
 
       <main class="card main">
-        <div class="progressBox">
-          <div class="progressHead">
-            <p class="progressTitle">진행률</p>
-            <div class="progressMeta" id="progressMeta">0 / 0 단계 완료</div>
-          </div>
-          <div class="bar"><div class="barFill" id="barFill"></div></div>
-        </div>
-
         <div id="currentStageArea"></div>
 
         <div class="finalMsg" id="finalMsg">
@@ -585,7 +581,6 @@
         if (!map.has(item.stepNo)) {
           map.set(item.stepNo, {
             stepNo: item.stepNo,
-            stepCode: item.stepCode,
             stepName: item.stepName,
             blocks: []
           });
@@ -639,7 +634,6 @@
                     : '')
               }
             </div>
-            <div class="stepNavMeta">${escapeHtml(step.stepCode)}</div>
           </div>
         `;
       }).join('');
@@ -660,16 +654,12 @@
         return;
       }
 
-      const currentStepNo = getCurrentStepNo();
-      const isReplay = isCompleted(step.stepNo) && step.stepNo !== currentStepNo;
-
       area.innerHTML = `
         <section class="stageCard">
           <div class="stageHead">
             <div>
               <div class="badge">${isCompleted(step.stepNo) ? '완료 STEP ' + step.stepNo : 'STEP ' + step.stepNo}</div>
               <p class="stageTitle">${escapeHtml(step.stepName)}</p>
-              <p class="stageCode">${escapeHtml(step.stepCode)} ${isReplay ? '· 완료된 단계 다시보기' : ''}</p>
             </div>
             ${!isCompleted(step.stepNo)
               ? `<button class="doneBtn" type="button" id="completeCurrentStepBtn" data-step="${step.stepNo}">완료</button>`
@@ -703,16 +693,16 @@
       const pathHtml = path ? `
         <div class="path">
           <span class="pathBadge">경로</span>
-          <div class="pathText">${escapeHtml(path)}</div>
+          <div class="pathText">${path}</div>
         </div>
       ` : '';
 
       const descHtml = desc ? `
-        <div class="desc">${escapeHtml(desc)}</div>
+        <div class="desc">${desc}</div>
       ` : '';
 
       const highlightHtml = highlight ? `
-        <div class="highlight">${escapeHtml(highlight)}</div>
+        <div class="highlight">${highlight}</div>
       ` : '';
 
       const imageHtml = imageThumb ? `
@@ -739,7 +729,12 @@
       const checklistHtml = type === '체크리스트' && desc ? `
         <div class="checklist">
           <ul>
-            ${desc.split('/').map(item => `<li>${escapeHtml(item.trim())}</li>`).join('')}
+            ${desc
+              .split('<br>')
+              .map(item => item.trim())
+              .filter(Boolean)
+              .map(item => `<li>${item}</li>`)
+              .join('')}
           </ul>
         </div>
       ` : '';
@@ -781,10 +776,9 @@
       viewingStepNo = null;
       renderAll();
 
-      const nextStepNo = getCurrentStepNo();
-      if (nextStepNo) {
-        const main = document.querySelector('.main');
-        if (main) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const main = document.querySelector('.main');
+      if (main) {
+        main.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
