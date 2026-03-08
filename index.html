@@ -36,6 +36,12 @@
       --desc-label-text:#111827;
       --desc-text:#1F2937;
 
+      --method-poomgo-bg:rgba(0,64,209,.08);
+      --method-poomgo-border:rgba(0,64,209,.24);
+
+      --method-naver-bg:rgba(3,199,90,.10);
+      --method-naver-border:rgba(3,199,90,.28);
+
       --toggle-bg:#0040D1;
       --toggle-text:#FFFFFF;
       --toggle-border:#0040D1;
@@ -272,16 +278,6 @@
     .blockHead{
       padding:18px 20px 10px;
       background:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .blockHeadLeft{
-      min-width:0;
-      flex:1 1 auto;
     }
 
     .blockTitle{
@@ -293,11 +289,10 @@
       color:#111827;
     }
 
-    .headActions{
-      flex:0 0 auto;
+    .imageToggleRow{
+      padding:0 20px 12px;
       display:flex;
-      gap:8px;
-      align-items:center;
+      justify-content:flex-end;
     }
 
     .imageToggleBtn{
@@ -332,11 +327,20 @@
       border-color:var(--method-border);
     }
 
+    .method.platform-poomgo{
+      background:var(--method-poomgo-bg);
+      border-color:var(--method-poomgo-border);
+    }
+
+    .method.platform-naver{
+      background:var(--method-naver-bg);
+      border-color:var(--method-naver-border);
+    }
+
     .descBox{
       border-color:var(--desc-border);
     }
 
-    /* 왼쪽 상단 쪽 라벨 */
     .methodLabel,
     .descLabel{
       position:absolute;
@@ -362,7 +366,7 @@
     .methodText{
       color:var(--method-text);
       font-size:17px;
-      font-weight:900;
+      font-weight:400; /* 볼드 제거 */
       line-height:1.85;
       text-align:left;
       word-break:break-word;
@@ -422,7 +426,6 @@
       word-break:break-all;
     }
 
-    /* --- 입력 시 구분선 */
     .textDivider{
       margin:14px 0;
       border:0;
@@ -622,11 +625,8 @@
       .imageToggleBtn{
         width:100%;
       }
-      .blockHead{
-        align-items:flex-start;
-      }
-      .headActions{
-        width:100%;
+      .imageToggleRow{
+        justify-content:stretch;
       }
     }
   </style>
@@ -759,6 +759,13 @@
       groupedSteps = Array.from(map.values()).sort((a, b) => a.stepNo - b.stepNo);
     }
 
+    function normalizePlatform(value) {
+      const v = String(value || '').trim();
+      if (v === '품고') return 'platform-poomgo';
+      if (v === '네이버') return 'platform-naver';
+      return '';
+    }
+
     function renderAll() {
       const client = payload && payload.client ? payload.client : null;
 
@@ -843,30 +850,20 @@
       `;
     }
 
-    function renderRichContent(text, kind) {
+    function renderRichContent(text) {
       if (!text) return '';
 
       const parts = String(text).split('<br>');
       let html = '';
-      let dividerOpen = false;
 
       for (const raw of parts) {
         const line = raw.trim();
-
         if (line === '---') {
-          if (dividerOpen) {
-            html += '<hr class="textDivider">';
-          } else {
-            html += '<hr class="textDivider">';
-            dividerOpen = true;
-          }
-          continue;
+          html += '<hr class="textDivider">';
+        } else {
+          html += `<div>${raw}</div>`;
         }
-
-        dividerOpen = false;
-        html += `<div>${raw}</div>`;
       }
-
       return html;
     }
 
@@ -880,6 +877,7 @@
       const buttonText = block.buttonText || '';
       const buttonUrl = block.buttonUrl || '';
       const highlight = block.highlight || '';
+      const platformClass = normalizePlatform(block.platform);
 
       const hasImage = !!imageThumb;
 
@@ -888,34 +886,35 @@
           <div class="blockHeadLeft">
             <p class="blockTitle">${escapeHtml(title)}</p>
           </div>
-          <div class="headActions">
-            ${hasImage ? `
-              <button type="button" class="imageToggleBtn" data-toggle-image>
-                이미지 보기
-              </button>
-            ` : ''}
-          </div>
+        </div>
+      ` : '';
+
+      const imageToggleHtml = hasImage ? `
+        <div class="imageToggleRow">
+          <button type="button" class="imageToggleBtn" data-toggle-image>
+            이미지 보기
+          </button>
         </div>
       ` : '';
 
       const methodHtml = path ? `
-        <div class="method">
+        <div class="method ${platformClass}">
           <span class="methodLabel"></span>
-          <div class="methodText">${renderRichContent(path, 'method')}</div>
+          <div class="methodText">${renderRichContent(path)}</div>
         </div>
       ` : '';
 
       const tipHtml = highlight ? `
         <div class="tip">
-          <span class="tipBadge">💡 TIP</span>
-          <div class="tipText">${renderRichContent(highlight, 'tip')}</div>
+          <span class="tipBadge">💡TIP</span>
+          <div class="tipText">${renderRichContent(highlight)}</div>
         </div>
       ` : '';
 
       const descHtml = desc ? `
         <div class="descBox">
           <span class="descLabel"></span>
-          <div class="descText">${renderRichContent(desc, 'desc')}</div>
+          <div class="descText">${renderRichContent(desc)}</div>
         </div>
       ` : '';
 
@@ -958,6 +957,7 @@
       return `
         <div class="block">
           ${headHtml}
+          ${imageToggleHtml}
           ${methodHtml}
           ${tipHtml}
           ${type === '체크리스트' ? checklistHtml : descHtml}
