@@ -15,6 +15,7 @@
 
       --primary:#0040D1;
       --primary-weak:#EEF4FF;
+      --primary-soft:#F8FAFF;
 
       --ok:#16A34A;
       --ok-weak:#ECFDF5;
@@ -26,8 +27,15 @@
       --tip-badge-text:#1D4ED8;
       --tip-text:#1E3A8A;
 
-      --method-label:#0040D1;
-      --method-text:#111827;
+      --method-bg:#F5F8FF;
+      --method-border:#D9E4FF;
+      --method-badge-bg:#EAF1FF;
+      --method-badge-text:#1D4ED8;
+      --method-text:#1E3A8A;
+
+      --toggle-bg:#EAF1FF;
+      --toggle-text:#0040D1;
+      --toggle-border:#CFE0FF;
 
       --shadow:0 8px 24px rgba(15,23,42,.05);
       --radius:18px;
@@ -256,8 +264,18 @@
     }
 
     .blockHead{
-      padding:20px 20px 10px;
+      padding:18px 20px 10px;
       background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .blockHeadLeft{
+      min-width:0;
+      flex:1 1 auto;
     }
 
     .blockTitle{
@@ -267,6 +285,30 @@
       line-height:1.4;
       letter-spacing:-0.02em;
       color:#111827;
+    }
+
+    .headActions{
+      flex:0 0 auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .imageToggleBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:132px;
+      height:38px;
+      padding:0 14px;
+      border:1px solid var(--toggle-border);
+      border-radius:12px;
+      background:var(--toggle-bg);
+      color:var(--toggle-text);
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
     }
 
     .tip{
@@ -306,18 +348,29 @@
 
     .method{
       margin:0 20px 14px;
-      padding:0;
+      padding:12px 14px;
+      border-radius:12px;
+      background:var(--method-bg);
+      border:1px solid var(--method-border);
       display:flex;
       gap:10px;
-      align-items:flex-start;
-      border:none;
+      align-items:center;
+      justify-content:center;
+      text-align:left;
     }
 
-    .methodLabel{
-      color:var(--method-label);
-      font-size:13px;
+    .methodBadge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:66px;
+      height:26px;
+      padding:0 10px;
+      border-radius:999px;
+      background:var(--method-badge-bg);
+      color:var(--method-badge-text);
+      font-size:11px;
       font-weight:900;
-      line-height:1.7;
       flex:0 0 auto;
       white-space:nowrap;
     }
@@ -347,28 +400,6 @@
       color:#1F2937;
       line-height:1.9;
       white-space:normal;
-    }
-
-    .imageToggleWrap{
-      padding:0 20px 16px;
-      display:flex;
-      justify-content:center;
-    }
-
-    .imageToggleBtn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:180px;
-      height:44px;
-      padding:0 16px;
-      border:1px solid #DCE3EC;
-      border-radius:12px;
-      background:#fff;
-      color:#334155;
-      font-size:14px;
-      font-weight:900;
-      cursor:pointer;
     }
 
     .imagePanel{
@@ -555,7 +586,8 @@
       }
       .method{
         flex-direction:column;
-        gap:4px;
+        align-items:flex-start;
+        text-align:left;
       }
       .methodText{
         font-size:14px;
@@ -563,6 +595,12 @@
       .linkBtn,
       .nextBtn,
       .imageToggleBtn{
+        width:100%;
+      }
+      .blockHead{
+        align-items:flex-start;
+      }
+      .headActions{
         width:100%;
       }
     }
@@ -791,9 +829,20 @@
       const buttonUrl = block.buttonUrl || '';
       const highlight = block.highlight || '';
 
+      const hasImage = !!imageThumb;
+
       const headHtml = title ? `
         <div class="blockHead">
-          <p class="blockTitle">${escapeHtml(title)}</p>
+          <div class="blockHeadLeft">
+            <p class="blockTitle">${escapeHtml(title)}</p>
+          </div>
+          <div class="headActions">
+            ${hasImage ? `
+              <button type="button" class="imageToggleBtn" data-toggle-image>
+                이미지 보기
+              </button>
+            ` : ''}
+          </div>
         </div>
       ` : '';
 
@@ -806,7 +855,7 @@
 
       const methodHtml = path ? `
         <div class="method">
-          <span class="methodLabel">진행방법</span>
+          <span class="methodBadge">진행방법</span>
           <div class="methodText">${path}</div>
         </div>
       ` : '';
@@ -816,11 +865,6 @@
       ` : '';
 
       const imageHtml = imageThumb ? `
-        <div class="imageToggleWrap">
-          <button type="button" class="imageToggleBtn" data-toggle-image>
-            이미지 보기
-          </button>
-        </div>
         <div class="imagePanel">
           <div class="imgWrap">
             <img
