@@ -42,10 +42,6 @@
       --method-naver-bg:rgba(3,199,90,.10);
       --method-naver-border:rgba(3,199,90,.28);
 
-      --toggle-bg:#0040D1;
-      --toggle-text:#FFFFFF;
-      --toggle-border:#0040D1;
-
       --cta-bg:#F59E0B;
       --cta-text:#FFFFFF;
 
@@ -276,8 +272,18 @@
     }
 
     .blockHead{
-      padding:18px 20px 10px;
+      padding:18px 20px 14px;
       background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:nowrap;
+    }
+
+    .blockHeadLeft{
+      min-width:0;
+      flex:1 1 auto;
     }
 
     .blockTitle{
@@ -289,28 +295,27 @@
       color:#111827;
     }
 
-    .imageToggleRow{
-      padding:0 20px 12px;
+    .headActions{
+      flex:0 0 auto;
       display:flex;
-      justify-content:flex-end;
+      align-items:center;
+      gap:8px;
     }
 
     .imageToggleBtn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-width:132px;
-      height:38px;
-      padding:0 14px;
-      border:1px solid var(--toggle-border);
-      border-radius:12px;
-      background:var(--toggle-bg);
-      color:var(--toggle-text);
-      font-size:13px;
+      padding:0;
+      border:none;
+      background:transparent;
+      color:#0040D1;
+      font-size:22px;
       font-weight:900;
+      line-height:1.4;
       cursor:pointer;
       white-space:nowrap;
-      box-shadow:0 6px 14px rgba(0,64,209,.16);
+      box-shadow:none;
     }
 
     .method,
@@ -366,7 +371,7 @@
     .methodText{
       color:var(--method-text);
       font-size:17px;
-      font-weight:400; /* 볼드 제거 */
+      font-weight:400;
       line-height:1.85;
       text-align:left;
       word-break:break-word;
@@ -611,8 +616,19 @@
       .stageTitle{
         font-size:24px;
       }
+      .blockHead{
+        flex-wrap:wrap;
+        align-items:flex-start;
+      }
       .blockTitle{
         font-size:19px;
+      }
+      .headActions{
+        width:100%;
+        justify-content:flex-end;
+      }
+      .imageToggleBtn{
+        font-size:18px;
       }
       .methodText{
         font-size:15px;
@@ -621,12 +637,8 @@
         font-size:14px;
       }
       .linkBtn,
-      .nextBtn,
-      .imageToggleBtn{
+      .nextBtn{
         width:100%;
-      }
-      .imageToggleRow{
-        justify-content:stretch;
       }
     }
   </style>
@@ -886,34 +898,33 @@
           <div class="blockHeadLeft">
             <p class="blockTitle">${escapeHtml(title)}</p>
           </div>
-        </div>
-      ` : '';
-
-      const imageToggleHtml = hasImage ? `
-        <div class="imageToggleRow">
-          <button type="button" class="imageToggleBtn" data-toggle-image>
-            이미지 보기
-          </button>
+          <div class="headActions">
+            ${hasImage ? `
+              <button type="button" class="imageToggleBtn" data-toggle-image>
+                이미지 보기
+              </button>
+            ` : ''}
+          </div>
         </div>
       ` : '';
 
       const methodHtml = path ? `
         <div class="method ${platformClass}">
-          <span class="methodLabel"></span>
+          <span class="methodLabel">진행 방법</span>
           <div class="methodText">${renderRichContent(path)}</div>
         </div>
       ` : '';
 
       const tipHtml = highlight ? `
         <div class="tip">
-          <span class="tipBadge">💡TIP</span>
+          <span class="tipBadge">💡 TIP</span>
           <div class="tipText">${renderRichContent(highlight)}</div>
         </div>
       ` : '';
 
       const descHtml = desc ? `
         <div class="descBox">
-          <span class="descLabel"></span>
+          <span class="descLabel">설명</span>
           <div class="descText">${renderRichContent(desc)}</div>
         </div>
       ` : '';
@@ -957,7 +968,6 @@
       return `
         <div class="block">
           ${headHtml}
-          ${imageToggleHtml}
           ${methodHtml}
           ${tipHtml}
           ${type === '체크리스트' ? checklistHtml : descHtml}
