@@ -107,6 +107,7 @@
       font-size:15px;
       font-weight:900;
       text-decoration:none;
+      vertical-align:middle;
     }
 
     .primaryBtn{
@@ -138,6 +139,7 @@
       display:flex;
       flex-direction:column;
       gap:8px;
+      justify-content:center;
     }
 
     .field.full{
@@ -149,6 +151,9 @@
       font-weight:900;
       color:#111827;
       line-height:1.6;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .helpText{
@@ -173,6 +178,8 @@
       font-size:14px;
       color:#111827;
       outline:none;
+      line-height:48px;
+      vertical-align:middle;
     }
 
     .actionRow{
@@ -180,6 +187,7 @@
       gap:10px;
       flex-wrap:wrap;
       margin-top:22px;
+      align-items:center;
     }
 
     .hidden{
@@ -199,6 +207,9 @@
       font-size:14px;
       font-weight:900;
       color:#111827;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .packingGuideImgWrap{
@@ -237,12 +248,16 @@
       font-size:15px;
       font-weight:900;
       color:#111827;
+      display:flex;
+      align-items:center;
     }
 
     .progressMeta{
       font-size:13px;
       color:var(--muted);
       font-weight:800;
+      display:flex;
+      align-items:center;
     }
 
     .bar{
@@ -285,6 +300,9 @@
       font-size:16px;
       font-weight:900;
       color:#111827;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .stepNav{
@@ -323,6 +341,9 @@
       font-weight:900;
       line-height:1.5;
       color:#111827;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .navBtn{
@@ -335,6 +356,9 @@
       cursor:pointer;
       white-space:nowrap;
       color:#334155;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .main{
@@ -384,6 +408,8 @@
       line-height:1.25;
       letter-spacing:-.03em;
       color:#0F172A;
+      display:flex;
+      align-items:center;
     }
 
     .blocks{
@@ -415,6 +441,8 @@
     .blockHeadLeft{
       min-width:0;
       flex:1 1 auto;
+      display:flex;
+      align-items:center;
     }
 
     .blockTitle{
@@ -424,6 +452,8 @@
       line-height:1.4;
       letter-spacing:-0.02em;
       color:#111827;
+      display:flex;
+      align-items:center;
     }
 
     .headActions{
@@ -515,22 +545,17 @@
       font-weight:900;
       line-height:1.4;
       white-space:nowrap;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
-    .methodText{
+    .methodText,
+    .descText{
       color:#1F2937;
       font-size:17px;
       font-weight:400;
       line-height:1.85;
-      text-align:left;
-      word-break:break-word;
-    }
-
-    .descText{
-      color:#1F2937;
-      font-size:15px;
-      font-weight:800;
-      line-height:1.9;
       text-align:left;
       word-break:break-word;
     }
@@ -565,9 +590,9 @@
 
     .tipText{
       color:#7A3E00;
-      font-size:15px;
-      font-weight:800;
-      line-height:1.8;
+      font-size:17px;
+      font-weight:400;
+      line-height:1.85;
       word-break:break-word;
       width:100%;
     }
@@ -590,12 +615,12 @@
     .methodText table,
     .descText table,
     .tipText table{
-      width:100%;
-      min-width:560px;
+      width:auto;
+      max-width:100%;
       border-collapse:collapse;
-      margin:8px 0;
+      margin:10px 0;
       background:#fff;
-      table-layout:fixed;
+      table-layout:auto;
     }
 
     .methodText th, .methodText td,
@@ -604,10 +629,11 @@
       border:1px solid #D8DEE9;
       padding:10px 12px;
       text-align:left;
-      vertical-align:top;
-      font-size:14px;
-      line-height:1.7;
+      vertical-align:middle;
+      font-size:13px;
+      line-height:1.65;
       word-break:break-word;
+      white-space:pre-wrap;
     }
 
     .methodText th,
@@ -616,6 +642,8 @@
       background:#F8FAFC;
       font-weight:900;
       color:#111827;
+      text-align:center;
+      vertical-align:middle;
     }
 
     .methodText tbody tr:nth-child(even),
@@ -624,12 +652,24 @@
       background:#FCFDFE;
     }
 
+    .table-separator td{
+      padding:0 !important;
+      height:0;
+      line-height:0;
+      border-left:none !important;
+      border-right:none !important;
+      border-bottom:none !important;
+      border-top:2px solid #CBD5E1 !important;
+      background:#fff !important;
+    }
+
     .buttonArea{
       padding:0 20px 20px;
       display:flex;
       justify-content:center;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
     .linkBtn{
@@ -647,12 +687,14 @@
       text-decoration:none;
       box-shadow:0 8px 18px rgba(245,158,11,.16);
       text-align:center;
+      vertical-align:middle;
     }
 
     .stageFooter{
       padding:0 20px 22px;
       display:flex;
       justify-content:center;
+      align-items:center;
       background:#fff;
     }
 
@@ -739,6 +781,9 @@
       margin:0;
       font-size:16px;
       font-weight:900;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .modalBody{
@@ -778,6 +823,9 @@
       color:#111827;
       line-height:1.7;
       word-break:break-word;
+      display:flex;
+      align-items:center;
+      min-height:24px;
     }
 
     .statusModal{
@@ -823,11 +871,14 @@
       .blockTitle{ font-size:19px; }
       .headActions{ width:100%; justify-content:flex-end; }
       .imageToggleBtn{ width:100%; font-size:14px; }
-      .methodText{ font-size:15px; }
-      .descText{ font-size:14px; }
-      .tipText{ font-size:14px; }
+      .methodText, .descText, .tipText{ font-size:15px; }
       .linkBtn, .nextBtn, .primaryBtn, .secondaryBtn, .submitBtn{ width:100%; }
       .actionRow{ flex-direction:column; }
+      .methodText table,
+      .descText table,
+      .tipText table{
+        min-width:520px;
+      }
     }
   </style>
 </head>
@@ -1001,10 +1052,6 @@
     const params = new URLSearchParams(location.search);
     const clientCode = params.get('client') || '';
 
-    function inquiryDoneKey() {
-      return 'onboarding_inquiry_done_' + clientCode;
-    }
-
     function progressKey() {
       return 'onboarding_progress_' + clientCode;
     }
@@ -1024,11 +1071,7 @@
     }
 
     function isInquiryDone() {
-      return localStorage.getItem(inquiryDoneKey()) === 'Y';
-    }
-
-    function setInquiryDone() {
-      localStorage.setItem(inquiryDoneKey(), 'Y');
+      return !!(payload && payload.client && payload.client.inquirySubmitted);
     }
 
     function isCompleted(stepNo) {
@@ -1181,11 +1224,19 @@
     }
 
     function openInquiryForm() {
+      if (isInquiryDone()) {
+        renderIntroState();
+        return;
+      }
       document.getElementById('introCard').classList.add('hidden');
       document.getElementById('inquiryFormCard').classList.remove('hidden');
     }
 
     function closeInquiryForm() {
+      if (isInquiryDone()) {
+        renderIntroState();
+        return;
+      }
       document.getElementById('introCard').classList.remove('hidden');
       document.getElementById('inquiryFormCard').classList.add('hidden');
     }
@@ -1270,28 +1321,34 @@
         params.append('systemEmail', pendingInquiryData.systemEmail || '');
         params.append('userAgent', pendingInquiryData.userAgent || '');
 
-        await fetch(APPS_SCRIPT_WEBAPP_URL, {
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
           },
           body: params.toString()
         });
 
-        await sleep(900);
+        const text = await res.text();
+        let result = {};
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          throw new Error('응답 파싱 실패');
+        }
 
-        setInquiryDone();
+        if (!result.ok) {
+          throw new Error(result.message || '제출 중 오류가 발생했습니다.');
+        }
+
+        if (payload && payload.client) {
+          payload.client.inquirySubmitted = true;
+        }
+
+        await sleep(300);
+
         closeConfirmModal();
-
-        document.getElementById('introCard').classList.add('hidden');
-        document.getElementById('inquiryFormCard').classList.add('hidden');
-        document.getElementById('guideSection').classList.remove('hidden');
-
-        renderSidebar();
-        renderCurrentStage();
-        renderProgress();
-        renderFinalMessage();
+        renderIntroState();
 
         showStatusModal('제출 완료!', 'N배송 가이드로 이동합니다.', false);
         await sleep(700);
@@ -1305,7 +1362,7 @@
       } catch (err) {
         console.error(err);
         hideStatusModal();
-        alert('제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        alert(err.message || '제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       } finally {
         if (finalSubmitBtn) {
           finalSubmitBtn.disabled = false;
@@ -1348,24 +1405,32 @@
 
       const lines = normalized
         .split('\n')
-        .map(line => line.trim())
-        .filter(Boolean);
+        .map(line => line.trim());
 
-      if (!lines.length) return '';
+      const effectiveLines = lines.filter(line => line !== '');
 
-      const rows = lines.map(line =>
-        line.split('|').map(cell => cell.trim())
-      );
+      if (!effectiveLines.length) return '';
 
-      if (!rows.length) return '';
+      const rows = effectiveLines.map(line => {
+        if (line === '--') {
+          return { separator: true, cells: [] };
+        }
+        return {
+          separator: false,
+          cells: line.split('|').map(cell => cell.trim())
+        };
+      });
 
-      const headers = rows[0];
-      const bodyRows = rows.slice(1);
+      const headerRow = rows.find(r => !r.separator && r.cells.length > 0);
+      if (!headerRow) return '';
+
+      const colCount = headerRow.cells.length;
+      const bodyRows = rows.slice(rows.indexOf(headerRow) + 1);
 
       const thead = `
         <thead>
           <tr>
-            ${headers.map(h => `<th>${formatTableCellText(h)}</th>`).join('')}
+            ${headerRow.cells.map(h => `<th>${formatTableCellText(h)}</th>`).join('')}
           </tr>
         </thead>
       `;
@@ -1373,11 +1438,18 @@
       const tbody = bodyRows.length
         ? `
           <tbody>
-            ${bodyRows.map(row => `
-              <tr>
-                ${row.map(cell => `<td>${formatTableCellText(cell)}</td>`).join('')}
-              </tr>
-            `).join('')}
+            ${bodyRows.map(row => {
+              if (row.separator) {
+                return `<tr class="table-separator"><td colspan="${colCount}"></td></tr>`;
+              }
+              const cells = [...row.cells];
+              while (cells.length < colCount) cells.push('');
+              return `
+                <tr>
+                  ${cells.slice(0, colCount).map(cell => `<td>${formatTableCellText(cell)}</td>`).join('')}
+                </tr>
+              `;
+            }).join('')}
           </tbody>
         `
         : '';
