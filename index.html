@@ -206,18 +206,6 @@
       display:none !important;
     }
 
-    .successBox{
-      margin-top:18px;
-      padding:16px 18px;
-      border:1px solid #BBF7D0;
-      background:#ECFDF5;
-      border-radius:14px;
-      color:#166534;
-      font-size:15px;
-      font-weight:800;
-      line-height:1.8;
-    }
-
     .packingGuideBox{
       margin-top:14px;
       padding:16px;
@@ -1261,15 +1249,6 @@
       }
     }
 
-    function showGuide() {
-      document.getElementById('guideSection').classList.remove('hidden');
-      renderSidebar();
-      renderCurrentStage();
-      renderProgress();
-      renderFinalMessage();
-      document.getElementById('guideSection').scrollIntoView({ behavior:'smooth', block:'start' });
-    }
-
     function normalizePlatform(value) {
       const v = String(value || '').trim();
       if (v === '품고') return 'platform-poomgo';
@@ -1278,22 +1257,124 @@
       return '';
     }
 
-    function containsTableHtml(text) {
-      return /<(table|thead|tbody|tr|th|td)\b/i.test(String(text || ''));
+    function decodeHtmlBasic(str) {
+      return String(str || '')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&');
+    }
+
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
+    }
+
+    function formatTableCellText(cell) {
+      return escapeHtml(
+        decodeHtmlBasic(String(cell || '').trim())
+      )
+      .replace(/\\n/g, '<br>')
+      .replace(/\n/g, '<br>');
+    }
+
+    function buildCustomTableHtml(tableContent) {
+      const normalized = decodeHtmlBasic(String(tableContent || ''))
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/\r/g, '');
+
+      const lines = normalized
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      if (!lines.length) return '';
+
+      const rows = lines.map(line =>
+        line.split('|').map(cell => cell.trim())
+      );
+
+      if (!rows.length) return '';
+
+      const headers = rows[0];
+      const bodyRows = rows.slice(1);
+
+      const thead = `
+        <thead>
+          <tr>
+            ${headers.map(h => `<th>${formatTableCellText(h)}</th>`).join('')}
+          </tr>
+        </thead>
+      `;
+
+      const tbody = bodyRows.length
+        ? `
+          <tbody>
+            ${bodyRows.map(row => `
+              <tr>
+                ${row.map(cell => `<td>${formatTableCellText(cell)}</td>`).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        `
+        : '';
+
+      return `<table>${thead}${tbody}</table>`;
+    }
+
+    function renderPlainSegment(segment) {
+      if (!segment) return '';
+
+      return String(segment)
+        .split('<br>')
+        .map(part => {
+          const trimmed = part.trim();
+          if (!trimmed) return '';
+          if (trimmed === '---') return '<hr class="textDivider">';
+          return `<div>${part}</div>`;
+        })
+        .join('');
     }
 
     function renderRichContent(text) {
       if (!text) return '';
-      const raw = String(text);
 
-      if (containsTableHtml(raw)) {
-        return raw;
+      const raw = String(text);
+      const tableRegex = /\[\[table\]\]([\s\S]*?)\[\[\/table\]\]/gi;
+
+      if (!tableRegex.test(raw)) {
+        return renderPlainSegment(raw);
       }
 
-      return raw
-        .split('<br>')
-        .map(part => part.trim() === '---' ? '<hr class="textDivider">' : `<div>${part}</div>`)
-        .join('');
+      tableRegex.lastIndex = 0;
+
+      let result = '';
+      let lastIndex = 0;
+      let match;
+
+      while ((match = tableRegex.exec(raw)) !== null) {
+        const before = raw.slice(lastIndex, match.index);
+        const tableInner = match[1];
+
+        result += renderPlainSegment(before);
+        result += buildCustomTableHtml(tableInner);
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      const after = raw.slice(lastIndex);
+      result += renderPlainSegment(after);
+
+      return result;
     }
 
     function renderSidebar() {
@@ -1564,19 +1645,6 @@
         closeConfirmModal();
       }
     });
-
-    function escapeHtml(str) {
-      return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function escapeAttr(str) {
-      return escapeHtml(str);
-    }
 
     loadData();
   </script>
