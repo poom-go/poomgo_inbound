@@ -1664,7 +1664,9 @@ function buildCustomTableHtml(tableContent) {
   const rows = rawLines.map(line => {
     const textOnly = stripHtmlTags(line);
     if (textOnly === '--') return { separator: true, cells: [] };
-    return { separator: false, cells: splitTableRowPreservingHtml(line) };
+
+    const cells = splitTableRowPreservingHtml(line).map(cell => cell.trim());
+    return { separator: false, cells };
   });
 
   const headerRow = rows.find(r => !r.separator && r.cells.length > 0);
@@ -1672,13 +1674,12 @@ function buildCustomTableHtml(tableContent) {
 
   const colCount = headerRow.cells.length;
   const headerIndex = rows.indexOf(headerRow);
-  const bodyRows = rows.slice(headerIndex + 1);
 
-  const normalizedBodyRows = bodyRows.map(row => {
+  const bodyRows = rows.slice(headerIndex + 1).map(row => {
     if (row.separator) return row;
     const cells = [...row.cells];
     while (cells.length < colCount) cells.push('');
-    return { ...row, cells: cells.slice(0, colCount) };
+    return { separator: false, cells: cells.slice(0, colCount) };
   });
 
   const thead = `
@@ -1689,29 +1690,80 @@ function buildCustomTableHtml(tableContent) {
     </thead>
   `;
 
-  const tbody = normalizedBodyRows.length ? `
+  // rowspan 계산용 메타
+  const rowspanMeta = bodyRows.map(row => {
+    if (row.separator) {
+      return Array.from({ length: colCount }, () => ({ skip: false, rowspan: 1 }));
+    }
+    return Array.from({ length: colCount }, () => ({ skip: false, rowspan: 1 }));
+  });
+
+  // 0열, 1열만 병합 처리
+  [0, 1].forEach(colIndex => {
+    let r = 0;
+
+    while (r < bodyRows.length) {
+      const row = bodyRows[r];
+
+      if (row.separator) {
+        r++;
+        continue;
+      }
+
+      const current = stripHtmlTags(row.cells[colIndex] || '');
+
+      // 값이 비어 있으면 병합 시작점이 될 수 없음
+      if (!current) {
+        r++;
+        continue;
+      }
+
+      let span = 1;
+      let next = r + 1;
+
+      while (next < bodyRows.length) {
+        const nextRow = bodyRows[next];
+        if (nextRow.separator) break;
+
+        const nextText = stripHtmlTags(nextRow.cells[colIndex] || '');
+
+        // 아래 행이 빈 칸이면 위와 병합
+        if (nextText === '') {
+          span++;
+          next++;
+        } else {
+          break;
+        }
+      }
+
+      rowspanMeta[r][colIndex].rowspan = span;
+
+      for (let k = r + 1; k < r + span; k++) {
+        rowspanMeta[k][colIndex].skip = true;
+      }
+
+      r = r + span;
+    }
+  });
+
+  const tbody = bodyRows.length ? `
     <tbody>
-      ${normalizedBodyRows.map((row, rowIndex) => {
+      ${bodyRows.map((row, rowIndex) => {
         if (row.separator) {
           return `<tr class="table-separator"><td colspan="${colCount}"></td></tr>`;
         }
 
-        return `<tr>${
-          row.cells.map((cell, cellIndex) => {
-            const currentText = stripHtmlTags(cell);
-            const prevRow = rowIndex > 0 ? normalizedBodyRows[rowIndex - 1] : null;
+        let tds = '';
 
-            const isMergedLike =
-              prevRow &&
-              !prevRow.separator &&
-              currentText === '' &&
-              (cellIndex === 0 || cellIndex === 1);
+        row.cells.forEach((cell, colIndex) => {
+          const meta = rowspanMeta[rowIndex][colIndex];
+          if (meta.skip) return;
 
-            const cellClass = isMergedLike ? 'merge-continue' : '';
+          const rowspanAttr = meta.rowspan > 1 ? ` rowspan="${meta.rowspan}"` : '';
+          tds += `<td${rowspanAttr}>${formatTableCellHtml(cell)}</td>`;
+        });
 
-            return `<td class="${cellClass}">${formatTableCellHtml(cell)}</td>`;
-          }).join('')
-        }</tr>`;
+        return `<tr>${tds}</tr>`;
       }).join('')}
     </tbody>
   ` : '';
