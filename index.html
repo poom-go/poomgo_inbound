@@ -42,6 +42,9 @@
       --method-naver-bg:rgba(3,199,90,.10);
       --method-naver-border:rgba(3,199,90,.28);
 
+      --method-emphasis-bg:rgba(220,38,38,.08);
+      --method-emphasis-border:rgba(220,38,38,.22);
+
       --cta-bg:#F59E0B;
       --cta-text:#FFFFFF;
 
@@ -228,6 +231,10 @@
       font-size:14px;
       font-weight:900;
       color:#111827;
+    }
+
+    .packingGuideImgWrap{
+      margin-top:12px;
     }
 
     .packingGuideImg{
@@ -521,6 +528,11 @@
       background:rgba(3,199,90,.10);
       border-color:rgba(3,199,90,.28);
     }
+    .method.platform-emphasis{
+      background:rgba(220,38,38,.08);
+      border-color:rgba(220,38,38,.22);
+    }
+
     .descBox{ border-color:#D8DEE9; }
 
     .methodLabel,
@@ -844,12 +856,15 @@
 
           <div class="packingGuideBox">
             <div class="packingGuideHead">포장 방법 예시</div>
-            <img
-              id="packingGuideImg"
-              src=""
-              alt="포장 방법 예시"
-              class="packingGuideImg"
-            />
+            <button type="button" class="secondaryBtn" id="togglePackingGuideBtn" style="min-width:auto;height:42px;">예시 이미지보기</button>
+            <div class="packingGuideImgWrap hidden" id="packingGuideImgWrap">
+              <img
+                id="packingGuideImg"
+                src=""
+                alt="포장 방법 예시"
+                class="packingGuideImg"
+              />
+            </div>
           </div>
         </div>
 
@@ -1200,6 +1215,7 @@
       const v = String(value || '').trim();
       if (v === '품고') return 'platform-poomgo';
       if (v === '네이버') return 'platform-naver';
+      if (v.includes('강조')) return 'platform-emphasis';
       return '';
     }
 
@@ -1410,6 +1426,14 @@
       const showGuideBtn = e.target.closest('#showGuideBtn');
       if (showGuideBtn) {
         showGuide();
+        return;
+      }
+
+      const togglePackingGuideBtn = e.target.closest('#togglePackingGuideBtn');
+      if (togglePackingGuideBtn) {
+        const wrap = document.getElementById('packingGuideImgWrap');
+        wrap.classList.toggle('hidden');
+        togglePackingGuideBtn.textContent = wrap.classList.contains('hidden') ? '예시 이미지보기' : '예시 이미지숨기기';
         return;
       }
 
