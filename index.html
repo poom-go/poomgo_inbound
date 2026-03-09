@@ -360,13 +360,13 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap hidden" id="appWrap">
     <div class="top">
       <h1 class="title" id="pageTitle">온보딩 가이드</h1>
       <p class="sub" id="pageSubtitle">데이터를 불러오는 중입니다.</p>
     </div>
 
-    <section class="introCard" id="introCard">
+    <section class="introCard hidden" id="introCard">
       <h2 class="introTitle">물류사 질의 사항 최종 확인</h2>
       <p class="introDesc">
         본 항목은 네이버에 제출한 내용을 품고에서 최종 확인하기 위한 절차입니다.<br>
@@ -690,6 +690,9 @@
         buildInboundSteps();
         renderStaticText();
         renderIntroState();
+
+        const appWrap = document.getElementById('appWrap');
+        if (appWrap) appWrap.classList.remove('hidden');
       };
 
       const script = document.createElement('script');
