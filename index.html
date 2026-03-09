@@ -27,13 +27,9 @@
       --tip-text:#7A3E00;
 
       --method-border:#D1D5DB;
-      --method-label-bg:#FFFFFF;
-      --method-label-text:#111827;
       --method-text:#1F2937;
 
       --desc-border:#D8DEE9;
-      --desc-label-bg:#FFFFFF;
-      --desc-label-text:#111827;
       --desc-text:#1F2937;
 
       --method-poomgo-bg:rgba(0,64,209,.08);
@@ -45,11 +41,7 @@
       --method-emphasis-bg:rgba(220,38,38,.08);
       --method-emphasis-border:rgba(220,38,38,.22);
 
-      --cta-bg:#F59E0B;
-      --cta-text:#FFFFFF;
-
       --shadow:0 8px 24px rgba(15,23,42,.05);
-      --radius:18px;
     }
 
     *{ box-sizing:border-box; }
@@ -1199,87 +1191,85 @@
       document.body.style.overflow = '';
     }
 
-    <script>
-  async function submitInquiry() {
-    if (!pendingInquiryData) return;
+    async function submitInquiry() {
+      if (!pendingInquiryData) return;
 
-    const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+      const finalSubmitBtn = document.getElementById('finalSubmitBtn');
 
-    if (finalSubmitBtn) {
-      finalSubmitBtn.disabled = true;
-      finalSubmitBtn.textContent = '제출중...';
-      finalSubmitBtn.style.opacity = '0.7';
-      finalSubmitBtn.style.cursor = 'not-allowed';
-    }
+      if (finalSubmitBtn) {
+        finalSubmitBtn.disabled = true;
+        finalSubmitBtn.textContent = '제출중...';
+        finalSubmitBtn.style.opacity = '0.7';
+        finalSubmitBtn.style.cursor = 'not-allowed';
+      }
 
-    alert('제출중입니다.');
-
-    try {
-      const params = new URLSearchParams();
-      params.append('mode', 'submit_inquiry');
-      params.append('clientCode', pendingInquiryData.clientCode || '');
-      params.append('smartStoreUrl', pendingInquiryData.smartStoreUrl || '');
-      params.append('firstInboundDate', pendingInquiryData.firstInboundDate || '');
-      params.append('skuCount', pendingInquiryData.skuCount || '');
-      params.append('pltCount', pendingInquiryData.pltCount || '');
-      params.append('returnInfo', pendingInquiryData.returnInfo || '');
-      params.append('packingType', pendingInquiryData.packingType || '');
-      params.append('systemEmail', pendingInquiryData.systemEmail || '');
-      params.append('userAgent', pendingInquiryData.userAgent || '');
-
-      const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: params.toString()
-      });
-
-      const text = await res.text();
-      let result = {};
+      alert('제출중입니다.');
 
       try {
-        result = JSON.parse(text);
-      } catch (e) {
-        throw new Error('응답 파싱 실패');
-      }
+        const params = new URLSearchParams();
+        params.append('mode', 'submit_inquiry');
+        params.append('clientCode', pendingInquiryData.clientCode || '');
+        params.append('smartStoreUrl', pendingInquiryData.smartStoreUrl || '');
+        params.append('firstInboundDate', pendingInquiryData.firstInboundDate || '');
+        params.append('skuCount', pendingInquiryData.skuCount || '');
+        params.append('pltCount', pendingInquiryData.pltCount || '');
+        params.append('returnInfo', pendingInquiryData.returnInfo || '');
+        params.append('packingType', pendingInquiryData.packingType || '');
+        params.append('systemEmail', pendingInquiryData.systemEmail || '');
+        params.append('userAgent', pendingInquiryData.userAgent || '');
 
-      if (!result.ok) {
-        throw new Error(result.message || '제출 중 오류가 발생했습니다.');
-      }
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body: params.toString()
+        });
 
-      setInquiryDone();
-      closeConfirmModal();
+        const text = await res.text();
+        let result = {};
 
-      document.getElementById('introCard').classList.add('hidden');
-      document.getElementById('inquiryFormCard').classList.add('hidden');
-      document.getElementById('guideSection').classList.remove('hidden');
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          throw new Error('응답 파싱 실패');
+        }
 
-      renderSidebar();
-      renderCurrentStage();
-      renderProgress();
-      renderFinalMessage();
+        if (!result.ok) {
+          throw new Error(result.message || '제출 중 오류가 발생했습니다.');
+        }
 
-      alert('제출 완료!');
+        setInquiryDone();
+        closeConfirmModal();
 
-      document.getElementById('guideSection').scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+        document.getElementById('introCard').classList.add('hidden');
+        document.getElementById('inquiryFormCard').classList.add('hidden');
+        document.getElementById('guideSection').classList.remove('hidden');
 
-    } catch (err) {
-      console.error(err);
-      alert(err.message || '제출 요청 중 오류가 발생했습니다. 웹앱 배포 상태를 확인해주세요.');
-    } finally {
-      if (finalSubmitBtn) {
-        finalSubmitBtn.disabled = false;
-        finalSubmitBtn.textContent = '제출하기';
-        finalSubmitBtn.style.opacity = '';
-        finalSubmitBtn.style.cursor = '';
+        renderSidebar();
+        renderCurrentStage();
+        renderProgress();
+        renderFinalMessage();
+
+        alert('제출 완료!');
+
+        document.getElementById('guideSection').scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert(err.message || '제출 요청 중 오류가 발생했습니다. 웹앱 배포 상태를 확인해주세요.');
+      } finally {
+        if (finalSubmitBtn) {
+          finalSubmitBtn.disabled = false;
+          finalSubmitBtn.textContent = '제출하기';
+          finalSubmitBtn.style.opacity = '';
+          finalSubmitBtn.style.cursor = '';
+        }
       }
     }
-  }
-</script>
 
     function normalizePlatform(value) {
       const v = String(value || '').trim();
@@ -1296,19 +1286,6 @@
         .replace(/&quot;/g, '"')
         .replace(/&#39;/g, "'")
         .replace(/&amp;/g, '&');
-    }
-
-    function escapeHtml(str) {
-      return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function escapeAttr(str) {
-      return escapeHtml(str);
     }
 
     function formatTableCellText(cell) {
@@ -1677,6 +1654,19 @@
         closeConfirmModal();
       }
     });
+
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
+    }
 
     loadData();
   </script>
