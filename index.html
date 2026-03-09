@@ -1177,57 +1177,55 @@
       document.body.style.overflow = '';
     }
 
-<script>
-  async function submitInquiry() {
-    if (!pendingInquiryData) return;
-
-    try {
-      const params = new URLSearchParams();
-      params.append('mode', 'submit_inquiry');
-      params.append('clientCode', pendingInquiryData.clientCode || '');
-      params.append('smartStoreUrl', pendingInquiryData.smartStoreUrl || '');
-      params.append('firstInboundDate', pendingInquiryData.firstInboundDate || '');
-      params.append('skuCount', pendingInquiryData.skuCount || '');
-      params.append('pltCount', pendingInquiryData.pltCount || '');
-      params.append('returnInfo', pendingInquiryData.returnInfo || '');
-      params.append('packingType', pendingInquiryData.packingType || '');
-      params.append('systemEmail', pendingInquiryData.systemEmail || '');
-      params.append('userAgent', pendingInquiryData.userAgent || '');
-
-      const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: params.toString()
-      });
-
-      const text = await res.text();
-      let result = {};
+    async function submitInquiry() {
+      if (!pendingInquiryData) return;
 
       try {
-        result = JSON.parse(text);
-      } catch (e) {
-        console.error('응답 파싱 실패:', text);
-        alert('제출은 되었을 수 있으나 응답 확인 중 오류가 발생했습니다.');
-        return;
-      }
+        const params = new URLSearchParams();
+        params.append('mode', 'submit_inquiry');
+        params.append('clientCode', pendingInquiryData.clientCode || '');
+        params.append('smartStoreUrl', pendingInquiryData.smartStoreUrl || '');
+        params.append('firstInboundDate', pendingInquiryData.firstInboundDate || '');
+        params.append('skuCount', pendingInquiryData.skuCount || '');
+        params.append('pltCount', pendingInquiryData.pltCount || '');
+        params.append('returnInfo', pendingInquiryData.returnInfo || '');
+        params.append('packingType', pendingInquiryData.packingType || '');
+        params.append('systemEmail', pendingInquiryData.systemEmail || '');
+        params.append('userAgent', pendingInquiryData.userAgent || '');
 
-      if (!result.ok) {
-        alert(result.message || '제출 중 오류가 발생했습니다.');
-        return;
-      }
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body: params.toString()
+        });
 
-      setInquiryDone();
-      closeConfirmModal();
-      document.getElementById('submitSuccessBox').classList.remove('hidden');
-      alert('질의 사항이 정상 제출되었습니다.');
-    } catch (err) {
-      console.error(err);
-      alert('제출 요청 중 오류가 발생했습니다. 웹앱 배포 상태를 확인해주세요.');
+        const text = await res.text();
+        let result = {};
+
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          console.error('응답 파싱 실패:', text);
+          alert('제출 응답 확인 중 오류가 발생했습니다. 웹앱 재배포 상태를 확인해주세요.');
+          return;
+        }
+
+        if (!result.ok) {
+          alert(result.message || '제출 중 오류가 발생했습니다.');
+          return;
+        }
+
+        setInquiryDone();
+        closeConfirmModal();
+        document.getElementById('submitSuccessBox').classList.remove('hidden');
+        alert('질의 사항이 정상 제출되었습니다.');
+      } catch (err) {
+        console.error(err);
+        alert('제출 요청 중 오류가 발생했습니다. 웹앱 배포 상태를 확인해주세요.');
+      }
     }
-  }
-</script>
 
     function showGuide() {
       document.getElementById('guideSection').classList.remove('hidden');
