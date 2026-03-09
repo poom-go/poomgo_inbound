@@ -1,2714 +1,1262 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>온보딩 가이드</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>품고 셀프 온보딩 가이드</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
+
   <style>
     :root{
-      --bg:#F6F7FB;
-      --card:#FFFFFF;
+      --bg:#f6f8fc;
+      --card:#ffffff;
       --text:#111827;
-      --muted:#6B7280;
-      --muted-2:#94A3B8;
-      --line:#E7ECF3;
-      --line-soft:#EEF2F7;
-      --primary:#0040D1;
-      --primary-soft:#EEF4FF;
-      --tip-bg:#FFF8E6;
-      --tip-border:#F4D38A;
-      --tip-badge-bg:#FFE7A8;
-      --tip-badge-text:#8A4B00;
-      --tip-text:#7A3E00;
-      --method-poomgo-bg:rgba(0,64,209,.05);
-      --method-poomgo-border:rgba(0,64,209,.16);
-      --method-naver-bg:rgba(3,199,90,.06);
-      --method-naver-border:rgba(3,199,90,.18);
-      --method-emphasis-bg:rgba(220,38,38,.05);
-      --method-emphasis-border:rgba(220,38,38,.16);
-      --shadow:0 8px 24px rgba(15,23,42,.05);
-      --shadow-soft:0 4px 14px rgba(15,23,42,.04);
-      --radius-xl:20px;
-      --radius-lg:16px;
-      --radius-md:12px;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --primary:#03C75A;
+      --primary-soft:#ECFDF3;
+      --primary-deep:#02b350;
+      --warn-bg:#fff7ed;
+      --warn-line:#fed7aa;
+      --warn-text:#9a3412;
+      --danger-bg:#fff1f2;
+      --danger-line:#fecdd3;
+      --danger-text:#be123c;
+      --info-bg:#eff6ff;
+      --info-line:#bfdbfe;
+      --info-text:#1d4ed8;
+      --shadow:0 10px 30px rgba(17,24,39,.08);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
     }
 
-    *{ box-sizing:border-box; }
-
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      margin:0;
-      font-family:Pretendard, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:var(--bg);
+      font-family:"Pretendard Variable","Pretendard",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#f8fafc 0%, #f6f8fc 100%);
       color:var(--text);
+      line-height:1.55;
     }
 
     .wrap{
-      width:100%;
-      max-width:none;
+      max-width:1440px;
       margin:0 auto;
-      padding:22px 24px 36px;
-    }
-
-    .top{ margin-bottom:18px; }
-
-    .title{
-      margin:0;
-      font-size:34px;
-      font-weight:900;
-      letter-spacing:-0.03em;
-      line-height:1.2;
-      color:#0F172A;
-    }
-
-    .sub{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-size:16px;
-      font-weight:700;
-      line-height:1.7;
-    }
-
-    .introCard,.formCard{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow);
       padding:24px;
-      margin-bottom:18px;
     }
 
-    .introTitle,.formTitle{
-      margin:0 0 10px;
-      font-size:24px;
-      font-weight:900;
-      letter-spacing:-0.02em;
-      line-height:1.3;
-      color:#0F172A;
-    }
-
-    .introDesc{
-      margin:0 0 18px;
-      color:#374151;
-      font-size:15px;
-      line-height:1.9;
-      font-weight:700;
-    }
-
-    .primaryBtn,.secondaryBtn,.submitBtn,.ghostBtn,.linkBtn,.nextBtn,.navMiniBtn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:220px;
-      min-height:48px;
-      padding:0 18px;
-      border-radius:12px;
-      border:none;
-      cursor:pointer;
-      font-size:15px;
-      font-weight:900;
-      text-decoration:none;
-      text-align:center;
-      transition:.18s ease;
-    }
-
-    .primaryBtn{
-      background:#0040D1;
-      color:#fff;
-      box-shadow:0 8px 18px rgba(0,64,209,.14);
-    }
-
-    .secondaryBtn{
-      background:#fff;
-      color:#0040D1;
-      border:1px solid #C7D6FF;
-      box-shadow:none;
-    }
-
-    .submitBtn{
-      background:#16A34A;
-      color:#fff;
-      box-shadow:0 8px 18px rgba(22,163,74,.12);
-    }
-
-    .ghostBtn{
-      background:#fff;
-      color:#111827;
-      border:1px solid #D7DFEA;
-      box-shadow:none;
-    }
-
-    .linkBtn{
-      background:#F59E0B;
-      color:#FFFFFF;
-      box-shadow:0 8px 18px rgba(245,158,11,.14);
-    }
-
-    .nextBtn{
-      background:#16A34A;
-      color:#fff;
-      box-shadow:0 8px 18px rgba(22,163,74,.12);
-    }
-
-    .navMiniBtn{
-      min-width:auto;
-      min-height:40px;
-      padding:0 14px;
-      font-size:14px;
-      background:#fff;
-      color:#334155;
-      border:1px solid #DCE3EC;
-      box-shadow:none;
-    }
-
-    .primaryBtn:hover,.secondaryBtn:hover,.submitBtn:hover,.ghostBtn:hover,.linkBtn:hover,.nextBtn:hover,.navMiniBtn:hover{
-      transform:translateY(-1px);
-    }
-
-    .formGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap:16px;
-      margin-top:18px;
+      margin-bottom:20px;
     }
 
-    .field{
+    .brand{
       display:flex;
       flex-direction:column;
       gap:8px;
-      justify-content:center;
     }
 
-    .field.full{ grid-column:1 / -1; }
-
-    .label{
-      font-size:14px;
-      font-weight:900;
-      color:#111827;
-      line-height:1.6;
-      display:flex;
+    .eyebrow{
+      display:inline-flex;
       align-items:center;
-      min-height:24px;
-    }
-
-    .helpText{
-      margin-top:-2px;
-      color:#6B7280;
+      gap:8px;
       font-size:13px;
-      line-height:1.8;
       font-weight:700;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    input[type="date"],
-    select{
-      width:100%;
-      height:48px;
-      padding:0 14px;
-      border:1px solid #D7DFEA;
-      border-radius:12px;
-      background:#fff;
-      font-size:14px;
-      color:#111827;
-      outline:none;
-      line-height:48px;
-    }
-
-    .actionRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:22px;
-      align-items:center;
-    }
-
-    .hidden{ display:none !important; }
-
-    .packingGuideBox{
-      margin-top:14px;
-      padding:16px;
-      border:1px solid #E5EAF2;
-      border-radius:14px;
-      background:#FAFBFC;
-    }
-
-    .packingGuideHead{
-      margin-bottom:10px;
-      font-size:14px;
-      font-weight:900;
-      color:#111827;
-      display:flex;
-      align-items:center;
-      min-height:24px;
-    }
-
-    .packingGuideImgWrap{ margin-top:12px; }
-
-    .packingGuideImg{
-      width:100%;
-      display:block;
-      border-radius:12px;
-      border:1px solid #E5E7EB;
-      background:#fff;
-      cursor:zoom-in;
-    }
-
-    .progressInline{
-      margin-top:12px;
-      padding:16px 16px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .progressHead{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .progressTitle,.progressMeta{
-      display:flex;
-      align-items:center;
-    }
-
-    .progressTitle{
-      margin:0;
-      font-size:18px;
-      font-weight:900;
-      color:#111827;
-    }
-
-    .progressMeta{
-      font-size:16px;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    .bar{
-      width:100%;
-      height:10px;
+      color:var(--primary-deep);
+      background:var(--primary-soft);
+      padding:8px 12px;
       border-radius:999px;
-      background:#E8EDF5;
-      overflow:hidden;
+      width:max-content;
     }
 
-    .barFill{
-      width:0%;
-      height:100%;
-      background:linear-gradient(90deg, #0040D1, #2F6BFF);
-      transition:width .25s ease;
+    h1{
+      margin:0;
+      font-size:32px;
+      line-height:1.2;
+      letter-spacing:-.03em;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
     }
 
     .layout{
       display:grid;
-      grid-template-columns:360px minmax(0, 1fr);
-      gap:18px;
+      grid-template-columns:320px minmax(0,1fr);
+      gap:24px;
       align-items:start;
     }
 
-    .card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:18px;
-      box-shadow:var(--shadow-soft);
-    }
-
     .sidebar{
-      padding:16px;
       position:sticky;
-      top:16px;
-      max-height:calc(100vh - 32px);
-      overflow:auto;
+      top:20px;
     }
 
-    .sidebarTitle{
-      margin:0 0 14px;
-      font-size:20px;
-      font-weight:900;
-      color:#111827;
+    .panel{
+      background:var(--card);
+      border:1px solid rgba(229,231,235,.9);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+    }
+
+    .side-card{
+      padding:18px;
+    }
+
+    .side-head{
       display:flex;
+      justify-content:space-between;
       align-items:center;
-      min-height:28px;
+      margin-bottom:14px;
     }
 
-    .stepNav{
+    .side-title{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+
+    .progress-badge{
+      font-size:12px;
+      font-weight:700;
+      color:var(--primary-deep);
+      background:var(--primary-soft);
+      border-radius:999px;
+      padding:7px 10px;
+    }
+
+    .step-list{
       display:flex;
       flex-direction:column;
-      gap:12px;
+      gap:10px;
     }
 
-    .stepGroup{
-      border:1px solid #E6ECF5;
-      border-radius:16px;
-      background:#fff;
-      overflow:hidden;
-    }
-
-    .stepGroup.done{
-      background:#ECFDF5;
-      border-color:#BBF7D0;
-    }
-
-    .stepGroup.current{
-      border-color:#C8D7FF;
-      box-shadow:0 0 0 3px rgba(0,64,209,.04);
-    }
-
-    .stepGroupHeader{
+    .step-btn{
       width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      padding:14px;
+      cursor:pointer;
+      transition:.18s ease;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .step-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 20px rgba(17,24,39,.05);
+    }
+
+    .step-btn.active{
+      border-color:rgba(3,199,90,.28);
+      background:linear-gradient(180deg,#fafffc 0%, #f3fff8 100%);
+      box-shadow:0 10px 24px rgba(3,199,90,.10);
+    }
+
+    .step-num{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      flex:0 0 34px;
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      font-size:14px;
+      background:#f3f4f6;
+      color:#111827;
+    }
+
+    .step-btn.active .step-num{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .step-meta{
+      min-width:0;
+      flex:1;
+    }
+
+    .step-name{
+      font-size:15px;
+      font-weight:800;
+      margin:0 0 4px;
+      letter-spacing:-.02em;
+    }
+
+    .step-status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#d1d5db;
+    }
+    .status-dot.done{background:var(--primary)}
+    .status-dot.current{background:#2563eb}
+
+    .side-note{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#f9fafb;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .content{
+      padding:24px;
+    }
+
+    .hero{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:10px;
-      padding:14px 14px;
-      background:transparent;
-      border:none;
-      cursor:pointer;
-      text-align:left;
+      gap:16px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
     }
 
-    .stepGroupHeaderLeft{
+    .hero-left{
       min-width:0;
-      flex:1 1 auto;
     }
 
-    .stepGroupTitle{
-      font-size:15px;
-      font-weight:900;
-      line-height:1.55;
-      color:#111827;
-      display:block;
-    }
-
-    .stepGroupMeta{
-      margin-top:4px;
-      font-size:12px;
-      color:#64748B;
-      font-weight:800;
-    }
-
-    .stepGroupArrow{
-      flex:0 0 auto;
-      font-size:14px;
-      color:#64748B;
-      font-weight:900;
-      padding-top:2px;
-    }
-
-    .stepSubList{
-      display:none;
-      padding:0 10px 10px 10px;
-      border-top:1px solid #EDF2F7;
-      background:#FBFCFF;
-    }
-
-    .stepGroup.open .stepSubList{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .stepSubItem{
-      width:100%;
-      border:none;
-      background:#fff;
-      border:1px solid #E8EDF5;
-      border-radius:12px;
-      padding:10px 12px;
-      text-align:left;
-      cursor:pointer;
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-    }
-
-    .stepSubItem:hover{
-      border-color:#C9D8FF;
-      background:#F8FBFF;
-    }
-
-    .stepSubItem.current{
-      border-color:#0040D1;
-      background:#EEF4FF;
-    }
-
-    .stepSubIndex{
-      flex:0 0 auto;
-      min-width:22px;
-      height:22px;
-      border-radius:999px;
-      background:#E9EEF8;
-      color:#475569;
-      font-size:11px;
-      font-weight:900;
+    .step-chip{
       display:inline-flex;
       align-items:center;
-      justify-content:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#f3f4f6;
+      color:#374151;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .hero h2{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.2;
+      letter-spacing:-.03em;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      background:#111827;
+      color:#fff;
+      padding:12px 16px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.secondary{
+      background:#fff;
+      color:#111827;
+      border:1px solid var(--line);
+    }
+    .btn.primary{
+      background:var(--primary);
+    }
+    .btn.primary:hover{
+      background:var(--primary-deep);
+    }
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      margin-top:8px;
+    }
+
+    .section{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      background:#fff;
+    }
+
+    .section h3{
+      margin:0 0 12px;
+      font-size:18px;
+      letter-spacing:-.02em;
+    }
+
+    .lead-box{
+      background:linear-gradient(180deg,#fbfffd 0%, #f3fff8 100%);
+      border:1px solid rgba(3,199,90,.20);
+      border-radius:20px;
+      padding:18px;
+      margin-bottom:18px;
+    }
+
+    .lead-title{
+      font-size:13px;
+      font-weight:800;
+      color:var(--primary-deep);
+      margin-bottom:8px;
+    }
+
+    .lead-text{
+      margin:0;
+      font-size:18px;
+      font-weight:800;
+      line-height:1.45;
+      letter-spacing:-.02em;
+    }
+
+    .check-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+
+    .check-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px 14px;
+      background:#f9fafb;
+      border:1px solid #eef2f7;
+      border-radius:16px;
+      font-size:14px;
+    }
+
+    .check-icon{
+      width:22px;
+      height:22px;
+      flex:0 0 22px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:#e5e7eb;
+      color:#111827;
+      font-size:12px;
+      font-weight:900;
       margin-top:1px;
     }
 
-    .stepSubItem.current .stepSubIndex{
-      background:#0040D1;
-      color:#fff;
-    }
-
-    .stepSubTextWrap{
-      min-width:0;
-      flex:1 1 auto;
-    }
-
-    .stepSubText{
-      font-size:13px;
-      font-weight:800;
-      line-height:1.5;
-      color:#111827;
-      word-break:break-word;
-    }
-
-    .stepSubType{
-      margin-top:3px;
-      font-size:11px;
-      color:#64748B;
-      font-weight:800;
-    }
-
-    .main{
-      padding:18px;
-      min-height:500px;
-    }
-
-    .stageCard{
-      border:1px solid var(--line);
-      border-radius:20px;
-      overflow:hidden;
-      background:#fff;
-    }
-
-    .stageHead{
-      padding:24px 28px 18px;
-      border-bottom:1px solid var(--line-soft);
-      background:#fff;
-    }
-
-    .stageTitleRow{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:92px;
-      height:34px;
-      padding:0 12px;
-      border-radius:999px;
-      background:var(--primary-soft);
-      color:#0040D1;
-      font-size:12px;
-      font-weight:900;
-      flex:0 0 auto;
-    }
-
-    .stageTitle{
-      margin:0;
-      font-size:28px;
-      font-weight:900;
-      line-height:1.25;
-      letter-spacing:-.03em;
-      color:#0F172A;
-      display:flex;
-      align-items:center;
-    }
-
-    .stageSubTitle{
-      margin:12px 0 0;
-      font-size:14px;
-      color:#64748B;
-      font-weight:800;
-      line-height:1.7;
-    }
-
-    .blocks{
-      padding:24px;
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-      background:#fff;
-    }
-
-    .block{
-      border:1px solid #EDF2F7;
+    .info-box,.warn-box,.danger-box{
       border-radius:18px;
-      background:#fff;
-      overflow:hidden;
-      padding-bottom:4px;
+      padding:16px;
+      margin-top:14px;
+      border:1px solid;
     }
 
-    .blockHead{
-      padding:18px 20px 14px;
-      background:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:nowrap;
+    .info-box{
+      background:var(--info-bg);
+      border-color:var(--info-line);
+      color:var(--info-text);
     }
 
-    .blockHeadLeft{
-      min-width:0;
-      flex:1 1 auto;
-      display:flex;
-      align-items:center;
+    .warn-box{
+      background:var(--warn-bg);
+      border-color:var(--warn-line);
+      color:var(--warn-text);
     }
 
-    .blockTitle{
+    .danger-box{
+      background:var(--danger-bg);
+      border-color:var(--danger-line);
+      color:var(--danger-text);
+    }
+
+    .box-title{
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .mini-list{
       margin:0;
-      font-size:20px;
-      font-weight:900;
-      line-height:1.45;
-      letter-spacing:-0.02em;
-      color:#111827;
-      display:flex;
-      align-items:center;
+      padding-left:18px;
     }
 
-    .headActions{
-      flex:0 0 auto;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+    .mini-list li + li{margin-top:6px}
 
-    .blockMetaBar{
-      margin:0 20px 16px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .metaPill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:28px;
-      padding:0 10px;
-      border-radius:999px;
-      background:#F8FAFC;
-      border:1px solid #E5EAF2;
-      color:#475569;
-      font-size:12px;
-      font-weight:900;
-    }
-
-    .imageToggleBtn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:124px;
-      height:42px;
-      padding:0 16px;
-      border:1px solid #0040D1;
-      border-radius:12px;
-      background:#0040D1;
-      color:#FFFFFF;
-      font-size:15px;
-      font-weight:900;
-      line-height:1;
-      cursor:pointer;
-      white-space:nowrap;
-      box-shadow:0 8px 16px rgba(0,64,209,.12);
-    }
-
-    .imagePanel{ display:none; }
-    .imagePanel.open{ display:block; }
-
-    .imgWrap{
-      padding:0 20px 20px;
-      background:#fff;
-    }
-
-    .imgWrap img{
-      width:100%;
-      display:block;
-      border-radius:14px;
-      border:1px solid var(--line);
-      cursor:zoom-in;
-      background:#fff;
-    }
-
-    .imgHint{
-      margin:8px 0 0;
-      text-align:right;
-      color:#6B7280;
-      font-size:12px;
+    .path{
+      background:#0f172a;
+      color:#f8fafc;
+      border-radius:18px;
+      padding:16px;
+      font-size:14px;
+      line-height:1.8;
+      white-space:pre-line;
+      margin-top:12px;
       font-weight:700;
     }
 
-    .method,.descBox{
-      position:relative;
-      margin:0 20px 16px;
-      padding:22px 18px 16px;
-      border:1px solid #E5EAF2;
-      border-radius:16px;
-      background:#fff;
-      overflow-x:auto;
-    }
-
-    .method{ border-color:#DDE5F0; }
-    .method.platform-poomgo{ background:var(--method-poomgo-bg); border-color:var(--method-poomgo-border); }
-    .method.platform-naver{ background:var(--method-naver-bg); border-color:var(--method-naver-border); }
-    .method.platform-emphasis{ background:var(--method-emphasis-bg); border-color:var(--method-emphasis-border); }
-    .descBox{ border-color:#E5EAF2; }
-
-    .methodLabel,.descLabel{
-      position:absolute;
-      top:-12px;
-      left:18px;
-      background:#fff;
-      padding:0 8px;
-      font-size:13px;
-      font-weight:900;
-      line-height:1.4;
-      white-space:nowrap;
-      display:flex;
-      align-items:center;
-      min-height:22px;
-      color:#64748B;
-    }
-
-    .methodText,.descText{
-      color:#1F2937;
-      font-size:16px;
-      font-weight:400;
-      line-height:1.95;
-      text-align:left;
-      word-break:break-word;
-    }
-
-    .methodText > div,
-    .descText > div,
-    .tipText > div{
-      margin:0 0 4px;
-    }
-
-    .tip{
-      margin:10px 20px 16px;
-      padding:14px 16px;
-      border-radius:14px;
-      background:#FFF8E6;
-      border:1px solid #F4D38A;
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      overflow-x:auto;
-    }
-
-    .tipBadge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:auto;
-      height:26px;
-      padding:0 9px;
-      border-radius:999px;
-      background:#FFE7A8;
-      color:#8A4B00;
-      font-size:12px;
-      font-weight:900;
-      flex:0 0 auto;
-      margin-top:2px;
-    }
-
-    .tipText{
-      color:#7A3E00;
-      font-size:16px;
-      font-weight:400;
-      line-height:1.95;
-      word-break:break-word;
-      width:100%;
-    }
-
-    .methodText a,.descText a,.tipText a{
-      color:#0040D1;
-      font-weight:900;
-      text-decoration:underline;
-      word-break:break-all;
-    }
-
-    .textDivider{
-      margin:14px 0;
-      border:0;
-      border-top:1px solid #E2E8F0;
-    }
-
-    .methodText table,.descText table,.tipText table{
-      width:auto;
-      max-width:100%;
-      border-collapse:collapse;
-      margin:12px 0;
-      background:#fff;
-      table-layout:auto;
-    }
-
-    .methodText th,.methodText td,
-    .descText th,.descText td,
-    .tipText th,.tipText td{
-      border:1px solid #D8DEE9;
-      padding:12px 14px;
-      text-align:left;
-      vertical-align:middle;
-      font-size:14px;
-      line-height:1.8;
-      word-break:break-word;
-      white-space:pre-wrap;
-    }
-
-    .methodText th,.descText th,.tipText th{
-      background:#F8FAFC;
-      font-weight:900;
-      color:#111827;
-      text-align:center;
-      vertical-align:middle;
-    }
-
-    .methodText tbody tr:nth-child(even),
-    .descText tbody tr:nth-child(even),
-    .tipText tbody tr:nth-child(even){
-      background:#FCFDFE;
-    }
-
-    .table-separator td{
-      padding:0 !important;
-      height:0;
-      line-height:0;
-      border-left:none !important;
-      border-right:none !important;
-      border-bottom:none !important;
-      border-top:2px solid #CBD5E1 !important;
-      background:#fff !important;
-    }
-
-    .processWrap{
-      margin:8px 0 4px;
-      padding:14px;
-      border:1px solid #E5EAF2;
-      border-radius:14px;
-      background:#FBFCFE;
-    }
-
-    .processFlow{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      gap:8px;
-      margin-bottom:12px;
-    }
-
-    .processStep{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:38px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:#EEF4FF;
-      color:#0F172A;
-      font-size:13px;
-      font-weight:900;
-      text-align:center;
-    }
-
-    .processArrow{
-      color:#64748B;
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .processMeta{
+    .subsections{
       display:flex;
       flex-direction:column;
-      gap:6px;
+      gap:14px;
     }
 
-    .processMetaRow{
-      font-size:14px;
-      line-height:1.75;
-      color:#334155;
-    }
-
-    .processMetaLabel{
-      font-weight:900;
-      color:#111827;
-    }
-
-    .buttonArea{
-      padding:0 20px 18px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .stageFooter{
-      padding:0 20px 20px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      background:#fff;
-      gap:12px;
-      flex-wrap:wrap;
-      border-top:1px solid #F1F5F9;
-    }
-
-    .stageFooterLeft,.stageFooterRight{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .empty{
-      padding:40px 20px;
-      text-align:center;
-      color:#6B7280;
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .finalMsg{
-      margin-top:14px;
-      padding:18px;
-      border:1px solid #BBF7D0;
-      background:#ECFDF5;
-      border-radius:16px;
-      display:none;
-    }
-
-    .finalMsg p{
-      margin:0;
-      color:#166534;
-      font-size:15px;
-      font-weight:900;
-      line-height:1.7;
-    }
-
-    .modalBack{
-      position:fixed;
-      inset:0;
-      background:rgba(17,24,39,.6);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:50;
-    }
-
-    .modal,.confirmModal,.statusModal{
-      width:min(720px, 96vw);
-      background:#fff;
-      border-radius:20px;
-      box-shadow:0 24px 48px rgba(15,23,42,.16);
-      overflow:hidden;
-    }
-
-    .modal{
-      width:min(1280px, 98vw);
-      max-height:94vh;
-      overflow:auto;
-      position:relative;
-    }
-
-    .modalHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      background:#fff;
-      border-bottom:1px solid var(--line);
-    }
-
-    .modalTitle{
-      margin:0;
-      font-size:16px;
-      font-weight:900;
-      display:flex;
-      align-items:center;
-      min-height:24px;
-    }
-
-    .modalBody{
-      padding:16px;
-      position:relative;
-    }
-
-    .zoomImg{
-      width:100%;
-      display:block;
-      border-radius:16px;
+    .sub-card{
       border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:#fff;
     }
 
-    .zoomNavBtn{
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      width:52px;
-      height:52px;
-      border:none;
-      border-radius:999px;
-      background:rgba(17,24,39,.72);
-      color:#fff;
-      font-size:24px;
-      font-weight:900;
-      cursor:pointer;
-      z-index:2;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .zoomPrev{ left:20px; }
-    .zoomNext{ right:20px; }
-
-    .zoomCounter{
-      margin-top:10px;
-      text-align:center;
-      font-size:13px;
+    .sub-title{
+      margin:0 0 8px;
+      font-size:16px;
       font-weight:800;
-      color:#64748B;
+      letter-spacing:-.02em;
     }
 
-    .confirmList{
-      display:grid;
+    .sub-text{
+      margin:0;
+      color:#374151;
+      font-size:14px;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      margin-top:10px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      min-width:520px;
+    }
+
+    th,td{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+    }
+
+    th{
+      background:#f9fafb;
+      font-size:13px;
+      color:#374151;
+      font-weight:800;
+    }
+
+    .complete-card{
+      margin-top:18px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      background:#fff;
+    }
+
+    .complete-card h3{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    .task-list{
+      display:flex;
+      flex-direction:column;
       gap:10px;
       margin-top:12px;
     }
 
-    .confirmItem{
+    .task-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
       padding:12px 14px;
-      border:1px solid #E5EAF2;
-      border-radius:12px;
-      background:#F9FBFF;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fafafa;
     }
 
-    .confirmKey{
-      font-size:12px;
-      font-weight:900;
-      color:#6B7280;
-      margin-bottom:4px;
+    .task-item input{
+      width:18px;
+      height:18px;
+      margin-top:2px;
+      accent-color:var(--primary);
+      cursor:pointer;
     }
 
-    .confirmValue{
+    .task-label{
       font-size:14px;
-      font-weight:800;
+      font-weight:700;
       color:#111827;
-      line-height:1.7;
-      word-break:break-word;
+    }
+
+    .footer-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#f3f4f6;
+      font-size:12px;
+      font-weight:800;
+      color:#374151;
+    }
+
+    .empty-image{
+      width:100%;
+      border:1px dashed #cbd5e1;
+      background:linear-gradient(180deg,#fcfcfd 0%, #f8fafc 100%);
+      border-radius:18px;
+      min-height:240px;
       display:flex;
       align-items:center;
-      min-height:24px;
-    }
-
-    .statusModal{
-      padding:28px 24px;
+      justify-content:center;
       text-align:center;
-    }
-
-    .statusSpinner{
-      width:42px;
-      height:42px;
-      margin:0 auto 14px;
-      border:4px solid #E5EAF2;
-      border-top-color:#0040D1;
-      border-radius:50%;
-      animation:spin 0.8s linear infinite;
-    }
-
-    .statusTitle{
-      margin:0;
-      font-size:20px;
-      font-weight:900;
-      color:#111827;
-    }
-
-    .statusDesc{
-      margin:10px 0 0;
+      color:#64748b;
+      padding:20px;
       font-size:14px;
-      line-height:1.8;
-      color:#6B7280;
       font-weight:700;
-    }
-
-    @keyframes spin{
-      to { transform: rotate(360deg); }
     }
 
     @media (max-width: 1100px){
       .layout{
         grid-template-columns:1fr;
       }
-
       .sidebar{
-        position:static;
-        max-height:none;
+        position:relative;
+        top:auto;
+      }
+      .grid{
+        grid-template-columns:1fr;
       }
     }
 
-    @media (max-width: 980px){
-      .wrap{
-        padding:18px 16px 30px;
-      }
-
-      .title{
-        font-size:28px;
-      }
-
-      .sub{
-        font-size:15px;
-      }
-
-      .formGrid{
-        grid-template-columns:1fr;
-      }
-
-      .sidebarTitle{
-        font-size:18px;
-      }
-
-      .main{
-        padding:16px;
-      }
-
-      .stageHead{
-        padding:20px 18px 16px;
-      }
-
-      .stageTitle{
-        font-size:24px;
-      }
-
-      .blocks{
-        padding:18px;
-      }
-
-      .blockHead{
-        flex-wrap:wrap;
-        align-items:flex-start;
-      }
-
-      .blockTitle{
-        font-size:18px;
-      }
-
-      .headActions{
-        width:100%;
-        justify-content:flex-end;
-      }
-
-      .imageToggleBtn{
-        width:100%;
-        font-size:14px;
-      }
-
-      .method,.descBox{
-        margin:0 0 16px;
-      }
-
-      .tip{
-        margin:10px 0 16px;
-      }
-
-      .buttonArea{
-        padding:0 0 18px;
-      }
-
-      .stageFooter{
-        padding:0 0 20px;
-      }
-
-      .stageFooterLeft,.stageFooterRight{
-        width:100%;
-      }
-
-      .methodText,.descText,.tipText{
-        font-size:15px;
-      }
-
-      .linkBtn,.nextBtn,.primaryBtn,.secondaryBtn,.submitBtn,.ghostBtn,.navMiniBtn{
-        width:100%;
-      }
-
-      .actionRow{
-        flex-direction:column;
-      }
-
-      .methodText table,.descText table,.tipText table{
-        min-width:520px;
-      }
-
-      .zoomNavBtn{
-        width:44px;
-        height:44px;
-      }
-
-      .zoomPrev{ left:12px; }
-      .zoomNext{ right:12px; }
+    @media (max-width: 640px){
+      .wrap{padding:14px}
+      h1{font-size:26px}
+      .hero h2{font-size:24px}
+      .content{padding:18px}
+      .step-btn{padding:12px}
     }
   </style>
 </head>
 <body>
-  <div class="wrap hidden" id="appWrap">
-    <div class="top">
-      <h1 class="title" id="pageTitle">온보딩 가이드</h1>
-      <p class="sub" id="pageSubtitle">데이터를 불러오는 중입니다.</p>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="eyebrow">셀프 세팅 가이드</div>
+        <h1>품고 셀프 온보딩</h1>
+        <p class="subtitle">문의 없이 순서대로 따라가면 세팅이 완료되도록 설계된 가이드입니다.</p>
+      </div>
     </div>
 
-    <section class="introCard hidden" id="introCard">
-      <h2 class="introTitle">물류사 질의 사항 최종 확인</h2>
-      <p class="introDesc">
-        본 항목은 네이버에 제출한 내용을 품고에서 최종 확인하기 위한 절차입니다.<br>
-        네이버에 입력한 정보와 동일하게 작성해주세요.
-      </p>
-      <div class="actionRow">
-        <button type="button" class="primaryBtn" id="openInquiryBtn">물류사 질의 사항 입력하러 가기</button>
-      </div>
-    </section>
-
-    <section class="formCard hidden" id="inquiryFormCard">
-      <h2 class="formTitle">물류사 질의 사항 최종 확인</h2>
-
-      <div class="formGrid">
-        <div class="field full">
-          <label class="label">스마트스토어 주소</label>
-          <input type="text" id="smartStoreUrl" placeholder="https://smartstore.naver.com/..." />
-        </div>
-
-        <div class="field">
-          <label class="label">초도 입고 예정일</label>
-          <input type="date" id="firstInboundDate" />
-        </div>
-
-        <div class="field">
-          <label class="label">운영 예정 상품(SKU) 수량</label>
-          <input type="number" id="skuCount" min="0" placeholder="예: 120" />
-        </div>
-
-        <div class="field">
-          <label class="label">월 보관 PLT 수량</label>
-          <input type="number" id="pltCount" min="0" placeholder="예: 3" />
-        </div>
-
-        <div class="field">
-          <label class="label">반품지 정보</label>
-          <select id="returnInfo">
-            <option value="">선택해주세요</option>
-            <option value="품고">품고</option>
-            <option value="브랜드사">브랜드사</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label class="label">포장 방법</label>
-          <select id="packingType">
-            <option value="">선택해주세요</option>
-            <option value="기본">기본</option>
-            <option value="에어캡">에어캡</option>
-            <option value="버블페이퍼">버블페이퍼</option>
-          </select>
-
-          <div class="helpText">
-            * 기본 : 박스 내 위 아래 에어캡이 1장씩 깔린 상태로 출고됩니다.<br>
-            * 에어캡 : 제품을 에어캡으로 포장하여 박스에 포장됩니다.(비용 추가 발생)<br>
-            * 버블페이퍼 : 제품을 버블페이퍼로 포장하여 박스에 포장됩니다.(비용 추가 발생)
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel side-card">
+          <div class="side-head">
+            <div class="side-title">진행 단계</div>
+            <div class="progress-badge" id="progressText">0 / 5 완료</div>
           </div>
 
-          <div class="packingGuideBox">
-            <div class="packingGuideHead">포장 방법 예시</div>
-            <button type="button" class="secondaryBtn" id="togglePackingGuideBtn" style="min-width:auto;height:42px;">예시 이미지보기</button>
-            <div class="packingGuideImgWrap hidden" id="packingGuideImgWrap">
-              <img id="packingGuideImg" src="" alt="포장 방법 예시" class="packingGuideImg" />
+          <div class="step-list" id="stepList"></div>
+
+          <div class="side-note">
+            현재 단계의 <strong>완료 기준</strong>을 체크하면 다음 단계로 넘어갈 수 있습니다.
+          </div>
+        </div>
+      </aside>
+
+      <main class="panel content">
+        <div class="hero">
+          <div class="hero-left">
+            <div class="step-chip" id="heroChip">STEP 1</div>
+            <h2 id="heroTitle">고객사 등록</h2>
+            <p id="heroDesc">현재 단계의 핵심 안내가 여기에 표시됩니다.</p>
+          </div>
+
+          <div class="hero-actions">
+            <button class="btn secondary" id="resetBtn" type="button">체크 초기화</button>
+          </div>
+        </div>
+
+        <div class="lead-box">
+          <div class="lead-title">지금 해야 할 일</div>
+          <p class="lead-text" id="leadText"></p>
+        </div>
+
+        <div class="grid">
+          <section class="section">
+            <h3>진행 순서</h3>
+            <ul class="check-list" id="flowList"></ul>
+
+            <div class="subsections" id="detailSections" style="margin-top:18px;"></div>
+          </section>
+
+          <section class="section">
+            <h3>입력 기준 / 주의사항</h3>
+            <div id="rightInfo"></div>
+
+            <div class="complete-card">
+              <h3>다음 단계로 넘어가기 전 확인</h3>
+              <p class="muted">아래 항목을 모두 체크하면 이 단계가 완료로 표시됩니다.</p>
+              <div class="task-list" id="taskList"></div>
             </div>
-          </div>
+          </section>
         </div>
 
-        <div class="field full">
-          <label class="label">품고 시스템 사용 메일 계정 주소를 입력해주세요.</label>
-          <input type="email" id="systemEmail" placeholder="example@company.com" />
+        <div class="footer-nav">
+          <button class="btn secondary" id="prevBtn" type="button">이전 단계</button>
+          <button class="btn primary" id="nextBtn" type="button">다음 단계</button>
         </div>
-      </div>
-
-      <div class="actionRow">
-        <button type="button" class="secondaryBtn" id="cancelInquiryBtn">닫기</button>
-        <button type="button" class="submitBtn" id="previewSubmitBtn">제출 전 확인</button>
-      </div>
-    </section>
-
-    <section class="hidden" id="mainGuideSection">
-      <div class="progressInline">
-        <div class="progressHead">
-          <p class="progressTitle">메인 가이드 진행률</p>
-          <div class="progressMeta" id="progressMeta">0 / 0 단계 완료</div>
-        </div>
-        <div class="bar"><div class="barFill" id="barFill"></div></div>
-      </div>
-
-      <div class="layout" style="margin-top:16px;">
-        <aside class="card sidebar">
-          <p class="sidebarTitle" id="clientNameBox">고객사 확인 중</p>
-          <div class="stepNav" id="stepNav"></div>
-        </aside>
-
-        <main class="card main">
-          <div id="currentStageArea"></div>
-          <div class="finalMsg" id="finalMsg">
-            <p>✅ 모든 온보딩 단계를 완료했습니다. 담당자에게 완료 여부를 공유해주세요.</p>
-          </div>
-        </main>
-      </div>
-    </section>
-
-    <section class="hidden" id="inboundGuideSection">
-      <div class="progressInline">
-        <div class="progressHead">
-          <p class="progressTitle">입고 가이드</p>
-          <div class="progressMeta">입고 전 필수 확인</div>
-        </div>
-      </div>
-
-      <div class="layout" style="margin-top:16px;">
-        <aside class="card sidebar">
-          <p class="sidebarTitle">입고 가이드</p>
-          <div class="stepNav" id="inboundStepNav"></div>
-        </aside>
-
-        <main class="card main">
-          <div class="actionRow" style="margin-top:0; margin-bottom:16px;">
-            <button type="button" class="ghostBtn" id="backToMainGuideBtn">← 메인 가이드로 돌아가기</button>
-          </div>
-          <div id="inboundStageArea"></div>
-        </main>
-      </div>
-    </section>
-  </div>
-
-  <div class="modalBack" id="zoomBack">
-    <div class="modal">
-      <div class="modalHead">
-        <p class="modalTitle" id="zoomTitle">이미지 확대</p>
-        <button class="secondaryBtn" id="zoomClose" type="button" style="min-width:auto;height:40px;">닫기</button>
-      </div>
-      <div class="modalBody">
-        <button class="zoomNavBtn zoomPrev hidden" id="zoomPrevBtn" type="button" aria-label="이전 이미지">&lt;</button>
-        <button class="zoomNavBtn zoomNext hidden" id="zoomNextBtn" type="button" aria-label="다음 이미지">&gt;</button>
-        <img class="zoomImg" id="zoomImg" src="" alt="zoom" />
-        <div class="zoomCounter hidden" id="zoomCounter"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modalBack" id="confirmBack">
-    <div class="confirmModal">
-      <div class="modalHead">
-        <p class="modalTitle">입력 내용 확인</p>
-        <button class="secondaryBtn" id="closeConfirmBtn" type="button" style="min-width:auto;height:40px;">닫기</button>
-      </div>
-      <div class="modalBody">
-        <p style="margin:0 0 12px; font-size:14px; line-height:1.8; color:#374151; font-weight:700;">
-          아래 내용으로 제출하시겠습니까?
-        </p>
-        <div class="confirmList" id="confirmList"></div>
-        <div class="actionRow" style="margin-top:18px;">
-          <button type="button" class="secondaryBtn" id="editAgainBtn">수정하기</button>
-          <button type="button" class="submitBtn" id="finalSubmitBtn">제출하기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modalBack" id="statusBack">
-    <div class="statusModal">
-      <div class="statusSpinner" id="statusSpinner"></div>
-      <p class="statusTitle" id="statusTitle">제출중입니다.</p>
-      <p class="statusDesc" id="statusDesc">잠시만 기다려주세요.</p>
+      </main>
     </div>
   </div>
 
   <script>
-    const APPS_SCRIPT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzJHhyl4gwS6R7MXtWKuFbTMZE0-DOwyGPA73l19dJD_SCF7S2mtyazd_1OmVvAoCJV/exec';
-    const PACKING_GUIDE_IMAGE_URL = 'https://drive.google.com/file/d/1EKpe0-VyNOZd9rPsTDXKR_OQONMsFBbY/view?usp=drive_link';
-
-    let payload = null;
-    let groupedSteps = [];
-    let inboundGroupedSteps = [];
-    let completedSteps = [];
-    let viewingStepNo = null;
-    let viewingInboundStepNo = null;
-    let selectedBlockOrderByStep = {};
-    let selectedInboundBlockOrderByStep = {};
-    let pendingInquiryData = null;
-
-    let currentGalleryImages = [];
-    let currentGalleryIndex = 0;
-
-    const params = new URLSearchParams(location.search);
-    const clientCode = params.get('client') || '';
-
-    function progressKey() {
-      return 'onboarding_progress_' + clientCode;
-    }
-
-    function blockSelectionKey() {
-      return 'onboarding_block_selection_' + clientCode;
-    }
-
-    function inboundBlockSelectionKey() {
-      return 'onboarding_inbound_block_selection_' + clientCode;
-    }
-
-    function loadProgress() {
-      try {
-        const raw = localStorage.getItem(progressKey());
-        const parsed = raw ? JSON.parse(raw) : [];
-        completedSteps = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        completedSteps = [];
-      }
-    }
-
-    function saveProgress() {
-      localStorage.setItem(progressKey(), JSON.stringify(completedSteps));
-    }
-
-    function loadBlockSelections() {
-      try {
-        const raw = localStorage.getItem(blockSelectionKey());
-        const parsed = raw ? JSON.parse(raw) : {};
-        selectedBlockOrderByStep = parsed && typeof parsed === 'object' ? parsed : {};
-      } catch (e) {
-        selectedBlockOrderByStep = {};
-      }
-
-      try {
-        const raw2 = localStorage.getItem(inboundBlockSelectionKey());
-        const parsed2 = raw2 ? JSON.parse(raw2) : {};
-        selectedInboundBlockOrderByStep = parsed2 && typeof parsed2 === 'object' ? parsed2 : {};
-      } catch (e) {
-        selectedInboundBlockOrderByStep = {};
-      }
-    }
-
-    function saveBlockSelections() {
-      localStorage.setItem(blockSelectionKey(), JSON.stringify(selectedBlockOrderByStep));
-      localStorage.setItem(inboundBlockSelectionKey(), JSON.stringify(selectedInboundBlockOrderByStep));
-    }
-
-    function isInquiryDone() {
-      return !!(payload && payload.client && payload.client.inquirySubmitted);
-    }
-
-    function isNShippingReady() {
-      return !!(payload && payload.client && payload.client.nShippingReady);
-    }
-
-    function isCompleted(stepNo) {
-      return completedSteps.includes(stepNo);
-    }
-
-    function getCurrentStepNo() {
-      const next = groupedSteps.find(step => !isCompleted(step.stepNo));
-      return next ? next.stepNo : null;
-    }
-
-    function getDisplayStepNo() {
-      if (viewingStepNo) return viewingStepNo;
-      return getCurrentStepNo();
-    }
-
-    function getInboundDisplayStepNo() {
-      if (viewingInboundStepNo) return viewingInboundStepNo;
-      return inboundGroupedSteps.length ? inboundGroupedSteps[0].stepNo : null;
-    }
-
-    function getSortedBlocks(step) {
-      return (step && step.blocks ? [...step.blocks] : []).sort((a, b) => a.blockOrder - b.blockOrder);
-    }
-
-    function ensureSelectedBlock(step) {
-      if (!step) return null;
-      const stepKey = String(step.stepNo);
-      const blocks = getSortedBlocks(step);
-      if (!blocks.length) return null;
-
-      const savedOrder = Number(selectedBlockOrderByStep[stepKey] || 0);
-      let found = blocks.find(block => Number(block.blockOrder) === savedOrder);
-
-      if (!found) {
-        found = blocks[0];
-        selectedBlockOrderByStep[stepKey] = found.blockOrder;
-        saveBlockSelections();
-      }
-
-      return found;
-    }
-
-    function ensureSelectedInboundBlock(step) {
-      if (!step) return null;
-      const stepKey = String(step.stepNo);
-      const blocks = getSortedBlocks(step);
-      if (!blocks.length) return null;
-
-      const savedOrder = Number(selectedInboundBlockOrderByStep[stepKey] || 0);
-      let found = blocks.find(block => Number(block.blockOrder) === savedOrder);
-
-      if (!found) {
-        found = blocks[0];
-        selectedInboundBlockOrderByStep[stepKey] = found.blockOrder;
-        saveBlockSelections();
-      }
-
-      return found;
-    }
-
-    function getSelectedBlockIndex(step) {
-      const blocks = getSortedBlocks(step);
-      const current = ensureSelectedBlock(step);
-      if (!current) return -1;
-      return blocks.findIndex(b => Number(b.blockOrder) === Number(current.blockOrder));
-    }
-
-    function getSelectedInboundBlockIndex(step) {
-      const blocks = getSortedBlocks(step);
-      const current = ensureSelectedInboundBlock(step);
-      if (!current) return -1;
-      return blocks.findIndex(b => Number(b.blockOrder) === Number(current.blockOrder));
-    }
-
-    function setSelectedBlock(stepNo, blockOrder) {
-      selectedBlockOrderByStep[String(stepNo)] = Number(blockOrder);
-      saveBlockSelections();
-    }
-
-    function setSelectedInboundBlock(stepNo, blockOrder) {
-      selectedInboundBlockOrderByStep[String(stepNo)] = Number(blockOrder);
-      saveBlockSelections();
-    }
-
-    function moveBlock(step, direction) {
-      if (!step) return;
-      const blocks = getSortedBlocks(step);
-      if (!blocks.length) return;
-
-      const currentIndex = getSelectedBlockIndex(step);
-      if (currentIndex < 0) return;
-
-      const nextIndex = currentIndex + direction;
-      if (nextIndex < 0 || nextIndex >= blocks.length) return;
-
-      setSelectedBlock(step.stepNo, blocks[nextIndex].blockOrder);
-      renderSidebar();
-      renderCurrentStage();
-    }
-
-    function moveInboundBlock(step, direction) {
-      if (!step) return;
-      const blocks = getSortedBlocks(step);
-      if (!blocks.length) return;
-
-      const currentIndex = getSelectedInboundBlockIndex(step);
-      if (currentIndex < 0) return;
-
-      const nextIndex = currentIndex + direction;
-      if (nextIndex < 0 || nextIndex >= blocks.length) return;
-
-      setSelectedInboundBlock(step.stepNo, blocks[nextIndex].blockOrder);
-      renderInboundSidebar();
-      renderInboundStage();
-    }
-
-    function extractGoogleDriveFileId(url = '') {
-      const s = String(url || '').trim();
-      if (!s) return '';
-
-      const patterns = [
-        /\/file\/d\/([a-zA-Z0-9_-]+)/,
-        /[?&]id=([a-zA-Z0-9_-]+)/,
-        /\/d\/([a-zA-Z0-9_-]+)/,
-        /\/thumbnail\?id=([a-zA-Z0-9_-]+)/,
-        /\/uc\?(?:export=view&)?id=([a-zA-Z0-9_-]+)/
-      ];
-
-      for (const pattern of patterns) {
-        const m = s.match(pattern);
-        if (m && m[1]) return m[1];
-      }
-
-      if (/^[a-zA-Z0-9_-]{20,}$/.test(s)) return s;
-      return '';
-    }
-
-    function convertDriveUrlToThumb(url = '', size = 'w1600') {
-      const fileId = extractGoogleDriveFileId(url);
-      if (!fileId) return String(url || '').trim();
-      return `https://drive.google.com/thumbnail?id=${fileId}&sz=${size}`;
-    }
-
-    function convertDriveUrlToZoom(url = '', size = 'w4000') {
-      const fileId = extractGoogleDriveFileId(url);
-      if (!fileId) return String(url || '').trim();
-      return `https://drive.google.com/thumbnail?id=${fileId}&sz=${size}`;
-    }
-
-    function updateScreenHash(screen) {
-      if (screen === 'inbound') {
-        location.hash = '#inbound-guide-screen';
-      } else {
-        history.replaceState(null, '', location.pathname + location.search);
-      }
-    }
-
-    function shouldShowInboundOnLoad() {
-      return location.hash === '#inbound-guide-screen';
-    }
-
-    function showStatusModal(title, desc, isLoading = true) {
-      document.getElementById('statusTitle').textContent = title || '';
-      document.getElementById('statusDesc').textContent = desc || '';
-      document.getElementById('statusSpinner').style.display = isLoading ? 'block' : 'none';
-      document.getElementById('statusBack').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function hideStatusModal() {
-      document.getElementById('statusBack').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function loadData() {
-      if (!clientCode) {
-        alert('고객사 코드가 없습니다.');
-        return;
-      }
-
-      const packingGuideImg = document.getElementById('packingGuideImg');
-      const packingGuideThumb = convertDriveUrlToThumb(PACKING_GUIDE_IMAGE_URL, 'w1600');
-      const packingGuideZoom = convertDriveUrlToZoom(PACKING_GUIDE_IMAGE_URL, 'w4000');
-
-      packingGuideImg.src = packingGuideThumb;
-      packingGuideImg.setAttribute('data-zoom', packingGuideZoom);
-      packingGuideImg.setAttribute('data-title', '포장 방법 예시');
-      packingGuideImg.onerror = function() {
-        this.src = PACKING_GUIDE_IMAGE_URL;
-      };
-
-      window.renderOnboardingData = function(data) {
-        if (!data || data.ok === false) {
-          alert((data && data.message) || '가이드 데이터를 불러오지 못했습니다.');
-          return;
-        }
-
-        payload = data;
-        loadProgress();
-        loadBlockSelections();
-        buildSteps();
-        buildInboundSteps();
-        renderStaticText();
-        renderIntroState();
-
-        const appWrap = document.getElementById('appWrap');
-        if (appWrap) appWrap.classList.remove('hidden');
-      };
-
-      const script = document.createElement('script');
-      script.src =
-        APPS_SCRIPT_WEBAPP_URL +
-        '?mode=data&client=' + encodeURIComponent(clientCode) +
-        '&callback=renderOnboardingData';
-      document.body.appendChild(script);
-    }
-
-    function buildSteps() {
-      const items = (payload && payload.guideItems) ? payload.guideItems : [];
-      const map = new Map();
-
-      items.forEach(item => {
-        if (!map.has(item.stepNo)) {
-          map.set(item.stepNo, {
-            stepNo: item.stepNo,
-            stepCode: item.stepCode,
-            stepName: item.stepName,
-            blocks: []
-          });
-        }
-        map.get(item.stepNo).blocks.push(item);
-      });
-
-      groupedSteps = Array.from(map.values()).sort((a, b) => a.stepNo - b.stepNo);
-    }
-
-    function buildInboundSteps() {
-      const items = (payload && payload.inboundGuideItems) ? payload.inboundGuideItems : [];
-      const map = new Map();
-
-      items.forEach(item => {
-        if (!map.has(item.stepNo)) {
-          map.set(item.stepNo, {
-            stepNo: item.stepNo,
-            stepCode: item.stepCode,
-            stepName: item.stepName,
-            blocks: []
-          });
-        }
-        map.get(item.stepNo).blocks.push(item);
-      });
-
-      inboundGroupedSteps = Array.from(map.values()).sort((a, b) => a.stepNo - b.stepNo);
-    }
-
-    function renderStaticText() {
-      const client = payload && payload.client ? payload.client : null;
-      document.title = client && client.pageTitle ? client.pageTitle : '온보딩 가이드';
-      document.getElementById('pageTitle').textContent = client && client.pageTitle ? client.pageTitle : '온보딩 가이드';
-      document.getElementById('pageSubtitle').textContent = client && client.subtitle ? client.subtitle : '아래 순서대로 진행해주세요.';
-      document.getElementById('clientNameBox').textContent = client && client.clientName ? client.clientName : '고객사';
-    }
-
-    function showMainGuideScreen() {
-      document.getElementById('mainGuideSection').classList.remove('hidden');
-      document.getElementById('inboundGuideSection').classList.add('hidden');
-      updateScreenHash('main');
-      renderSidebar();
-      renderCurrentStage();
-      renderProgress();
-      renderFinalMessage();
-    }
-
-    function showInboundGuideScreen() {
-      document.getElementById('mainGuideSection').classList.add('hidden');
-      document.getElementById('inboundGuideSection').classList.remove('hidden');
-      updateScreenHash('inbound');
-      renderInboundSidebar();
-      renderInboundStage();
-      document.getElementById('inboundGuideSection').scrollIntoView({ behavior:'smooth', block:'start' });
-    }
-
-    function renderIntroState() {
-      const introCard = document.getElementById('introCard');
-      const formCard = document.getElementById('inquiryFormCard');
-
-      if (isInquiryDone()) {
-        introCard.classList.add('hidden');
-        formCard.classList.add('hidden');
-
-        if (shouldShowInboundOnLoad()) {
-          showInboundGuideScreen();
-        } else {
-          showMainGuideScreen();
-        }
-        return;
-      }
-
-      introCard.classList.remove('hidden');
-      formCard.classList.add('hidden');
-      document.getElementById('mainGuideSection').classList.add('hidden');
-      document.getElementById('inboundGuideSection').classList.add('hidden');
-    }
-
-    function openInquiryForm() {
-      if (isInquiryDone()) {
-        renderIntroState();
-        return;
-      }
-      document.getElementById('introCard').classList.add('hidden');
-      document.getElementById('inquiryFormCard').classList.remove('hidden');
-    }
-
-    function closeInquiryForm() {
-      if (isInquiryDone()) {
-        renderIntroState();
-        return;
-      }
-      document.getElementById('introCard').classList.remove('hidden');
-      document.getElementById('inquiryFormCard').classList.add('hidden');
-    }
-
-    function getFormData() {
-      return {
-        clientCode: clientCode,
-        smartStoreUrl: document.getElementById('smartStoreUrl').value.trim(),
-        firstInboundDate: document.getElementById('firstInboundDate').value.trim(),
-        skuCount: document.getElementById('skuCount').value.trim(),
-        pltCount: document.getElementById('pltCount').value.trim(),
-        returnInfo: document.getElementById('returnInfo').value.trim(),
-        packingType: document.getElementById('packingType').value.trim(),
-        systemEmail: document.getElementById('systemEmail').value.trim(),
-        userAgent: navigator.userAgent || ''
-      };
-    }
-
-    function validateForm(data) {
-      if (!data.smartStoreUrl) return '스마트스토어 주소를 입력해주세요.';
-      if (!data.firstInboundDate) return '초도 입고 예정일을 선택해주세요.';
-      if (!data.skuCount) return '운영 예정 상품(SKU) 수량을 입력해주세요.';
-      if (!data.pltCount) return '월 보관 PLT 수량을 입력해주세요.';
-      if (!data.returnInfo) return '반품지 정보를 선택해주세요.';
-      if (!data.packingType) return '포장 방법을 선택해주세요.';
-      if (!data.systemEmail) return '품고 시스템 사용 메일 계정 주소를 입력해주세요.';
-      return '';
-    }
-
-    function openConfirmModal(data) {
-      const list = document.getElementById('confirmList');
-      list.innerHTML = `
-        ${confirmItem('스마트스토어 주소', data.smartStoreUrl)}
-        ${confirmItem('초도 입고 예정일', data.firstInboundDate)}
-        ${confirmItem('운영 예정 상품(SKU) 수량', data.skuCount)}
-        ${confirmItem('월 보관 PLT 수량', data.pltCount)}
-        ${confirmItem('반품지 정보', data.returnInfo)}
-        ${confirmItem('포장 방법', data.packingType)}
-        ${confirmItem('품고 시스템 사용 메일 계정', data.systemEmail)}
-      `;
-      document.getElementById('confirmBack').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function confirmItem(key, value) {
-      return `
-        <div class="confirmItem">
-          <div class="confirmKey">${escapeHtml(key)}</div>
-          <div class="confirmValue">${escapeHtml(value)}</div>
-        </div>
-      `;
-    }
-
-    function closeConfirmModal() {
-      document.getElementById('confirmBack').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    async function submitInquiry() {
-      if (!pendingInquiryData) return;
-
-      const finalSubmitBtn = document.getElementById('finalSubmitBtn');
-      if (finalSubmitBtn) {
-        finalSubmitBtn.disabled = true;
-        finalSubmitBtn.textContent = '제출중...';
-        finalSubmitBtn.style.opacity = '0.7';
-        finalSubmitBtn.style.cursor = 'not-allowed';
-      }
-
-      showStatusModal('제출중입니다.', '잠시만 기다려주세요.', true);
-
-      try {
-        const params = new URLSearchParams();
-        params.append('mode', 'submit_inquiry');
-        params.append('clientCode', pendingInquiryData.clientCode || '');
-        params.append('smartStoreUrl', pendingInquiryData.smartStoreUrl || '');
-        params.append('firstInboundDate', pendingInquiryData.firstInboundDate || '');
-        params.append('skuCount', pendingInquiryData.skuCount || '');
-        params.append('pltCount', pendingInquiryData.pltCount || '');
-        params.append('returnInfo', pendingInquiryData.returnInfo || '');
-        params.append('packingType', pendingInquiryData.packingType || '');
-        params.append('systemEmail', pendingInquiryData.systemEmail || '');
-        params.append('userAgent', pendingInquiryData.userAgent || '');
-
-        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    const STEPS = [
+      {
+        id: "client_register",
+        title: "고객사 등록",
+        shortDesc: "고객사 등록 메일 확인 후 정보 입력, 로그인, 구성원 추가까지 완료해주세요.",
+        lead: "고객사 등록 메일을 확인하고 고객사 정보 입력 → 품고 나우 로그인 → 구성원 추가까지 완료해주세요.",
+        flow: [
+          "고객사 등록 메일 수신",
+          "고객사 정보 입력",
+          "품고 나우 로그인",
+          "구성원 추가"
+        ],
+        details: [
+          {
+            title: "고객사 등록 메일 수신",
+            html: `
+              <p class="sub-text">품고에서 발송된 <strong>고객사 등록 메일</strong>을 확인한 후, 메일 내 <strong>[고객사 등록하기]</strong> 버튼을 클릭하여 등록을 진행해주세요.</p>
+              <div class="warn-box">
+                <div class="box-title">주의</div>
+                <ul class="mini-list">
+                  <li>메일 수신 후 <strong>24시간 이내 등록</strong>이 필요합니다.</li>
+                </ul>
+              </div>
+            `
           },
-          body: params.toString()
+          {
+            title: "고객사 정보 입력",
+            html: `
+              <p class="sub-text">브랜드 및 사업자 정보를 입력해주세요.</p>
+              <div class="info-box">
+                <div class="box-title">입력 기준</div>
+                <ul class="mini-list">
+                  <li>고객사명 : <strong>브랜드명과 동일하게 입력</strong></li>
+                  <li>사업자 정보 : <strong>네이버 기준 사업자 정보 입력</strong></li>
+                </ul>
+              </div>
+            `
+          },
+          {
+            title: "품고 나우 로그인",
+            html: `
+              <p class="sub-text">고객사 등록이 완료되면 <strong>품고 나우 로그인</strong>을 진행해주세요.</p>
+            `
+          },
+          {
+            title: "구성원 추가",
+            html: `
+              <p class="sub-text">시스템을 사용할 내부 구성원을 추가해주세요.</p>
+              <div class="path">품고 나우
+→ 등록
+→ + 구성원 추가
+→ 이름 / 이메일 / 전화번호 입력
+→ 구성원 추가</div>
+            `
+          }
+        ],
+        rightInfo: `
+          <div class="info-box">
+            <div class="box-title">완료 기준</div>
+            <ul class="mini-list">
+              <li>품고 나우 로그인 가능</li>
+              <li>필요한 구성원 계정 추가 완료</li>
+            </ul>
+          </div>
+
+          <div class="danger-box">
+            <div class="box-title">문제가 발생한 경우</div>
+            <p style="margin:0 0 8px;">다음 상황에 해당하는 경우 아래 정보를 전달해주세요.</p>
+            <ul class="mini-list">
+              <li>고객사 등록 버튼이 보이지 않는 경우</li>
+              <li>메일 수신 후 24시간이 초과된 경우</li>
+            </ul>
+            <div class="table-wrap" style="margin-top:10px;">
+              <table>
+                <thead>
+                  <tr><th>전달 필요 정보</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>사업자 주소</td></tr>
+                  <tr><td>브랜드 고객센터 대표번호</td></tr>
+                  <tr><td>반품지 주소</td></tr>
+                  <tr><td>담당자명 / 연락처 / 이메일</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `,
+        tasks: [
+          "고객사 등록 메일 확인 완료",
+          "고객사 정보 입력 완료",
+          "품고 나우 로그인 완료",
+          "필요한 구성원 추가 완료"
+        ]
+      },
+      {
+        id: "fulfillment_connect",
+        title: "풀필먼트 연동",
+        shortDesc: "판매처 등록 후 풀필먼트 신청, 연동 상태 확인, N배송 동의까지 진행해주세요.",
+        lead: "판매처 등록 후 풀필먼트 신청 → 연동 상태 확인 → N배송 동의까지 진행해주세요.",
+        flow: [
+          "판매처 등록",
+          "풀필먼트 신청",
+          "연동 확인",
+          "N배송 동의"
+        ],
+        details: [
+          {
+            title: "판매처 등록",
+            html: `
+              <p class="sub-text">스마트스토어 등 <strong>판매처 계정</strong>을 등록해주세요.</p>
+            `
+          },
+          {
+            title: "풀필먼트 신청",
+            html: `
+              <p class="sub-text">네이버 풀필먼트 이용을 위해 <strong>풀필먼트 신청</strong>을 진행해주세요.</p>
+            `
+          },
+          {
+            title: "연동 확인 & N배송 동의",
+            html: `
+              <p class="sub-text">아래 항목이 정확히 표시되는지 반드시 확인해주세요.</p>
+              <div class="info-box">
+                <div class="box-title">확인 항목</div>
+                <ul class="mini-list">
+                  <li>물류사 : <strong>품고</strong></li>
+                  <li>연동 상태 : <strong>연동중</strong></li>
+                </ul>
+              </div>
+            `
+          }
+        ],
+        rightInfo: `
+          <div class="warn-box">
+            <div class="box-title">자주 발생하는 문제</div>
+            <ul class="mini-list">
+              <li>타 물류사가 <strong>연동중</strong>으로 남아있는 경우</li>
+              <li>연동 신청만 하고 상태 확인을 하지 않는 경우</li>
+            </ul>
+          </div>
+
+          <div class="danger-box">
+            <div class="box-title">반드시 처리해주세요</div>
+            <p style="margin:0;">타 물류사를 이용하지 않는 경우, 연동중으로 표시된 물류사는 <strong>모두 철회 처리</strong>해야 합니다.</p>
+          </div>
+
+          <div class="info-box">
+            <div class="box-title">완료 기준</div>
+            <ul class="mini-list">
+              <li>물류사 : 품고</li>
+              <li>연동 상태 : 연동중</li>
+              <li>불필요한 타 물류사 연동 없음</li>
+            </ul>
+          </div>
+        `,
+        tasks: [
+          "판매처 등록 완료",
+          "풀필먼트 신청 완료",
+          "물류사 품고 / 연동 상태 연동중 확인 완료",
+          "불필요한 타 물류사 연동 철회 완료"
+        ]
+      },
+      {
+        id: "sku_register",
+        title: "SKU 등록",
+        shortDesc: "상품 식별 정보와 보관 정보를 정확히 입력하고, 연결상품 매핑까지 완료해주세요.",
+        lead: "상품 식별 정보와 보관 정보를 기준에 맞게 입력하여 SKU 등록 → 연결상품 매핑까지 완료해주세요.",
+        flow: [
+          "SKU 등록 전 유의사항 확인",
+          "SKU 등록",
+          "연결상품 매핑"
+        ],
+        details: [
+          {
+            title: "SKU 등록 화면 안내",
+            html: `
+              <div class="empty-image">
+                여기에 SKU 등록 화면 이미지를 넣어주세요.<br><br>
+                추천: 이미지 위에 ① SKU명 ② 바코드 ③ 보관온도 ④ 소비기한 ⑤ 로트번호 ⑥ 보관사이즈 ⑦ SKU유형 번호 표시
+              </div>
+            `
+          },
+          {
+            title: "SKU명",
+            html: `
+              <p class="sub-text">SKU명은 <strong>모두가 식별 가능한 형태</strong>로 입력해주세요.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>기준</th><th>예시</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>식별 가능</td><td>꽃물 틴트 1호 체리</td></tr>
+                    <tr><td>식별 가능</td><td>꽃물 틴트 2호 딸기</td></tr>
+                    <tr><td>식별 불가</td><td>체리 / 딸기</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          {
+            title: "바코드",
+            html: `
+              <p class="sub-text">실제 상품에 부착된 <strong>실물 바코드와 동일하게 입력</strong>해주세요.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>상황</th><th>처리 방법</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>실물 바코드 없음</td><td>네이버 바코드 선택</td></tr>
+                    <tr><td>실물 바코드 있음</td><td>실물과 동일한 바코드 입력</td></tr>
+                    <tr><td>바코드 미검수</td><td>임의 바코드 입력 또는 네이버 바코드 선택</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          {
+            title: "보관 정보 설정",
+            html: `
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>항목</th><th>입력 기준</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>보관 온도</td><td>상온</td></tr>
+                    <tr><td>소비기한 관리 여부</td><td>소비기한을 관리하는 상품만 관리 선택</td></tr>
+                    <tr><td>로트번호 관리 여부</td><td>제조 로트를 관리하는 상품만 관리 선택</td></tr>
+                    <tr><td>보관 사이즈</td><td>가로 / 세로 / 높이 / 무게 모두 1 입력</td></tr>
+                    <tr><td>SKU 유형</td><td>상품 선택</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          {
+            title: "연결상품 매핑",
+            html: `
+              <p class="sub-text">등록된 SKU와 <strong>스마트스토어 상품을 연결</strong>해주세요.</p>
+            `
+          }
+        ],
+        rightInfo: `
+          <div class="warn-box">
+            <div class="box-title">자주 틀리는 항목</div>
+            <ul class="mini-list">
+              <li>SKU명을 옵션 없이 입력</li>
+              <li>실물과 다른 바코드 입력</li>
+              <li>관리하지 않는 SKU를 관리로 설정</li>
+              <li>SKU 유형을 사은품으로 선택</li>
+            </ul>
+          </div>
+
+          <div class="danger-box">
+            <div class="box-title">주의</div>
+            <ul class="mini-list">
+              <li>관리 여부는 <strong>설정 후 수정이 불가</strong>합니다.</li>
+              <li>사은품 선택 시 <strong>SKU 등록이 되지 않습니다.</strong></li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <div class="box-title">보관 사이즈 안내</div>
+            <p style="margin:0;">최초 입고 SKU는 품고에서 실제 체적 정보를 측정하여 <strong>자동 반영</strong>됩니다.</p>
+          </div>
+
+          <div class="info-box">
+            <div class="box-title">완료 기준</div>
+            <ul class="mini-list">
+              <li>SKU 등록 완료</li>
+              <li>판매처 상품과 연결상품 매핑 완료</li>
+            </ul>
+          </div>
+        `,
+        tasks: [
+          "SKU 등록 전 유의사항 확인 완료",
+          "SKU 등록 완료",
+          "연결상품 매핑 완료"
+        ]
+      },
+      {
+        id: "inbound_guide",
+        title: "입고 가이드 확인",
+        shortDesc: "입고 전 포장 방법과 입고 기준을 반드시 확인해주세요.",
+        lead: "상품 입고 전 포장 방법 및 입고 기준을 반드시 확인해주세요.",
+        flow: [
+          "입고 기준 확인",
+          "포장 방법 확인",
+          "파렛타이징 기준 확인",
+          "벌크 입고 기준 확인"
+        ],
+        details: [
+          {
+            title: "입고 전 반드시 확인해주세요",
+            html: `
+              <p class="sub-text">입고 전 아래 기준을 확인한 후 진행해주세요.</p>
+              <ul class="mini-list">
+                <li>입고 기준</li>
+                <li>포장 방법</li>
+                <li>파렛타이징 기준</li>
+                <li>벌크 입고 기준</li>
+              </ul>
+            `
+          },
+          {
+            title: "포장 유형 안내",
+            html: `
+              <div class="empty-image">
+                여기에 포장 유형별 이미지 카드 3개를 넣어주세요.<br><br>
+                추천 구성: 박스 패키지 / 일반 풀패키지 / 친환경 풀패키지
+              </div>
+            `
+          }
+        ],
+        rightInfo: `
+          <div class="warn-box">
+            <div class="box-title">기준 미준수 시</div>
+            <ul class="mini-list">
+              <li>입고 지연 가능</li>
+              <li>추가 작업 비용 발생 가능</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <div class="box-title">완료 기준</div>
+            <ul class="mini-list">
+              <li>포장 방법 확인 완료</li>
+              <li>입고 기준 확인 완료</li>
+            </ul>
+          </div>
+        `,
+        tasks: [
+          "입고 기준 확인 완료",
+          "포장 방법 확인 완료",
+          "파렛타이징 / 벌크 입고 기준 확인 완료"
+        ]
+      },
+      {
+        id: "n_delivery",
+        title: "N배송 설정",
+        shortDesc: "연결상품과 재고를 점검한 뒤 N배송 설정을 완료해주세요.",
+        lead: "상품 연결 상태와 재고를 점검한 후 N배송 설정을 완료해주세요.",
+        flow: [
+          "연결 상품 점검",
+          "재고 점검",
+          "N배송 설정하기"
+        ],
+        details: [
+          {
+            title: "연결 상품 점검",
+            html: `
+              <p class="sub-text">SKU와 판매처 상품 연결 상태를 확인해주세요.</p>
+              <div class="danger-box">
+                <div class="box-title">중요</div>
+                <p style="margin:0;">연결되지 않은 상품은 <strong>출고되지 않습니다.</strong></p>
+              </div>
+            `
+          },
+          {
+            title: "재고 점검",
+            html: `
+              <p class="sub-text">입고된 상품의 재고가 정상 반영되었는지 확인해주세요.</p>
+            `
+          },
+          {
+            title: "N배송 설정하기",
+            html: `
+              <p class="sub-text">N배송 출고 설정을 활성화해주세요.</p>
+            `
+          }
+        ],
+        rightInfo: `
+          <div class="warn-box">
+            <div class="box-title">설정 전 확인사항</div>
+            <ul class="mini-list">
+              <li>연결되지 않은 상품 없음</li>
+              <li>재고 정상 반영 완료</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <div class="box-title">완료 기준</div>
+            <ul class="mini-list">
+              <li>연결 상품 이상 없음</li>
+              <li>재고 정상 반영</li>
+              <li>N배송 설정 완료</li>
+            </ul>
+          </div>
+        `,
+        tasks: [
+          "연결 상품 점검 완료",
+          "재고 점검 완료",
+          "N배송 설정 완료"
+        ]
+      }
+    ];
+
+    const STORAGE_KEY = "poomgo_onboarding_state_v1";
+
+    const state = loadState();
+
+    let currentStepIndex = state.currentStepIndex ?? 0;
+
+    const stepListEl = document.getElementById("stepList");
+    const progressTextEl = document.getElementById("progressText");
+    const heroChipEl = document.getElementById("heroChip");
+    const heroTitleEl = document.getElementById("heroTitle");
+    const heroDescEl = document.getElementById("heroDesc");
+    const leadTextEl = document.getElementById("leadText");
+    const flowListEl = document.getElementById("flowList");
+    const detailSectionsEl = document.getElementById("detailSections");
+    const rightInfoEl = document.getElementById("rightInfo");
+    const taskListEl = document.getElementById("taskList");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return { tasks:{}, currentStepIndex:0 };
+        return JSON.parse(raw);
+      }catch(e){
+        return { tasks:{}, currentStepIndex:0 };
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        tasks: state.tasks || {},
+        currentStepIndex
+      }));
+    }
+
+    function getStepTaskState(stepId){
+      if(!state.tasks) state.tasks = {};
+      if(!state.tasks[stepId]) state.tasks[stepId] = [];
+      return state.tasks[stepId];
+    }
+
+    function isStepDone(step){
+      const tasks = getStepTaskState(step.id);
+      return step.tasks.length > 0 && step.tasks.every((_, idx) => !!tasks[idx]);
+    }
+
+    function isAnyTaskChecked(step){
+      const tasks = getStepTaskState(step.id);
+      return tasks.some(Boolean);
+    }
+
+    function renderSidebar(){
+      stepListEl.innerHTML = "";
+      const completedCount = STEPS.filter(isStepDone).length;
+      progressTextEl.textContent = `${completedCount} / ${STEPS.length} 완료`;
+
+      STEPS.forEach((step, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "step-btn" + (index === currentStepIndex ? " active" : "");
+        btn.addEventListener("click", () => {
+          currentStepIndex = index;
+          saveState();
+          render();
         });
 
-        const text = await res.text();
-        let result = {};
-        try {
-          result = JSON.parse(text);
-        } catch (e) {
-          throw new Error('응답 파싱 실패');
+        const done = isStepDone(step);
+        const started = isAnyTaskChecked(step);
+
+        let statusText = "대기";
+        let dotClass = "";
+        if(index === currentStepIndex){
+          statusText = done ? "완료" : "진행중";
+          dotClass = done ? "done" : "current";
+        }else if(done){
+          statusText = "완료";
+          dotClass = "done";
+        }else if(started){
+          statusText = "진행중";
+          dotClass = "current";
         }
 
-        if (!result.ok) throw new Error(result.message || '제출 중 오류가 발생했습니다.');
-
-        if (payload && payload.client) {
-          payload.client.inquirySubmitted = true;
-        }
-
-        await sleep(300);
-        closeConfirmModal();
-        renderIntroState();
-
-        showStatusModal('제출 완료!', '메인 가이드로 이동합니다.', false);
-        await sleep(700);
-        hideStatusModal();
-
-        document.getElementById('mainGuideSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      } catch (err) {
-        console.error(err);
-        hideStatusModal();
-        alert(err.message || '제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      } finally {
-        if (finalSubmitBtn) {
-          finalSubmitBtn.disabled = false;
-          finalSubmitBtn.textContent = '제출하기';
-          finalSubmitBtn.style.opacity = '';
-          finalSubmitBtn.style.cursor = '';
-        }
-      }
-    }
-
-    function normalizePlatform(value) {
-      const v = String(value || '').trim();
-      if (v === '품고') return 'platform-poomgo';
-      if (v === '네이버') return 'platform-naver';
-      if (v.includes('강조')) return 'platform-emphasis';
-      return '';
-    }
-
-    function getBlockTypeLabel(type) {
-      const t = String(type || '').trim();
-      if (!t) return '안내';
-      if (t.includes('이미지')) return '이미지';
-      if (t.includes('버튼')) return '바로가기';
-      if (t.includes('체크')) return '체크리스트';
-      return t;
-    }
-
-    function htmlToPlainTextForSplit(html) {
-      return String(html || '')
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/\r/g, '');
-    }
-
-    function stripHtmlTags(html) {
-      const div = document.createElement('div');
-      div.innerHTML = String(html || '');
-      return (div.textContent || div.innerText || '').trim();
-    }
-
-    function splitTableRowPreservingHtml(lineHtml) {
-      const safe = String(lineHtml || '').replace(/\|/g, '[[PIPE]]');
-      return safe.split('[[PIPE]]').map(cell => cell.trim());
-    }
-
-    function formatTableCellHtml(cell) {
-      return String(cell || '')
-        .trim()
-        .replace(/\\n/g, '<br>')
-        .replace(/\n/g, '<br>');
-    }
-
-    function buildCustomTableHtml(tableContent) {
-      const normalized = htmlToPlainTextForSplit(tableContent);
-      const rawLines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
-      if (!rawLines.length) return '';
-
-      const rows = rawLines.map(line => {
-        const textOnly = stripHtmlTags(line);
-        if (textOnly === '--') return { separator: true, cells: [] };
-
-        const cells = splitTableRowPreservingHtml(line).map(cell => cell.trim());
-        return { separator: false, cells };
-      });
-
-      const headerRow = rows.find(r => !r.separator && r.cells.length > 0);
-      if (!headerRow) return '';
-
-      const colCount = headerRow.cells.length;
-      const headerIndex = rows.indexOf(headerRow);
-
-      const bodyRows = rows.slice(headerIndex + 1).map(row => {
-        if (row.separator) return row;
-        const cells = [...row.cells];
-        while (cells.length < colCount) cells.push('');
-        return { separator: false, cells: cells.slice(0, colCount) };
-      });
-
-      const thead = `
-        <thead>
-          <tr>
-            ${headerRow.cells.map(h => `<th>${formatTableCellHtml(h)}</th>`).join('')}
-          </tr>
-        </thead>
-      `;
-
-      const rowspanMeta = bodyRows.map(row => {
-        if (row.separator) {
-          return Array.from({ length: colCount }, () => ({ skip: false, rowspan: 1 }));
-        }
-        return Array.from({ length: colCount }, () => ({ skip: false, rowspan: 1 }));
-      });
-
-      [0, 1].forEach(colIndex => {
-        let r = 0;
-
-        while (r < bodyRows.length) {
-          const row = bodyRows[r];
-
-          if (row.separator) {
-            r++;
-            continue;
-          }
-
-          const current = stripHtmlTags(row.cells[colIndex] || '');
-
-          if (!current) {
-            r++;
-            continue;
-          }
-
-          let span = 1;
-          let next = r + 1;
-
-          while (next < bodyRows.length) {
-            const nextRow = bodyRows[next];
-            if (nextRow.separator) break;
-
-            const nextText = stripHtmlTags(nextRow.cells[colIndex] || '');
-
-            if (nextText === '') {
-              span++;
-              next++;
-            } else {
-              break;
-            }
-          }
-
-          rowspanMeta[r][colIndex].rowspan = span;
-
-          for (let k = r + 1; k < r + span; k++) {
-            rowspanMeta[k][colIndex].skip = true;
-          }
-
-          r = r + span;
-        }
-      });
-
-      const tbody = bodyRows.length ? `
-        <tbody>
-          ${bodyRows.map((row, rowIndex) => {
-            if (row.separator) {
-              return `<tr class="table-separator"><td colspan="${colCount}"></td></tr>`;
-            }
-
-            let tds = '';
-
-            row.cells.forEach((cell, colIndex) => {
-              const meta = rowspanMeta[rowIndex][colIndex];
-              if (meta.skip) return;
-
-              const rowspanAttr = meta.rowspan > 1 ? ` rowspan="${meta.rowspan}"` : '';
-              tds += `<td${rowspanAttr}>${formatTableCellHtml(cell)}</td>`;
-            });
-
-            return `<tr>${tds}</tr>`;
-          }).join('')}
-        </tbody>
-      ` : '';
-
-      return `<table>${thead}${tbody}</table>`;
-    }
-
-    function buildProcessHtml(processContent) {
-      const normalized = htmlToPlainTextForSplit(processContent);
-      const lines = normalized
-        .split('\n')
-        .map(line => line.trim())
-        .filter(Boolean);
-
-      if (!lines.length) return '';
-
-      const flowLine = lines[0];
-      const steps = flowLine.split('>').map(v => v.trim()).filter(Boolean);
-      const metaLines = lines.slice(1);
-
-      const flowHtml = `
-        <div class="processFlow">
-          ${steps.map((step, idx) => `
-            <span class="processStep">${step}</span>
-            ${idx < steps.length - 1 ? '<span class="processArrow">→</span>' : ''}
-          `).join('')}
-        </div>
-      `;
-
-      const metaHtml = metaLines.length ? `
-        <div class="processMeta">
-          ${metaLines.map(line => {
-            const textOnly = stripHtmlTags(line);
-            const colonIndex = textOnly.indexOf(':');
-
-            if (colonIndex > -1) {
-              const label = textOnly.slice(0, colonIndex).trim();
-              const value = textOnly.slice(colonIndex + 1).trim();
-              return `<div class="processMetaRow"><span class="processMetaLabel">${escapeHtml(label)}:</span> ${escapeHtml(value)}</div>`;
-            }
-
-            return `<div class="processMetaRow">${escapeHtml(textOnly)}</div>`;
-          }).join('')}
-        </div>
-      ` : '';
-
-      return `<div class="processWrap">${flowHtml}${metaHtml}</div>`;
-    }
-
-    function renderPlainSegment(segment) {
-      if (!segment) return '';
-      return String(segment).split('<br>').map(part => {
-        const trimmed = stripHtmlTags(part);
-        if (!trimmed) return '';
-        if (trimmed === '---') return '<hr class="textDivider">';
-        return `<div>${part}</div>`;
-      }).join('');
-    }
-
-    function renderRichContent(text) {
-      if (!text) return '';
-
-      const raw = String(text);
-      const blockRegex = /\[\[(table|process)\]\]([\s\S]*?)\[\[\/\1\]\]/gi;
-
-      if (!blockRegex.test(raw)) return renderPlainSegment(raw);
-
-      blockRegex.lastIndex = 0;
-
-      let result = '';
-      let lastIndex = 0;
-      let match;
-
-      while ((match = blockRegex.exec(raw)) !== null) {
-        const before = raw.slice(lastIndex, match.index);
-        const type = match[1];
-        const inner = match[2];
-
-        result += renderPlainSegment(before);
-
-        if (type === 'table') {
-          result += buildCustomTableHtml(inner);
-        } else if (type === 'process') {
-          result += buildProcessHtml(inner);
-        }
-
-        lastIndex = match.index + match[0].length;
-      }
-
-      result += renderPlainSegment(raw.slice(lastIndex));
-      return result;
-    }
-
-    function renderSidebar() {
-      const nav = document.getElementById('stepNav');
-      if (!groupedSteps.length) {
-        nav.innerHTML = '<div class="stepGroup"><div class="stepGroupHeader"><span class="stepGroupTitle">단계 정보 없음</span></div></div>';
-        return;
-      }
-
-      const currentStepNo = getCurrentStepNo();
-      const displayStepNo = getDisplayStepNo();
-
-      nav.innerHTML = groupedSteps.map(step => {
-        const done = isCompleted(step.stepNo);
-        const current = !done && step.stepNo === currentStepNo;
-        const open = step.stepNo === displayStepNo || done;
-        const blocks = getSortedBlocks(step);
-        const selectedBlock = ensureSelectedBlock(step);
-
-        return `
-          <div class="stepGroup ${done ? 'done' : ''} ${current ? 'current' : ''} ${open ? 'open' : ''}">
-            <button class="stepGroupHeader" type="button" data-toggle-step="${step.stepNo}">
-              <div class="stepGroupHeaderLeft">
-                <span class="stepGroupTitle">${done ? '✅' : (current ? '🔵' : '⚪')} STEP${step.stepNo} ${escapeHtml(step.stepName)}</span>
-                <div class="stepGroupMeta">${blocks.length}개 세부항목</div>
-              </div>
-              <span class="stepGroupArrow">${open ? '▾' : '▸'}</span>
-            </button>
-
-            <div class="stepSubList">
-              ${blocks.map((block, idx) => `
-                <button
-                  type="button"
-                  class="stepSubItem ${selectedBlock && Number(selectedBlock.blockOrder) === Number(block.blockOrder) && step.stepNo === displayStepNo ? 'current' : ''}"
-                  data-select-block="${step.stepNo}|${block.blockOrder}">
-                  <span class="stepSubIndex">${idx + 1}</span>
-                  <span class="stepSubTextWrap">
-                    <span class="stepSubText">${escapeHtml(block.blockTitle || ('세부항목 ' + (idx + 1)))}</span>
-                    <span class="stepSubType">${escapeHtml(getBlockTypeLabel(block.blockType))}</span>
-                  </span>
-                </button>
-              `).join('')}
+        btn.innerHTML = `
+          <div class="step-num">${index + 1}</div>
+          <div class="step-meta">
+            <div class="step-name">${step.title}</div>
+            <div class="step-status">
+              <span class="status-dot ${dotClass}"></span>
+              <span>${statusText}</span>
             </div>
           </div>
         `;
-      }).join('');
+        stepListEl.appendChild(btn);
+      });
     }
 
-    function renderInboundSidebar() {
-      const nav = document.getElementById('inboundStepNav');
-      if (!inboundGroupedSteps.length) {
-        nav.innerHTML = '<div class="stepGroup"><div class="stepGroupHeader"><span class="stepGroupTitle">입고 가이드 없음</span></div></div>';
-        return;
-      }
+    function renderMain(){
+      const step = STEPS[currentStepIndex];
+      heroChipEl.textContent = `STEP ${currentStepIndex + 1}`;
+      heroTitleEl.textContent = step.title;
+      heroDescEl.textContent = step.shortDesc;
+      leadTextEl.textContent = step.lead;
 
-      const displayStepNo = getInboundDisplayStepNo();
+      flowListEl.innerHTML = "";
+      step.flow.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="check-icon">✓</span><div>${item}</div>`;
+        flowListEl.appendChild(li);
+      });
 
-      nav.innerHTML = inboundGroupedSteps.map(step => {
-        const open = step.stepNo === displayStepNo;
-        const blocks = getSortedBlocks(step);
-        const selectedBlock = ensureSelectedInboundBlock(step);
-
-        return `
-          <div class="stepGroup ${open ? 'open current' : ''}">
-            <button class="stepGroupHeader" type="button" data-toggle-inbound-step="${step.stepNo}">
-              <div class="stepGroupHeaderLeft">
-                <span class="stepGroupTitle">📦 STEP${step.stepNo} ${escapeHtml(step.stepName)}</span>
-                <div class="stepGroupMeta">${blocks.length}개 세부항목</div>
-              </div>
-              <span class="stepGroupArrow">${open ? '▾' : '▸'}</span>
-            </button>
-
-            <div class="stepSubList">
-              ${blocks.map((block, idx) => `
-                <button
-                  type="button"
-                  class="stepSubItem ${selectedBlock && Number(selectedBlock.blockOrder) === Number(block.blockOrder) && step.stepNo === displayStepNo ? 'current' : ''}"
-                  data-select-inbound-block="${step.stepNo}|${block.blockOrder}">
-                  <span class="stepSubIndex">${idx + 1}</span>
-                  <span class="stepSubTextWrap">
-                    <span class="stepSubText">${escapeHtml(block.blockTitle || ('세부항목 ' + (idx + 1)))}</span>
-                    <span class="stepSubType">${escapeHtml(getBlockTypeLabel(block.blockType))}</span>
-                  </span>
-                </button>
-              `).join('')}
-            </div>
-          </div>
+      detailSectionsEl.innerHTML = "";
+      step.details.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "sub-card";
+        card.innerHTML = `
+          <h4 class="sub-title">${item.title}</h4>
+          ${item.html}
         `;
-      }).join('');
+        detailSectionsEl.appendChild(card);
+      });
+
+      rightInfoEl.innerHTML = step.rightInfo;
+
+      taskListEl.innerHTML = "";
+      const taskState = getStepTaskState(step.id);
+
+      step.tasks.forEach((task, idx) => {
+        const row = document.createElement("label");
+        row.className = "task-item";
+        row.innerHTML = `
+          <input type="checkbox" ${taskState[idx] ? "checked" : ""} />
+          <span class="task-label">${task}</span>
+        `;
+
+        const checkbox = row.querySelector("input");
+        checkbox.addEventListener("change", (e) => {
+          taskState[idx] = e.target.checked;
+          saveState();
+          renderSidebar();
+          updateNavButtons();
+        });
+
+        taskListEl.appendChild(row);
+      });
+
+      updateNavButtons();
     }
 
-    function getInboundGateBlock(step) {
-      if (!step || !step.blocks) return null;
-      return step.blocks.find(block => String(block.buttonUrl || '').trim() === '#inbound-guide') || null;
+    function updateNavButtons(){
+      prevBtn.disabled = currentStepIndex === 0;
+      nextBtn.disabled = currentStepIndex === STEPS.length - 1;
+
+      const step = STEPS[currentStepIndex];
+      if(currentStepIndex < STEPS.length - 1){
+        nextBtn.textContent = isStepDone(step) ? "다음 단계" : "다음 단계";
+      }else{
+        nextBtn.textContent = "마지막 단계";
+      }
     }
 
-    function renderCurrentStage() {
-      const area = document.getElementById('currentStageArea');
-      const stepNo = getDisplayStepNo();
-
-      if (!stepNo) {
-        area.innerHTML = '<div class="empty">현재 표시할 단계가 없습니다.</div>';
-        return;
-      }
-
-      const step = groupedSteps.find(s => s.stepNo === stepNo);
-      if (!step) {
-        area.innerHTML = '<div class="empty">단계 정보를 찾을 수 없습니다.</div>';
-        return;
-      }
-
-      const blocks = getSortedBlocks(step);
-      const selectedBlock = ensureSelectedBlock(step);
-
-      if (!selectedBlock) {
-        area.innerHTML = '<div class="empty">세부항목이 없습니다.</div>';
-        return;
-      }
-
-      const selectedIndex = blocks.findIndex(b => Number(b.blockOrder) === Number(selectedBlock.blockOrder));
-      const inboundGateBlock = getInboundGateBlock(step);
-      const hasInboundGate = !!inboundGateBlock;
-      const isLastBlock = selectedIndex === blocks.length - 1;
-
-      area.innerHTML = `
-        <section class="stageCard">
-          <div class="stageHead">
-            <div class="stageTitleRow">
-              <div class="badge">${isCompleted(step.stepNo) ? '완료 STEP ' + step.stepNo : 'STEP ' + step.stepNo}</div>
-              <p class="stageTitle">${escapeHtml(step.stepName)}</p>
-            </div>
-            <p class="stageSubTitle">세부항목 ${selectedIndex + 1} / ${blocks.length}</p>
-          </div>
-
-          <div class="blocks">
-            ${renderBlockHtml(selectedBlock, false, hasInboundGate)}
-          </div>
-
-          <div class="stageFooter">
-            <div class="stageFooterLeft">
-              <button type="button" class="navMiniBtn" data-prev-block="${step.stepNo}" ${selectedIndex <= 0 ? 'disabled style="opacity:.45;cursor:not-allowed;"' : ''}>이전 세부항목</button>
-              <button type="button" class="navMiniBtn" data-next-block="${step.stepNo}" ${selectedIndex >= blocks.length - 1 ? 'disabled style="opacity:.45;cursor:not-allowed;"' : ''}>다음 세부항목</button>
-            </div>
-
-            <div class="stageFooterRight">
-              ${isLastBlock ? (
-                hasInboundGate
-                  ? `
-                    <button class="linkBtn" type="button" data-open-inbound-guide>
-                      ${escapeHtml(inboundGateBlock.buttonText || '입고 가이드 보러가기')}
-                    </button>
-                    <button class="nextBtn" type="button" id="goNShippingBtn" data-step="${step.stepNo}">
-                      N배송설정하기
-                    </button>
-                  `
-                  : `<button class="nextBtn" type="button" id="completeCurrentStepBtn" data-step="${step.stepNo}">STEP 완료</button>`
-              ) : ''}
-            </div>
-          </div>
-        </section>
-      `;
-    }
-
-    function renderInboundStage() {
-      const area = document.getElementById('inboundStageArea');
-      const stepNo = getInboundDisplayStepNo();
-
-      if (!stepNo) {
-        area.innerHTML = '<div class="empty">입고 가이드 단계가 없습니다.</div>';
-        return;
-      }
-
-      const step = inboundGroupedSteps.find(s => s.stepNo === stepNo);
-      if (!step) {
-        area.innerHTML = '<div class="empty">입고 가이드 정보를 찾을 수 없습니다.</div>';
-        return;
-      }
-
-      const blocks = getSortedBlocks(step);
-      const selectedBlock = ensureSelectedInboundBlock(step);
-
-      if (!selectedBlock) {
-        area.innerHTML = '<div class="empty">세부항목이 없습니다.</div>';
-        return;
-      }
-
-      const selectedIndex = blocks.findIndex(b => Number(b.blockOrder) === Number(selectedBlock.blockOrder));
-
-      area.innerHTML = `
-        <section class="stageCard">
-          <div class="stageHead">
-            <div class="stageTitleRow">
-              <div class="badge">입고 STEP ${step.stepNo}</div>
-              <p class="stageTitle">${escapeHtml(step.stepName)}</p>
-            </div>
-            <p class="stageSubTitle">세부항목 ${selectedIndex + 1} / ${blocks.length}</p>
-          </div>
-
-          <div class="blocks">
-            ${renderBlockHtml(selectedBlock, true, false)}
-          </div>
-
-          <div class="stageFooter">
-            <div class="stageFooterLeft">
-              <button type="button" class="navMiniBtn" data-prev-inbound-block="${step.stepNo}" ${selectedIndex <= 0 ? 'disabled style="opacity:.45;cursor:not-allowed;"' : ''}>이전 세부항목</button>
-              <button type="button" class="navMiniBtn" data-next-inbound-block="${step.stepNo}" ${selectedIndex >= blocks.length - 1 ? 'disabled style="opacity:.45;cursor:not-allowed;"' : ''}>다음 세부항목</button>
-            </div>
-            <div class="stageFooterRight"></div>
-          </div>
-        </section>
-      `;
-    }
-
-    function renderBlockHtml(block, isInbound, suppressInboundButton) {
-      const title = block.blockTitle || '';
-      const path = block.path || '';
-      const desc = block.desc || '';
-      const imageThumb = block.imageThumb || '';
-      const imageZoom = block.imageZoom || '';
-      const buttonText = block.buttonText || '';
-      const buttonUrl = block.buttonUrl || '';
-      const highlight = block.highlight || '';
-      const platformClass = normalizePlatform(block.platform);
-      const hasImage = !!imageThumb;
-      const isInboundGuideButton = buttonUrl === '#inbound-guide';
-
-      return `
-        <div class="block">
-          <div class="blockHead">
-            <div class="blockHeadLeft">
-              <p class="blockTitle">${escapeHtml(title)}</p>
-            </div>
-            <div class="headActions">
-              ${hasImage ? `<button type="button" class="imageToggleBtn" data-toggle-image>이미지 보기</button>` : ''}
-            </div>
-          </div>
-
-          <div class="blockMetaBar">
-            <span class="metaPill">${escapeHtml(getBlockTypeLabel(block.blockType))}</span>
-            ${block.platform ? `<span class="metaPill">${escapeHtml(block.platform)}</span>` : ''}
-          </div>
-
-          ${imageThumb ? `
-            <div class="imagePanel">
-              <div class="imgWrap">
-                <img
-                  src="${escapeAttr(imageThumb)}"
-                  data-zoom="${escapeAttr(imageZoom || imageThumb)}"
-                  data-title="${escapeAttr(title || '이미지')}"
-                  data-step-code="${escapeAttr(block.stepCode || '')}"
-                  data-screen="${isInbound ? 'inbound' : 'main'}"
-                  alt="${escapeAttr(title || '이미지')}"
-                >
-                <p class="imgHint">이미지를 클릭하면 확대됩니다.</p>
-              </div>
-            </div>
-          ` : ''}
-
-          ${path ? `
-            <div class="method ${platformClass}">
-              <span class="methodLabel">경로 안내</span>
-              <div class="methodText">${renderRichContent(path)}</div>
-            </div>
-          ` : ''}
-
-          ${highlight ? `
-            <div class="tip">
-              <span class="tipBadge">💡TIP</span>
-              <div class="tipText">${renderRichContent(highlight)}</div>
-            </div>
-          ` : ''}
-
-          ${desc ? `
-            <div class="descBox">
-              <span class="descLabel">상세 안내</span>
-              <div class="descText">${renderRichContent(desc)}</div>
-            </div>
-          ` : ''}
-
-          ${buttonText && buttonUrl && !(suppressInboundButton && isInboundGuideButton) ? `
-            <div class="buttonArea">
-              ${isInboundGuideButton
-                ? `<button class="linkBtn" type="button" data-open-inbound-guide>${escapeHtml(buttonText)}</button>`
-                : `<a class="linkBtn" href="${escapeAttr(buttonUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(buttonText)}</a>`
-              }
-            </div>
-          ` : ''}
-        </div>
-      `;
-    }
-
-    function renderProgress() {
-      const total = groupedSteps.length;
-      const done = completedSteps.filter(stepNo => groupedSteps.some(s => s.stepNo === stepNo)).length;
-      const pct = total ? Math.round((done / total) * 100) : 0;
-      document.getElementById('progressMeta').textContent = done + ' / ' + total + ' 단계 완료';
-      document.getElementById('barFill').style.width = pct + '%';
-    }
-
-    function renderFinalMessage() {
-      const total = groupedSteps.length;
-      const done = completedSteps.filter(stepNo => groupedSteps.some(s => s.stepNo === stepNo)).length;
-      document.getElementById('finalMsg').style.display = (total > 0 && done === total) ? 'block' : 'none';
-    }
-
-    function completeStep(stepNo) {
-      if (!completedSteps.includes(stepNo)) {
-        completedSteps.push(stepNo);
-        completedSteps.sort((a, b) => a - b);
-        saveProgress();
-      }
-
-      viewingStepNo = null;
-
-      const nextStep = groupedSteps.find(step => !isCompleted(step.stepNo));
-      if (nextStep) {
-        const firstBlock = getSortedBlocks(nextStep)[0];
-        if (firstBlock) setSelectedBlock(nextStep.stepNo, firstBlock.blockOrder);
-      }
-
+    function render(){
       renderSidebar();
-      renderCurrentStage();
-      renderProgress();
-      renderFinalMessage();
+      renderMain();
     }
 
-    function handleNShippingStep(stepNo) {
-      if (!isNShippingReady()) {
-        alert('품고에서 입고 완료 확인 후 N배송 설정 안내가 가능합니다.');
-        return;
-      }
-      completeStep(stepNo);
-    }
-
-    function getGallerySource(screen) {
-      return screen === 'inbound'
-        ? (payload && payload.inboundGuideItems ? payload.inboundGuideItems : [])
-        : (payload && payload.guideItems ? payload.guideItems : []);
-    }
-
-    function openZoomByGroup(stepCode, screen, zoomSrc, title) {
-      const source = getGallerySource(screen);
-      const gallery = source
-        .filter(item => String(item.stepCode || '') === String(stepCode || '') && item.imageThumb)
-        .sort((a, b) => {
-          if (Number(a.stepNo) !== Number(b.stepNo)) return Number(a.stepNo) - Number(b.stepNo);
-          return Number(a.blockOrder) - Number(b.blockOrder);
-        })
-        .map(item => ({
-          src: item.imageZoom || item.imageThumb,
-          title: item.blockTitle || title || '이미지'
-        }));
-
-      if (!gallery.length) {
-        currentGalleryImages = [{ src: zoomSrc, title: title || '이미지' }];
-      } else {
-        currentGalleryImages = gallery;
-      }
-
-      let foundIndex = currentGalleryImages.findIndex(item => item.src === zoomSrc);
-      if (foundIndex < 0) foundIndex = 0;
-      currentGalleryIndex = foundIndex;
-
-      renderZoomImage();
-      zoomBack.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function renderZoomImage() {
-      const item = currentGalleryImages[currentGalleryIndex];
-      if (!item) return;
-
-      zoomImg.src = item.src;
-      zoomTitle.textContent = item.title || '이미지 확대';
-
-      const hasMultiple = currentGalleryImages.length > 1;
-      document.getElementById('zoomPrevBtn').classList.toggle('hidden', !hasMultiple);
-      document.getElementById('zoomNextBtn').classList.toggle('hidden', !hasMultiple);
-
-      const counter = document.getElementById('zoomCounter');
-      if (hasMultiple) {
-        counter.classList.remove('hidden');
-        counter.textContent = `${currentGalleryIndex + 1} / ${currentGalleryImages.length}`;
-      } else {
-        counter.classList.add('hidden');
-        counter.textContent = '';
-      }
-    }
-
-    function showPrevZoomImage() {
-      if (currentGalleryImages.length <= 1) return;
-      currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-      renderZoomImage();
-    }
-
-    function showNextZoomImage() {
-      if (currentGalleryImages.length <= 1) return;
-      currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryImages.length;
-      renderZoomImage();
-    }
-
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('#openInquiryBtn')) return openInquiryForm();
-      if (e.target.closest('#cancelInquiryBtn')) return closeInquiryForm();
-
-      if (e.target.closest('#previewSubmitBtn')) {
-        const data = getFormData();
-        const msg = validateForm(data);
-        if (msg) return alert(msg);
-        pendingInquiryData = data;
-        return openConfirmModal(data);
-      }
-
-      if (e.target.closest('#closeConfirmBtn') || e.target.closest('#editAgainBtn')) {
-        return closeConfirmModal();
-      }
-
-      if (e.target.closest('#finalSubmitBtn')) return submitInquiry();
-
-      if (e.target.closest('#togglePackingGuideBtn')) {
-        const wrap = document.getElementById('packingGuideImgWrap');
-        wrap.classList.toggle('hidden');
-        e.target.closest('#togglePackingGuideBtn').textContent = wrap.classList.contains('hidden') ? '예시 이미지보기' : '예시 이미지숨기기';
-        return;
-      }
-
-      if (e.target.closest('[data-open-inbound-guide]')) return showInboundGuideScreen();
-      if (e.target.closest('#backToMainGuideBtn')) return showMainGuideScreen();
-
-      const imageToggleBtn = e.target.closest('[data-toggle-image]');
-      if (imageToggleBtn) {
-        const block = imageToggleBtn.closest('.block');
-        const panel = block ? block.querySelector('.imagePanel') : null;
-        if (!panel) return;
-        panel.classList.toggle('open');
-        imageToggleBtn.textContent = panel.classList.contains('open') ? '이미지 숨기기' : '이미지 보기';
-        return;
-      }
-
-      const toggleStepBtn = e.target.closest('[data-toggle-step]');
-      if (toggleStepBtn) {
-        const stepNo = Number(toggleStepBtn.getAttribute('data-toggle-step'));
-        if (!stepNo) return;
-        viewingStepNo = stepNo;
-        const step = groupedSteps.find(s => s.stepNo === stepNo);
-        if (step) ensureSelectedBlock(step);
-        renderSidebar();
-        renderCurrentStage();
-        renderProgress();
-        renderFinalMessage();
-        return;
-      }
-
-      const selectBlockBtn = e.target.closest('[data-select-block]');
-      if (selectBlockBtn) {
-        const raw = selectBlockBtn.getAttribute('data-select-block') || '';
-        const parts = raw.split('|');
-        const stepNo = Number(parts[0]);
-        const blockOrder = Number(parts[1]);
-        if (!stepNo || !blockOrder) return;
-        viewingStepNo = stepNo;
-        setSelectedBlock(stepNo, blockOrder);
-        renderSidebar();
-        renderCurrentStage();
-        renderProgress();
-        renderFinalMessage();
-        return;
-      }
-
-      const toggleInboundStepBtn = e.target.closest('[data-toggle-inbound-step]');
-      if (toggleInboundStepBtn) {
-        const stepNo = Number(toggleInboundStepBtn.getAttribute('data-toggle-inbound-step'));
-        if (!stepNo) return;
-        viewingInboundStepNo = stepNo;
-        const step = inboundGroupedSteps.find(s => s.stepNo === stepNo);
-        if (step) ensureSelectedInboundBlock(step);
-        renderInboundSidebar();
-        renderInboundStage();
-        return;
-      }
-
-      const selectInboundBlockBtn = e.target.closest('[data-select-inbound-block]');
-      if (selectInboundBlockBtn) {
-        const raw = selectInboundBlockBtn.getAttribute('data-select-inbound-block') || '';
-        const parts = raw.split('|');
-        const stepNo = Number(parts[0]);
-        const blockOrder = Number(parts[1]);
-        if (!stepNo || !blockOrder) return;
-        viewingInboundStepNo = stepNo;
-        setSelectedInboundBlock(stepNo, blockOrder);
-        renderInboundSidebar();
-        renderInboundStage();
-        return;
-      }
-
-      const prevBlockBtn = e.target.closest('[data-prev-block]');
-      if (prevBlockBtn) {
-        const stepNo = Number(prevBlockBtn.getAttribute('data-prev-block'));
-        const step = groupedSteps.find(s => s.stepNo === stepNo);
-        if (step) moveBlock(step, -1);
-        return;
-      }
-
-      const nextBlockBtn = e.target.closest('[data-next-block]');
-      if (nextBlockBtn) {
-        const stepNo = Number(nextBlockBtn.getAttribute('data-next-block'));
-        const step = groupedSteps.find(s => s.stepNo === stepNo);
-        if (step) moveBlock(step, 1);
-        return;
-      }
-
-      const prevInboundBlockBtn = e.target.closest('[data-prev-inbound-block]');
-      if (prevInboundBlockBtn) {
-        const stepNo = Number(prevInboundBlockBtn.getAttribute('data-prev-inbound-block'));
-        const step = inboundGroupedSteps.find(s => s.stepNo === stepNo);
-        if (step) moveInboundBlock(step, -1);
-        return;
-      }
-
-      const nextInboundBlockBtn = e.target.closest('[data-next-inbound-block]');
-      if (nextInboundBlockBtn) {
-        const stepNo = Number(nextInboundBlockBtn.getAttribute('data-next-inbound-block'));
-        const step = inboundGroupedSteps.find(s => s.stepNo === stepNo);
-        if (step) moveInboundBlock(step, 1);
-        return;
-      }
-
-      const completeBtn = e.target.closest('#completeCurrentStepBtn');
-      if (completeBtn) {
-        const stepNo = Number(completeBtn.getAttribute('data-step'));
-        if (stepNo) completeStep(stepNo);
-        return;
-      }
-
-      const nShippingBtn = e.target.closest('#goNShippingBtn');
-      if (nShippingBtn) {
-        const stepNo = Number(nShippingBtn.getAttribute('data-step'));
-        if (stepNo) handleNShippingStep(stepNo);
-        return;
-      }
-
-      const img = e.target.closest('img[data-zoom]');
-      if (img) {
-        openZoomByGroup(
-          img.getAttribute('data-step-code') || '',
-          img.getAttribute('data-screen') || 'main',
-          img.getAttribute('data-zoom'),
-          img.getAttribute('data-title')
-        );
+    prevBtn.addEventListener("click", () => {
+      if(currentStepIndex > 0){
+        currentStepIndex -= 1;
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     });
 
-    const zoomBack = document.getElementById('zoomBack');
-    const zoomImg = document.getElementById('zoomImg');
-    const zoomTitle = document.getElementById('zoomTitle');
-    const zoomClose = document.getElementById('zoomClose');
-    const zoomPrevBtn = document.getElementById('zoomPrevBtn');
-    const zoomNextBtn = document.getElementById('zoomNextBtn');
-
-    function closeZoom() {
-      zoomBack.style.display = 'none';
-      zoomImg.src = '';
-      currentGalleryImages = [];
-      currentGalleryIndex = 0;
-      document.body.style.overflow = '';
-    }
-
-    zoomClose.addEventListener('click', closeZoom);
-    zoomPrevBtn.addEventListener('click', showPrevZoomImage);
-    zoomNextBtn.addEventListener('click', showNextZoomImage);
-
-    zoomBack.addEventListener('click', function(e) {
-      if (e.target === zoomBack) closeZoom();
-    });
-
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeZoom();
-        closeConfirmModal();
-      }
-      if (zoomBack.style.display === 'flex') {
-        if (e.key === 'ArrowLeft') showPrevZoomImage();
-        if (e.key === 'ArrowRight') showNextZoomImage();
+    nextBtn.addEventListener("click", () => {
+      if(currentStepIndex < STEPS.length - 1){
+        currentStepIndex += 1;
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     });
 
-    function escapeHtml(str) {
-      return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+    resetBtn.addEventListener("click", () => {
+      if(!confirm("체크한 완료 항목을 모두 초기화할까요?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state.tasks = {};
+      currentStepIndex = 0;
+      saveState();
+      render();
+    });
 
-    function escapeAttr(str) {
-      return escapeHtml(str);
-    }
-
-    loadData();
+    render();
   </script>
 </body>
 </html>
