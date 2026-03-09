@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" as="style" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
 
   <style>
     :root{
@@ -22,6 +23,9 @@
       --warn-bg:#fff7ed;
       --warn-line:#fed7aa;
       --warn-text:#9a3412;
+      --danger-bg:#fff1f2;
+      --danger-line:#fecdd3;
+      --danger-text:#be123c;
       --shadow:0 10px 30px rgba(15,23,42,.06);
       --radius-xl:22px;
       --radius-lg:16px;
@@ -39,6 +43,7 @@
 
     button,input{font:inherit}
     img{max-width:100%;display:block}
+    a{text-decoration:none}
 
     .app{
       width:100%;
@@ -293,6 +298,10 @@
       border-radius:12px;
       font-weight:800;
       cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .btn.secondary{
@@ -423,6 +432,31 @@
       overflow-wrap:anywhere;
     }
 
+    .detail-body p{margin:0 0 10px}
+    .detail-body p:last-child{margin-bottom:0}
+    .detail-body table{width:100%; min-width:560px; border-collapse:collapse; background:#fff}
+    .detail-body th,.detail-body td{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+      word-break:break-word;
+    }
+    .detail-body th{
+      background:#f9fafb;
+      font-size:13px;
+      font-weight:800;
+      color:#374151;
+    }
+    .detail-body .table-wrap{
+      width:100%;
+      overflow-x:auto;
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
     .subnote{
       margin-top:10px;
       padding:14px;
@@ -452,51 +486,26 @@
       font-size:13px;
     }
 
-    .placeholder{
-      margin-top:10px;
-      min-height:200px;
-      border:1px dashed #cbd5e1;
-      border-radius:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      background:#fafcff;
-      color:#64748b;
-      font-size:14px;
-      font-weight:700;
-      padding:20px;
-    }
-
-    .table-wrap{
-      width:100%;
-      overflow-x:auto;
+    .render-image{
       margin-top:12px;
       border:1px solid var(--line);
-      border-radius:14px;
-    }
-
-    table{
-      width:100%;
-      min-width:560px;
-      border-collapse:collapse;
+      border-radius:16px;
+      overflow:hidden;
       background:#fff;
     }
 
-    th,td{
-      padding:12px 14px;
-      border-bottom:1px solid var(--line);
-      text-align:left;
-      vertical-align:top;
-      font-size:14px;
-      word-break:break-word;
+    .render-image img{
+      width:100%;
+      height:auto;
+      object-fit:contain;
+      background:#fff;
     }
 
-    th{
-      background:#f9fafb;
+    .render-caption{
+      padding:12px 14px;
+      border-top:1px solid var(--line);
       font-size:13px;
-      font-weight:800;
-      color:#374151;
+      color:var(--muted);
     }
 
     .check-area{
@@ -538,7 +547,28 @@
       flex-wrap:wrap;
     }
 
-    /* FAQ modal */
+    .loading{
+      padding:40px 20px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .error{
+      margin-top:12px;
+      padding:16px;
+      border-radius:14px;
+      background:var(--danger-bg);
+      border:1px solid var(--danger-line);
+      color:var(--danger-text);
+      font-size:14px;
+      white-space:pre-line;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:14px;
+    }
+
     .modal{
       position:fixed;
       inset:0;
@@ -685,42 +715,43 @@
   <div class="app">
     <div class="topbar">
       <div class="badge">셀프 세팅 가이드</div>
-      <h1>품고 셀프 온보딩</h1>
-      <p class="sub">질문 없이 순서대로 따라가면 세팅이 완료되도록 구성한 셀프 온보딩입니다.</p>
+      <h1 id="pageTitle">품고 셀프 온보딩</h1>
+      <p class="sub" id="appSub">시트에 입력한 내용이 자동 반영됩니다.</p>
     </div>
 
     <div class="layout">
       <aside class="card sidebar">
         <div class="side-head">
           <div class="side-title">진행 단계</div>
-          <div class="progress" id="progressText">0 / 5 완료</div>
+          <div class="progress" id="progressText">0 / 0 완료</div>
         </div>
 
-        <div class="accordion" id="stepAccordion"></div>
+        <div class="accordion" id="stepAccordion">
+          <div class="loading">불러오는 중...</div>
+        </div>
 
         <div class="side-note">
-          완료 항목을 모두 체크하면 해당 STEP은 완료 처리되며 자동으로 닫히고 다음 STEP이 열립니다.
+          체크한 항목은 다시 클릭하면 해제할 수 있습니다.
         </div>
       </aside>
 
       <main class="card main">
         <div class="hero">
           <div>
-            <div class="step-chip" id="heroChip">STEP 1</div>
-            <h2 id="heroTitle">고객사 등록</h2>
+            <div class="step-chip" id="heroChip">STEP</div>
+            <h2 id="heroTitle">불러오는 중...</h2>
             <p id="heroDesc"></p>
           </div>
 
           <div class="actions">
             <button class="btn secondary" id="faqBtn" type="button">FAQ 보기</button>
-            <button class="btn secondary" id="resetBtn" type="button">체크 초기화</button>
           </div>
         </div>
 
         <section class="guide">
           <div class="guide-section lead-box">
             <div class="section-label">지금 해야 할 일</div>
-            <p class="lead-text" id="leadText"></p>
+            <p class="lead-text" id="leadText">시트 데이터를 불러오는 중입니다.</p>
           </div>
 
           <div class="guide-section">
@@ -743,6 +774,8 @@
           <button class="btn secondary" id="prevBtn" type="button">이전 단계</button>
           <button class="btn primary" id="nextBtn" type="button">다음 단계</button>
         </div>
+
+        <div id="errorBox"></div>
       </main>
     </div>
   </div>
@@ -763,219 +796,23 @@
   </div>
 
   <script>
-    const DATA = [
-      {
-        id: "client_register",
-        title: "고객사 등록",
-        desc: "고객사 등록, 로그인, 구성원 추가를 진행합니다.",
-        lead: "고객사 등록 메일을 확인하고 고객사 정보 입력 → 품고 나우 로그인 → 구성원 추가까지 완료해주세요.",
-        items: [
-          {
-            title: "고객사 등록 메일 수신",
-            type: "section",
-            body: "품고에서 발송된 고객사 등록 메일을 확인한 후 메일 내 [고객사 등록하기] 버튼을 클릭하여 등록을 진행해주세요.",
-            warn: ["메일 수신 후 24시간 이내 등록이 필요합니다."]
-          },
-          {
-            title: "고객사 정보 입력",
-            type: "section",
-            body: "브랜드 및 사업자 정보를 입력해주세요.",
-            note: "고객사명은 브랜드명과 동일하게 입력해주세요.\n사업자 정보는 네이버 기준으로 입력해주세요."
-          },
-          {
-            title: "품고 나우 로그인 하기",
-            type: "section",
-            body: "고객사 등록 완료 후 품고 나우 로그인을 진행해주세요."
-          },
-          {
-            title: "구성원 추가",
-            type: "path",
-            body: "품고 나우 > 등록 > + 구성원 추가 클릭 > 이름, 이메일, 전화번호 입력 > 구성원 추가 클릭"
-          }
-        ],
-        checks: [
-          "고객사 등록 메일 확인 완료",
-          "고객사 정보 입력 완료",
-          "품고 나우 로그인 완료",
-          "구성원 추가 완료"
-        ],
-        faqs: [
-          {
-            q: "고객사 등록 버튼이 보이지 않아요.",
-            a: "메일 수신 후 24시간이 경과했거나 링크가 만료된 경우 버튼이 보이지 않을 수 있습니다.\n이 경우 사업자 주소, 브랜드 고객센터 대표번호, 반품지 주소, 담당자명/연락처/이메일 정보를 준비해 별도 전달 후 진행해주세요."
-          },
-          {
-            q: "메일 수신 후 24시간이 지났어요.",
-            a: "등록 링크 사용이 어려울 수 있습니다.\n별도 재등록 또는 수기 확인이 필요할 수 있으므로 지정된 제출 정보 기준으로 전달 후 진행해주세요."
-          },
-          {
-            q: "구성원 추가는 꼭 해야 하나요?",
-            a: "실제 운영에 참여하는 계정이 2인 이상이거나 담당자가 분리되어 있다면 미리 등록하는 것이 좋습니다.\n초기 운영 중 계정 혼선 방지에 도움이 됩니다."
-          }
-        ]
+    const CONFIG = {
+      SPREADSHEET_ID: '1JzTyCkZHBMEQiKNqIXLB8KUiVY8Y-33KICB2lwM06GQ',
+      SHEETS: {
+        steps: 'steps',
+        contents: 'contents',
+        checklists: 'checklists',
+        faqs: 'faqs',
+        clients: '고객사링크'
       },
-      {
-        id: "fulfillment",
-        title: "풀필먼트 연동",
-        desc: "판매처 등록, 풀필먼트 신청, 연동 확인을 진행합니다.",
-        lead: "판매처 등록 후 풀필먼트 신청 → 연동 확인 → N배송 동의까지 진행해주세요.",
-        items: [
-          {
-            title: "판매처 등록",
-            type: "section",
-            body: "스마트스토어 등 판매처 계정을 등록해주세요."
-          },
-          {
-            title: "풀필먼트 신청",
-            type: "section",
-            body: "네이버 풀필먼트 신청을 진행해주세요."
-          },
-          {
-            title: "연동 확인 & N배송 동의",
-            type: "section",
-            body: "아래 두 가지를 반드시 확인해주세요.",
-            warn: [
-              "물류사 품고 / 연동 상태가 연동중으로 되어있는지 확인해주세요.",
-              "타물류사를 이용하지 않는 경우 연동중으로 노출되는 물류사는 모두 철회 처리해주세요."
-            ]
-          }
-        ],
-        checks: [
-          "판매처 등록 완료",
-          "풀필먼트 신청 완료",
-          "연동 상태 확인 완료"
-        ],
-        faqs: [
-          {
-            q: "연동 상태가 연동중으로 보이지 않아요.",
-            a: "풀필먼트 신청만 완료하고 실제 연동 반영이 끝나지 않은 경우일 수 있습니다.\n물류사가 품고로 선택되어 있는지 먼저 확인하고, 상태를 다시 확인해주세요."
-          },
-          {
-            q: "타 물류사가 연동중으로 보입니다.",
-            a: "현재 사용하지 않는 타 물류사가 남아있으면 진행이 꼬일 수 있습니다.\n이용하지 않는 물류사는 모두 철회 처리 후 진행해주세요."
-          }
-        ]
-      },
-      {
-        id: "sku",
-        title: "SKU 등록 하기",
-        desc: "SKU 등록과 연결상품 매핑을 진행합니다.",
-        lead: "상품 식별 정보와 보관 정보를 기준에 맞게 입력하여 SKU 등록 → 연결상품 매핑까지 완료해주세요.",
-        items: [
-          {
-            title: "SKU 등록 전 유의사항",
-            type: "section",
-            body: "SKU명은 식별 가능한 형태로 입력하고, 바코드는 실물과 동일하게 입력해주세요."
-          },
-          {
-            title: "SKU 등록",
-            type: "custom",
-            body: "skuGuide"
-          },
-          {
-            title: "연결상품매핑",
-            type: "section",
-            body: "등록된 SKU와 판매처 상품을 연결해주세요."
-          }
-        ],
-        checks: [
-          "SKU 등록 전 유의사항 확인 완료",
-          "SKU 등록 완료",
-          "연결상품매핑 완료"
-        ],
-        faqs: [
-          {
-            q: "바코드가 없는 상품은 어떻게 등록하나요?",
-            a: "실물 바코드가 없는 경우 네이버 바코드를 선택하면 됩니다.\n바코드 미검수 품목은 임의 바코드 입력 또는 네이버 바코드 선택 기준으로 진행해주세요."
-          },
-          {
-            q: "SKU명은 어디까지 자세히 적어야 하나요?",
-            a: "최소한 옵션/호수/색상 등 서로 구분되는 정보가 포함되어야 합니다.\n예: 체리 ❌ / 꽃물 틴트 1호 체리 ✅"
-          },
-          {
-            q: "왜 SKU 유형을 사은품으로 선택하면 안 되나요?",
-            a: "사은품으로 선택하면 품고 전산에 SKU가 정상 등록되지 않기 때문입니다.\n등록 대상은 상품으로 선택해주세요."
-          }
-        ]
-      },
-      {
-        id: "inbound",
-        title: "입고 가이드 확인",
-        desc: "입고 기준과 포장 방법을 확인합니다.",
-        lead: "입고 전 포장 방법과 입고 기준을 반드시 확인해주세요.",
-        items: [
-          {
-            title: "입고 가이드 확인",
-            type: "section",
-            body: "입고 기준, 포장 방법, 파렛타이징 기준, 벌크 입고 기준을 확인해주세요.",
-            warn: ["기준 미준수 시 입고 지연 또는 추가 작업 비용이 발생할 수 있습니다."]
-          },
-          {
-            title: "포장 유형 안내",
-            type: "placeholder",
-            body: "여기에 박스 패키지 / 일반 풀패키지 / 친환경 풀패키지 이미지를 넣어주세요."
-          }
-        ],
-        checks: [
-          "입고 가이드 확인 완료"
-        ],
-        faqs: [
-          {
-            q: "입고 기준을 지키지 않으면 어떻게 되나요?",
-            a: "입고가 지연되거나 현장 추가 작업이 발생할 수 있으며, 상황에 따라 추가 비용이 발생할 수 있습니다."
-          },
-          {
-            q: "포장 방식은 왜 꼭 맞춰야 하나요?",
-            a: "입고 검수, 보관, 출고 과정의 작업 효율과 안전성에 직접 영향을 주기 때문입니다.\n특히 파손 우려 상품은 포장 방식 확인이 중요합니다."
-          }
-        ]
-      },
-      {
-        id: "ndelivery",
-        title: "N배송 설정",
-        desc: "연결 상품 및 재고 점검 후 N배송 설정을 진행합니다.",
-        lead: "연결 상품과 재고를 점검한 뒤 N배송 설정을 완료해주세요.",
-        items: [
-          {
-            title: "연결 상품 점검",
-            type: "section",
-            body: "SKU와 판매처 상품 연결 상태를 확인해주세요.",
-            warn: ["연결되지 않은 상품은 출고되지 않습니다."]
-          },
-          {
-            title: "재고 점검",
-            type: "section",
-            body: "입고 재고가 정상 반영되었는지 확인해주세요."
-          },
-          {
-            title: "N배송 설정하기",
-            type: "section",
-            body: "N배송 출고 설정을 진행해주세요."
-          }
-        ],
-        checks: [
-          "연결 상품 점검 완료",
-          "재고 점검 완료",
-          "N배송 설정 완료"
-        ],
-        faqs: [
-          {
-            q: "연결 상품이 누락되면 어떻게 되나요?",
-            a: "연결되지 않은 상품은 정상 출고 대상이 되지 않습니다.\n설정 전 연결 상태를 먼저 점검해주세요."
-          },
-          {
-            q: "재고가 반영되기 전에 N배송 설정을 해도 되나요?",
-            a: "권장하지 않습니다.\n재고 반영 상태를 먼저 확인한 뒤 설정하는 것이 안전합니다."
-          }
-        ]
-      }
-    ];
+      DEFAULT_SUBTITLE: '시트에 입력한 내용이 자동 반영됩니다.'
+    };
 
-    const STORAGE_KEY = "poomgo_self_onboarding_v4";
-    const state = loadState();
-
-    let currentIndex = state.currentIndex ?? 0;
-    let openStepId = state.openStepId ?? DATA[0].id;
+    let DATA = [];
+    let CLIENT_INFO = null;
+    let currentIndex = 0;
+    let openStepId = '';
+    let state = loadState();
 
     const stepAccordion = document.getElementById("stepAccordion");
     const progressText = document.getElementById("progressText");
@@ -988,8 +825,6 @@
     const checkArea = document.getElementById("checkArea");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
-    const resetBtn = document.getElementById("resetBtn");
-
     const faqBtn = document.getElementById("faqBtn");
     const faqModal = document.getElementById("faqModal");
     const faqBackdrop = document.getElementById("faqBackdrop");
@@ -997,18 +832,174 @@
     const faqModalTitle = document.getElementById("faqModalTitle");
     const faqModalSub = document.getElementById("faqModalSub");
     const faqList = document.getElementById("faqList");
+    const errorBox = document.getElementById("errorBox");
+    const appSub = document.getElementById("appSub");
+    const pageTitle = document.getElementById("pageTitle");
+
+    google.charts.load('current');
+    google.charts.setOnLoadCallback(init);
+
+    async function init() {
+      try {
+        const [stepsRows, contentsRows, checklistRows, faqRows, clientRows] = await Promise.all([
+          querySheet(CONFIG.SHEETS.steps),
+          querySheet(CONFIG.SHEETS.contents),
+          querySheet(CONFIG.SHEETS.checklists),
+          querySheet(CONFIG.SHEETS.faqs),
+          querySheet(CONFIG.SHEETS.clients)
+        ]);
+
+        const clientCode = getClientCodeFromUrl_();
+        if (!clientCode) {
+          throw new Error('고객사 코드가 없습니다. 링크에 ?client=고객사코드 형식이 필요합니다.');
+        }
+
+        CLIENT_INFO = findClientInfo_(clientRows, clientCode);
+        if (!CLIENT_INFO) {
+          throw new Error('유효하지 않은 고객사 링크입니다. 고객사코드를 확인해주세요.');
+        }
+
+        if (String(CLIENT_INFO['사용여부'] || '').toUpperCase() === 'N') {
+          throw new Error('현재 비활성화된 고객사 링크입니다.');
+        }
+
+        DATA = buildData(stepsRows, contentsRows, checklistRows, faqRows);
+
+        if (!DATA.length) {
+          throw new Error('활성화된 steps 데이터가 없습니다. steps 시트의 사용여부 값을 확인해주세요.');
+        }
+
+        const customerName = String(CLIENT_INFO['고객사명'] || '').trim();
+        document.title = `${customerName} | 품고 셀프 온보딩`;
+        pageTitle.textContent = customerName ? `${customerName} 셀프 온보딩` : '품고 셀프 온보딩';
+        appSub.textContent = customerName
+          ? `${customerName} 전용 셀프 온보딩 페이지입니다.`
+          : CONFIG.DEFAULT_SUBTITLE;
+
+        state = loadState();
+        currentIndex = Math.min(state.currentIndex ?? 0, DATA.length - 1);
+        openStepId = state.openStepId || DATA[currentIndex].id;
+
+        render();
+      } catch (err) {
+        showError(
+          '시트 데이터를 불러오지 못했습니다.\n\n' +
+          '1) SPREADSHEET_ID가 맞는지\n' +
+          '2) 시트 탭 이름이 steps / contents / checklists / faqs / 고객사링크 인지\n' +
+          '3) 링크에 ?client=고객사코드 가 들어있는지\n' +
+          '4) 고객사링크 시트의 사용여부가 Y인지\n\n' +
+          '상세 오류:\n' + (err?.message || String(err))
+        );
+      }
+    }
+
+    function querySheet(sheetName) {
+      return new Promise((resolve, reject) => {
+        const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SPREADSHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}`;
+        const query = new google.visualization.Query(url);
+        query.setQuery('select *');
+
+        query.send(response => {
+          if (response.isError()) {
+            reject(new Error(response.getMessage() || `시트 조회 실패: ${sheetName}`));
+            return;
+          }
+
+          const dt = response.getDataTable();
+          const cols = [];
+          for (let c = 0; c < dt.getNumberOfColumns(); c++) {
+            cols.push(String(dt.getColumnLabel(c) || dt.getColumnId(c) || `col_${c}`).trim());
+          }
+
+          const rows = [];
+          for (let r = 0; r < dt.getNumberOfRows(); r++) {
+            const row = {};
+            for (let c = 0; c < dt.getNumberOfColumns(); c++) {
+              const raw = dt.getValue(r, c);
+              const formatted = dt.getFormattedValue(r, c);
+              row[cols[c]] = formatted ?? raw ?? '';
+            }
+            rows.push(row);
+          }
+          resolve(rows);
+        });
+      });
+    }
+
+    function buildData(stepsRows, contentsRows, checklistRows, faqRows) {
+      const activeSteps = stepsRows
+        .filter(r => String(r['사용여부'] || '').toUpperCase() !== 'N')
+        .sort((a, b) => Number(a['단계순서'] || 0) - Number(b['단계순서'] || 0));
+
+      return activeSteps.map(step => {
+        const stepId = String(step['단계ID'] || '').trim();
+
+        const items = contentsRows
+          .filter(r => String(r['단계ID'] || '').trim() === stepId)
+          .sort((a, b) => Number(a['항목순서'] || 0) - Number(b['항목순서'] || 0))
+          .map(r => ({
+            title: r['항목명'] || '',
+            type: String(r['항목타입'] || 'section').toLowerCase(),
+            bodyHtml: r['본문HTML'] || '',
+            noteHtml: r['안내HTML'] || '',
+            warnHtml: r['주의HTML'] || '',
+            imageUrl: r['이미지URL'] || '',
+            imageCaption: r['이미지캡션'] || '',
+            linkText: r['버튼텍스트'] || '',
+            linkUrl: r['버튼링크'] || ''
+          }));
+
+        const checks = checklistRows
+          .filter(r => String(r['단계ID'] || '').trim() === stepId)
+          .sort((a, b) => Number(a['체크순서'] || 0) - Number(b['체크순서'] || 0))
+          .map(r => r['체크문구'] || '');
+
+        const faqs = faqRows
+          .filter(r => String(r['단계ID'] || '').trim() === stepId)
+          .sort((a, b) => Number(a['FAQ순서'] || 0) - Number(b['FAQ순서'] || 0))
+          .map(r => ({
+            q: r['질문'] || '',
+            aHtml: r['답변HTML'] || ''
+          }));
+
+        return {
+          id: stepId,
+          title: step['단계명'] || '',
+          desc: step['단계설명'] || '',
+          leadHtml: step['리드문구'] || '',
+          items,
+          checks,
+          faqs
+        };
+      });
+    }
+
+    function getClientCodeFromUrl_() {
+      const params = new URLSearchParams(window.location.search);
+      return String(params.get('client') || '').trim();
+    }
+
+    function findClientInfo_(clientRows, clientCode) {
+      if (!clientCode) return null;
+      return clientRows.find(r => String(r['고객사코드'] || '').trim() === clientCode) || null;
+    }
+
+    function storageKey() {
+      const clientCode = getClientCodeFromUrl_() || 'default';
+      return `poomgo_onboarding_${CONFIG.SPREADSHEET_ID}_${clientCode}`;
+    }
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : { checks: {}, currentIndex: 0, openStepId: DATA[0].id };
+        const raw = localStorage.getItem(storageKey());
+        return raw ? JSON.parse(raw) : { checks: {}, currentIndex: 0, openStepId: '' };
       } catch (e) {
-        return { checks: {}, currentIndex: 0, openStepId: DATA[0].id };
+        return { checks: {}, currentIndex: 0, openStepId: '' };
       }
     }
 
     function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      localStorage.setItem(storageKey(), JSON.stringify({
         checks: state.checks || {},
         currentIndex,
         openStepId
@@ -1030,6 +1021,12 @@
       if (isStepDone(step)) return { text: "완료", cls: "done" };
       if (idx === currentIndex) return { text: "진행중", cls: "current" };
       return { text: "대기", cls: "" };
+    }
+
+    function render() {
+      renderAccordion();
+      renderMain();
+      errorBox.innerHTML = '';
     }
 
     function renderAccordion() {
@@ -1056,7 +1053,7 @@
           </button>
           <div class="step-body">
             <div class="step-sublist">
-              ${step.items.map(x => `<div class="step-subitem"><span>ㄴ</span><span>${escapeHtml(x.title)}</span></div>`).join("")}
+              ${step.items.map(x => `<div class="step-subitem"><span>ㄴ</span><span>${escapeHtml(x.title)}</span></div>`).join("") || `<div class="empty">하위 항목 없음</div>`}
             </div>
           </div>
         `;
@@ -1077,7 +1074,7 @@
       heroChip.textContent = `STEP ${currentIndex + 1}`;
       heroTitle.textContent = step.title;
       heroDesc.textContent = step.desc;
-      leadText.textContent = step.lead;
+      leadText.innerHTML = step.leadHtml || '<span class="empty">리드문구가 비어 있습니다.</span>';
 
       flowList.innerHTML = "";
       step.items.forEach((item, idx) => {
@@ -1127,74 +1124,86 @@
 
         checkArea.appendChild(row);
       });
+
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === DATA.length - 1;
     }
 
     function renderDetail(item) {
-      if (item.type === "path") {
+      const title = `<h3 class="detail-title">${escapeHtml(item.title)}</h3>`;
+      const body = item.bodyHtml
+        ? `<div class="detail-body">${wrapTables(item.bodyHtml)}</div>`
+        : '';
+
+      const note = item.noteHtml
+        ? `<div class="subnote">${item.noteHtml}</div>`
+        : '';
+
+      const warn = item.warnHtml
+        ? `<div class="warn"><strong>주의</strong>${item.warnHtml}</div>`
+        : '';
+
+      const image = item.imageUrl
+        ? `
+          <div class="render-image">
+            <img src="${escapeAttr(item.imageUrl)}" alt="${escapeAttr(item.title)}">
+            ${item.imageCaption ? `<div class="render-caption">${item.imageCaption}</div>` : ''}
+          </div>
+        `
+        : '';
+
+      if (item.type === 'path') {
         return `
-          <h3 class="detail-title">${escapeHtml(item.title)}</h3>
-          <p class="detail-body">아래 경로대로 진행해주세요.</p>
-          <div class="subnote">${escapeHtml(item.body).replaceAll(" > ", "\n→ ")}</div>
+          ${title}
+          <div class="subnote">${escapeHtml(stripHtml(item.bodyHtml)).replaceAll(">", "→")}</div>
+          ${warn}
         `;
       }
 
-      if (item.type === "placeholder") {
+      if (item.type === 'link') {
         return `
-          <h3 class="detail-title">${escapeHtml(item.title)}</h3>
-          <div class="placeholder">${escapeHtml(item.body)}</div>
+          ${title}
+          ${body}
+          ${warn}
+          ${item.linkUrl ? `<div style="margin-top:12px;"><a class="btn primary" href="${escapeAttr(item.linkUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.linkText || '바로가기')}</a></div>` : ''}
         `;
       }
 
-      if (item.type === "custom" && item.body === "skuGuide") {
+      if (item.type === 'image' || item.type === 'html') {
         return `
-          <h3 class="detail-title">SKU 등록</h3>
-          <p class="detail-body">SKU 등록 화면에서 필수 항목을 기준에 맞게 입력해주세요.</p>
-          <div class="placeholder">여기에 SKU 등록 화면 이미지를 넣어주세요. 추천: ① SKU명 ② 바코드 ③ 보관온도 ④ 소비기한 ⑤ 로트번호 ⑥ 보관사이즈 ⑦ SKU유형 번호 표시</div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>항목</th><th>입력 기준</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>SKU명</td><td>모두가 식별 가능한 형태로 입력</td></tr>
-                <tr><td>바코드</td><td>실물 바코드와 동일하게 입력</td></tr>
-                <tr><td>보관 온도</td><td>상온</td></tr>
-                <tr><td>소비기한 관리여부</td><td>소비기한을 관리하는 품목인 경우에만 관리 선택</td></tr>
-                <tr><td>로트번호 관리여부</td><td>제조 로트를 관리하는 품목인 경우에만 관리 선택</td></tr>
-                <tr><td>보관사이즈</td><td>모두 1 입력</td></tr>
-                <tr><td>SKU 유형</td><td>상품 선택</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>기준</th><th>상품명</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>식별 가능</td><td>꽃물 틴트 1호 체리, 꽃물 틴트 2호 딸기</td></tr>
-                <tr><td>식별 불가</td><td>체리, 딸기</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="warn">
-            <strong>주의</strong>
-            관리하지 않는 상품을 관리함으로 설정하지 않도록 주의해주세요. 수정이 불가합니다.<br>
-            사은품 선택 시 품고 전산에 등록되지 않으므로 상품으로 선택해주세요.<br>
-            최초 입고 SKU는 품고에서 체적 정보를 측정하여 자동 반영됩니다.
-          </div>
+          ${title}
+          ${body}
+          ${image}
+          ${note}
+          ${warn}
         `;
       }
 
       return `
-        <h3 class="detail-title">${escapeHtml(item.title)}</h3>
-        <p class="detail-body">${escapeHtml(item.body)}</p>
-        ${item.note ? `<div class="subnote">${escapeHtml(item.note)}</div>` : ""}
-        ${item.warn?.length ? `<div class="warn"><strong>주의</strong>${item.warn.map(x => escapeHtml(x)).join("<br>")}</div>` : ""}
+        ${title}
+        ${body}
+        ${image}
+        ${note}
+        ${warn}
       `;
+    }
+
+    function wrapTables(html) {
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      temp.querySelectorAll('table').forEach(table => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrap';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
+      return temp.innerHTML;
+    }
+
+    function stripHtml(html) {
+      const div = document.createElement('div');
+      div.innerHTML = html || '';
+      return div.textContent || div.innerText || '';
     }
 
     function openFaqModal() {
@@ -1203,23 +1212,27 @@
       faqModalSub.textContent = "현재 단계에서 자주 막히는 항목을 정리했습니다.";
       faqList.innerHTML = "";
 
-      (step.faqs || []).forEach((faq, idx) => {
-        const item = document.createElement("div");
-        item.className = "faq-item" + (idx === 0 ? " open" : "");
-        item.innerHTML = `
-          <button class="faq-q" type="button">
-            <span>${escapeHtml(faq.q)}</span>
-            <span class="faq-arrow">⌄</span>
-          </button>
-          <div class="faq-a">${escapeHtml(faq.a)}</div>
-        `;
+      if (!step.faqs.length) {
+        faqList.innerHTML = `<div class="empty">등록된 FAQ가 없습니다.</div>`;
+      } else {
+        step.faqs.forEach((faq, idx) => {
+          const item = document.createElement("div");
+          item.className = "faq-item" + (idx === 0 ? " open" : "");
+          item.innerHTML = `
+            <button class="faq-q" type="button">
+              <span>${escapeHtml(faq.q)}</span>
+              <span class="faq-arrow">⌄</span>
+            </button>
+            <div class="faq-a">${faq.aHtml}</div>
+          `;
 
-        item.querySelector(".faq-q").addEventListener("click", () => {
-          item.classList.toggle("open");
+          item.querySelector(".faq-q").addEventListener("click", () => {
+            item.classList.toggle("open");
+          });
+
+          faqList.appendChild(item);
         });
-
-        faqList.appendChild(item);
-      });
+      }
 
       faqModal.classList.add("open");
       faqModal.setAttribute("aria-hidden", "false");
@@ -1241,9 +1254,19 @@
         .replaceAll("'", "&#39;");
     }
 
-    function render() {
-      renderAccordion();
-      renderMain();
+    function escapeAttr(str = "") {
+      return escapeHtml(str);
+    }
+
+    function showError(message) {
+      errorBox.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+      stepAccordion.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+      heroTitle.textContent = '불러오기 실패';
+      heroDesc.textContent = '';
+      leadText.textContent = '시트 연결 상태를 확인해주세요.';
+      flowList.innerHTML = '';
+      detailList.innerHTML = '';
+      checkArea.innerHTML = '';
     }
 
     prevBtn.addEventListener("click", () => {
@@ -1266,16 +1289,6 @@
       }
     });
 
-    resetBtn.addEventListener("click", () => {
-      if (!confirm("체크한 완료 항목을 모두 초기화할까요?")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      state.checks = {};
-      currentIndex = 0;
-      openStepId = DATA[0].id;
-      saveState();
-      render();
-    });
-
     faqBtn.addEventListener("click", openFaqModal);
     faqCloseBtn.addEventListener("click", closeFaqModal);
     faqBackdrop.addEventListener("click", closeFaqModal);
@@ -1285,8 +1298,6 @@
         closeFaqModal();
       }
     });
-
-    render();
   </script>
 </body>
 </html>
