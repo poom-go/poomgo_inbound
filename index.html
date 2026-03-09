@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -285,15 +286,45 @@
       width:min(720px, 96vw); background:#fff; border-radius:20px; box-shadow:0 24px 48px rgba(15,23,42,.16); overflow:hidden;
     }
 
-    .modal{ width:min(1280px, 98vw); max-height:94vh; overflow:auto; }
+    .modal{ width:min(1280px, 98vw); max-height:94vh; overflow:auto; position:relative; }
 
     .modalHead{
       display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; background:#fff; border-bottom:1px solid var(--line);
     }
 
     .modalTitle{ margin:0; font-size:16px; font-weight:900; display:flex; align-items:center; min-height:24px; }
-    .modalBody{ padding:16px; }
+    .modalBody{ padding:16px; position:relative; }
     .zoomImg{ width:100%; display:block; border-radius:16px; border:1px solid var(--line); }
+
+    .zoomNavBtn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:52px;
+      height:52px;
+      border:none;
+      border-radius:999px;
+      background:rgba(17,24,39,.72);
+      color:#fff;
+      font-size:24px;
+      font-weight:900;
+      cursor:pointer;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .zoomPrev{ left:20px; }
+    .zoomNext{ right:20px; }
+
+    .zoomCounter{
+      margin-top:10px;
+      text-align:center;
+      font-size:13px;
+      font-weight:800;
+      color:#64748B;
+    }
 
     .confirmList{ display:grid; gap:10px; margin-top:12px; }
     .confirmItem{ padding:12px 14px; border:1px solid #E5EAF2; border-radius:12px; background:#F9FBFF; }
@@ -323,6 +354,12 @@
       .linkBtn,.nextBtn,.primaryBtn,.secondaryBtn,.submitBtn,.ghostBtn{ width:100%; }
       .actionRow{ flex-direction:column; }
       .methodText table,.descText table,.tipText table{ min-width:520px; }
+      .zoomNavBtn{
+        width:44px;
+        height:44px;
+      }
+      .zoomPrev{ left:12px; }
+      .zoomNext{ right:12px; }
     }
   </style>
 </head>
@@ -468,7 +505,10 @@
         <button class="secondaryBtn" id="zoomClose" type="button" style="min-width:auto;height:40px;">닫기</button>
       </div>
       <div class="modalBody">
+        <button class="zoomNavBtn zoomPrev hidden" id="zoomPrevBtn" type="button" aria-label="이전 이미지">&lt;</button>
+        <button class="zoomNavBtn zoomNext hidden" id="zoomNextBtn" type="button" aria-label="다음 이미지">&gt;</button>
         <img class="zoomImg" id="zoomImg" src="" alt="zoom" />
+        <div class="zoomCounter hidden" id="zoomCounter"></div>
       </div>
     </div>
   </div>
@@ -511,6 +551,9 @@
     let viewingStepNo = null;
     let viewingInboundStepNo = null;
     let pendingInquiryData = null;
+
+    let currentGalleryImages = [];
+    let currentGalleryIndex = 0;
 
     const params = new URLSearchParams(location.search);
     const clientCode = params.get('client') || '';
@@ -593,6 +636,18 @@
       return `https://drive.google.com/thumbnail?id=${fileId}&sz=${size}`;
     }
 
+    function updateScreenHash(screen) {
+      if (screen === 'inbound') {
+        location.hash = '#inbound-guide-screen';
+      } else {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    }
+
+    function shouldShowInboundOnLoad() {
+      return location.hash === '#inbound-guide-screen';
+    }
+
     function showStatusModal(title, desc, isLoading = true) {
       document.getElementById('statusTitle').textContent = title || '';
       document.getElementById('statusDesc').textContent = desc || '';
@@ -657,6 +712,7 @@
         if (!map.has(item.stepNo)) {
           map.set(item.stepNo, {
             stepNo: item.stepNo,
+            stepCode: item.stepCode,
             stepName: item.stepName,
             blocks: []
           });
@@ -675,6 +731,7 @@
         if (!map.has(item.stepNo)) {
           map.set(item.stepNo, {
             stepNo: item.stepNo,
+            stepCode: item.stepCode,
             stepName: item.stepName,
             blocks: []
           });
@@ -696,6 +753,7 @@
     function showMainGuideScreen() {
       document.getElementById('mainGuideSection').classList.remove('hidden');
       document.getElementById('inboundGuideSection').classList.add('hidden');
+      updateScreenHash('main');
       renderSidebar();
       renderCurrentStage();
       renderProgress();
@@ -705,6 +763,7 @@
     function showInboundGuideScreen() {
       document.getElementById('mainGuideSection').classList.add('hidden');
       document.getElementById('inboundGuideSection').classList.remove('hidden');
+      updateScreenHash('inbound');
       renderInboundSidebar();
       renderInboundStage();
       document.getElementById('inboundGuideSection').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -717,7 +776,12 @@
       if (isInquiryDone()) {
         introCard.classList.add('hidden');
         formCard.classList.add('hidden');
-        showMainGuideScreen();
+
+        if (shouldShowInboundOnLoad()) {
+          showInboundGuideScreen();
+        } else {
+          showMainGuideScreen();
+        }
         return;
       }
 
@@ -1178,7 +1242,14 @@
           ${imageThumb ? `
             <div class="imagePanel">
               <div class="imgWrap">
-                <img src="${escapeAttr(imageThumb)}" data-zoom="${escapeAttr(imageZoom || imageThumb)}" data-title="${escapeAttr(title || '이미지')}" alt="${escapeAttr(title || '이미지')}">
+                <img
+                  src="${escapeAttr(imageThumb)}"
+                  data-zoom="${escapeAttr(imageZoom || imageThumb)}"
+                  data-title="${escapeAttr(title || '이미지')}"
+                  data-step-code="${escapeAttr(block.stepCode || '')}"
+                  data-screen="${isInbound ? 'inbound' : 'main'}"
+                  alt="${escapeAttr(title || '이미지')}"
+                >
                 <p class="imgHint">이미지를 클릭하면 확대됩니다.</p>
               </div>
             </div>
@@ -1250,6 +1321,70 @@
         return;
       }
       completeStep(stepNo);
+      showMainGuideScreen();
+    }
+
+    function getGallerySource(screen) {
+      return screen === 'inbound'
+        ? (payload && payload.inboundGuideItems ? payload.inboundGuideItems : [])
+        : (payload && payload.guideItems ? payload.guideItems : []);
+    }
+
+    function openZoomByGroup(stepCode, screen, zoomSrc, title) {
+      const source = getGallerySource(screen);
+      const gallery = source
+        .filter(item => String(item.stepCode || '') === String(stepCode || '') && item.imageThumb)
+        .map(item => ({
+          src: item.imageZoom || item.imageThumb,
+          title: item.blockTitle || title || '이미지'
+        }));
+
+      if (!gallery.length) {
+        currentGalleryImages = [{ src: zoomSrc, title: title || '이미지' }];
+      } else {
+        currentGalleryImages = gallery;
+      }
+
+      let foundIndex = currentGalleryImages.findIndex(item => item.src === zoomSrc);
+      if (foundIndex < 0) foundIndex = 0;
+      currentGalleryIndex = foundIndex;
+
+      renderZoomImage();
+      zoomBack.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function renderZoomImage() {
+      const item = currentGalleryImages[currentGalleryIndex];
+      if (!item) return;
+
+      zoomImg.src = item.src;
+      zoomTitle.textContent = item.title || '이미지 확대';
+
+      const hasMultiple = currentGalleryImages.length > 1;
+      document.getElementById('zoomPrevBtn').classList.toggle('hidden', !hasMultiple);
+      document.getElementById('zoomNextBtn').classList.toggle('hidden', !hasMultiple);
+
+      const counter = document.getElementById('zoomCounter');
+      if (hasMultiple) {
+        counter.classList.remove('hidden');
+        counter.textContent = `${currentGalleryIndex + 1} / ${currentGalleryImages.length}`;
+      } else {
+        counter.classList.add('hidden');
+        counter.textContent = '';
+      }
+    }
+
+    function showPrevZoomImage() {
+      if (currentGalleryImages.length <= 1) return;
+      currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+      renderZoomImage();
+    }
+
+    function showNextZoomImage() {
+      if (currentGalleryImages.length <= 1) return;
+      currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryImages.length;
+      renderZoomImage();
     }
 
     document.addEventListener('click', function(e) {
@@ -1324,7 +1459,12 @@
 
       const img = e.target.closest('img[data-zoom]');
       if (img) {
-        openZoom(img.getAttribute('data-zoom'), img.getAttribute('data-title'));
+        openZoomByGroup(
+          img.getAttribute('data-step-code') || '',
+          img.getAttribute('data-screen') || 'main',
+          img.getAttribute('data-zoom'),
+          img.getAttribute('data-title')
+        );
       }
     });
 
@@ -1332,22 +1472,21 @@
     const zoomImg = document.getElementById('zoomImg');
     const zoomTitle = document.getElementById('zoomTitle');
     const zoomClose = document.getElementById('zoomClose');
-
-    function openZoom(src, title) {
-      if (!src) return;
-      zoomImg.src = src;
-      zoomTitle.textContent = title || '이미지 확대';
-      zoomBack.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
+    const zoomPrevBtn = document.getElementById('zoomPrevBtn');
+    const zoomNextBtn = document.getElementById('zoomNextBtn');
 
     function closeZoom() {
       zoomBack.style.display = 'none';
       zoomImg.src = '';
+      currentGalleryImages = [];
+      currentGalleryIndex = 0;
       document.body.style.overflow = '';
     }
 
     zoomClose.addEventListener('click', closeZoom);
+    zoomPrevBtn.addEventListener('click', showPrevZoomImage);
+    zoomNextBtn.addEventListener('click', showNextZoomImage);
+
     zoomBack.addEventListener('click', function(e) {
       if (e.target === zoomBack) closeZoom();
     });
@@ -1356,6 +1495,10 @@
       if (e.key === 'Escape') {
         closeZoom();
         closeConfirmModal();
+      }
+      if (zoomBack.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrevZoomImage();
+        if (e.key === 'ArrowRight') showNextZoomImage();
       }
     });
 
