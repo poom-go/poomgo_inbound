@@ -1642,51 +1642,68 @@
         .replace(/\n/g, '<br>');
     }
 
-    function buildCustomTableHtml(tableContent) {
-      const normalized = htmlToPlainTextForSplit(tableContent);
-      const rawLines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
-      if (!rawLines.length) return '';
+function buildCustomTableHtml(tableContent) {
+  const normalized = htmlToPlainTextForSplit(tableContent);
+  const rawLines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
+  if (!rawLines.length) return '';
 
-      const rows = rawLines.map(line => {
-        const textOnly = stripHtmlTags(line);
-        if (textOnly === '--') return { separator: true, cells: [] };
-        return { separator: false, cells: splitTableRowPreservingHtml(line) };
-      });
+  const rows = rawLines.map(line => {
+    const textOnly = stripHtmlTags(line);
+    if (textOnly === '--') return { separator: true, cells: [] };
+    return { separator: false, cells: splitTableRowPreservingHtml(line) };
+  });
 
-      const headerRow = rows.find(r => !r.separator && r.cells.length > 0);
-      if (!headerRow) return '';
+  const headerRow = rows.find(r => !r.separator && r.cells.length > 0);
+  if (!headerRow) return '';
 
-      const colCount = headerRow.cells.length;
-      const headerIndex = rows.indexOf(headerRow);
-      const bodyRows = rows.slice(headerIndex + 1);
+  const colCount = headerRow.cells.length;
+  const headerIndex = rows.indexOf(headerRow);
+  const bodyRows = rows.slice(headerIndex + 1);
 
-      const thead = `
-        <thead>
-          <tr>
-            ${headerRow.cells.map(h => `<th>${formatTableCellHtml(h)}</th>`).join('')}
-          </tr>
-        </thead>
-      `;
+  const normalizedBodyRows = bodyRows.map(row => {
+    if (row.separator) return row;
+    const cells = [...row.cells];
+    while (cells.length < colCount) cells.push('');
+    return { ...row, cells: cells.slice(0, colCount) };
+  });
 
-      const tbody = bodyRows.length ? `
-        <tbody>
-          ${bodyRows.map(row => {
-            if (row.separator) {
-              return `<tr class="table-separator"><td colspan="${colCount}"></td></tr>`;
-            }
+  const thead = `
+    <thead>
+      <tr>
+        ${headerRow.cells.map(h => `<th>${formatTableCellHtml(h)}</th>`).join('')}
+      </tr>
+    </thead>
+  `;
 
-            const cells = [...row.cells];
-            while (cells.length < colCount) cells.push('');
+  const tbody = normalizedBodyRows.length ? `
+    <tbody>
+      ${normalizedBodyRows.map((row, rowIndex) => {
+        if (row.separator) {
+          return `<tr class="table-separator"><td colspan="${colCount}"></td></tr>`;
+        }
 
-            return `<tr>${
-              cells.slice(0, colCount).map(cell => `<td>${formatTableCellHtml(cell)}</td>`).join('')
-            }</tr>`;
-          }).join('')}
-        </tbody>
-      ` : '';
+        return `<tr>${
+          row.cells.map((cell, cellIndex) => {
+            const currentText = stripHtmlTags(cell);
+            const prevRow = rowIndex > 0 ? normalizedBodyRows[rowIndex - 1] : null;
 
-      return `<table>${thead}${tbody}</table>`;
-    }
+            const isMergedLike =
+              prevRow &&
+              !prevRow.separator &&
+              currentText === '' &&
+              (cellIndex === 0 || cellIndex === 1);
+
+            const cellClass = isMergedLike ? 'merge-continue' : '';
+
+            return `<td class="${cellClass}">${formatTableCellHtml(cell)}</td>`;
+          }).join('')
+        }</tr>`;
+      }).join('')}
+    </tbody>
+  ` : '';
+
+  return `<table>${thead}${tbody}</table>`;
+}
 
     function buildProcessHtml(processContent) {
       const normalized = htmlToPlainTextForSplit(processContent);
