@@ -71,7 +71,7 @@
       padding:8px 13px;
       border-radius:999px;
       background:var(--brand-soft);
-      color:var(--brand);
+      color:var(--naver);
       font-size:13px;
       font-weight:800;
       margin-bottom:12px;
@@ -302,7 +302,7 @@
   <div class="app">
     <div class="topbar">
       <div class="badge" id="guideBadge">
-        <img id="companyLogo" class="badge-logo" src="여기에_회사로고_URL" alt="회사 로고">
+        <img id="companyLogo" class="badge-logo" src="https://drive.google.com/file/d/1tgVRxlRQ63QkShpmz1434yuWDD9MpKjw/view?usp=drive_link" alt="회사 로고">
         <span>N배송 세팅 가이드</span>
       </div>
       <h1 id="pageTitle">N배송 세팅 가이드</h1>
@@ -349,10 +349,16 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
             <div class="field full">
               <label for="pltCount"><span class="label-text">3. 초도 입고 PLT 수</span><span class="req">*</span></label>
               <input class="input" id="pltCount" type="number" min="0" placeholder="예: 10" />
+              <div class="hint">초도 입고 한정으로 PLT 내 SKU 혼적이 허용되며, 이후 입고시에는 1PLT-1SKU를 준수해주셔야합니다.</div>
             </div>
 
             <div class="field full">
-              <label for="packType"><span class="label-text">4. 포장 방법</span><span class="req">*</span></label>
+              <label for="monthlyPltCount"><span class="label-text">4. 월 별 보관 예정 PLT 수</span><span class="req">*</span></label>
+              <input class="input" id="monthlyPltCount" type="number" min="0" placeholder="예: 20" />
+            </div>
+
+            <div class="field full">
+              <label for="packType"><span class="label-text">5. 포장 방법</span><span class="req">*</span></label>
               <select class="select" id="packType">
                 <option value="">선택해주세요</option>
                 <option value="기본 포장">기본 포장</option>
@@ -364,7 +370,7 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
             </div>
 
             <div class="field">
-              <label for="returnDest"><span class="label-text">5. 반품 회수지</span><span class="req">*</span></label>
+              <label for="returnDest"><span class="label-text">6. 반품 회수지</span><span class="req">*</span></label>
               <select class="select" id="returnDest">
                 <option value="">선택해주세요</option>
                 <option value="품고">품고</option>
@@ -373,7 +379,7 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
             </div>
 
             <div class="field">
-              <label><span class="label-text">6. 초도 입고 월 행사 예정 여부</span><span class="req">*</span></label>
+              <label><span class="label-text">7. 초도 입고 당월 행사 진행 여부</span><span class="req">*</span></label>
               <div class="choice-row">
                 <label class="choice-pill"><input type="radio" name="eventPlan" value="Y"> Y</label>
                 <label class="choice-pill"><input type="radio" name="eventPlan" value="N"> N</label>
@@ -381,7 +387,12 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
             </div>
 
             <div class="field full">
-              <label for="inquiryText"><span class="label-text">7. 품고에 궁금한 사항</span></label>
+              <label for="accessEmail"><span class="label-text">8. 품고 나우 시스템 접속 메일 주소</span><span class="req">*</span></label>
+              <input class="input" id="accessEmail" type="email" placeholder="예: example@brand.com" />
+            </div>
+
+            <div class="field full">
+              <label for="inquiryText"><span class="label-text">9. 품고에 궁금한 사항</span></label>
               <textarea class="textarea" id="inquiryText" placeholder="예: 초도 입고 후 출고 가능 예상 시점, 포장 비용 기준, 반품 프로세스 등"></textarea>
             </div>
           </div>
@@ -749,222 +760,17 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
         }));
         const checks = checklistRows.filter(r => String(r['단계ID'] || '').trim() === stepId).sort((a, b) => Number(a['체크순서'] || 0) - Number(b['체크순서'] || 0)).map(r => r['체크문구'] || '');
         const faqs = faqRows.filter(r => String(r['단계ID'] || '').trim() === stepId).sort((a, b) => Number(a['FAQ순서'] || 0) - Number(b['FAQ순서'] || 0)).map(r => ({ q: r['질문'] || '', aHtml: r['답변HTML'] || '' }));
-        return { id: stepId, title: step['단계명'] || '', desc: step['단계설명'] || '', leadHtml: step['리드문구'] || '', items, checks, faqs };
-      });
-    }
-
-    function getClientCodeFromUrl_() {
-      const params = new URLSearchParams(window.location.search);
-      return String(params.get('client') || '').trim();
-    }
-
-    function findClientInfo_(clientRows, clientCode) {
-      if (!clientCode) return null;
-      return clientRows.find(r => String(r['고객사코드'] || '').trim() === clientCode) || null;
-    }
-
-    function storageKey() {
-      const clientCode = getClientCodeFromUrl_() || 'default';
-      return `poomgo_onboarding_${CONFIG.SPREADSHEET_ID}_${clientCode}`;
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(storageKey());
-        return raw ? JSON.parse(raw) : { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
-      } catch (e) {
-        return { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(storageKey(), JSON.stringify({ checks: state.checks || {}, currentIndex, currentItemIndex, openStepId }));
-    }
-
-    function getChecks(stepId) {
-      if (!state.checks) state.checks = {};
-      if (!state.checks[stepId]) state.checks[stepId] = [];
-      return state.checks[stepId];
-    }
-
-    function isStepDone(step) {
-      const arr = getChecks(step.id);
-      return step.checks.length > 0 && step.checks.every((_, i) => !!arr[i]);
-    }
-
-    function statusOf(step, idx) {
-      if (isStepDone(step)) return { text: '완료', cls: 'done' };
-      if (idx === currentIndex) return { text: '진행중', cls: 'current' };
-      return { text: '대기', cls: '' };
-    }
-
-    function getProcessTheme(title = '') {
-      const t = String(title).replace(/\s/g, '');
-      if (t.includes('고객사등록') || t.includes('입고가이드')) return 'brand';
-      return 'naver';
-    }
-
-    function render() {
-      renderAccordion();
-      renderMain();
-      errorBox.innerHTML = '';
-    }
-
-    function renderAccordion() {
-      stepAccordion.innerHTML = '';
-      const doneCount = DATA.filter(isStepDone).length;
-      progressText.textContent = `${doneCount} / ${DATA.length} 완료`;
-
-      DATA.forEach((step, idx) => {
-        const s = statusOf(step, idx);
-        const item = document.createElement('div');
-        item.className = 'step-item' + (openStepId === step.id ? ' active' : '');
-        item.innerHTML = `
-          <button class="step-header" type="button">
-            <div class="step-num">${idx + 1}</div>
-            <div class="step-main">
-              <div class="step-title">${escapeHtml(step.title)}</div>
-              <div class="step-state"><span class="dot ${s.cls}"></span><span>${s.text}</span></div>
-            </div>
-            <div class="chev">⌄</div>
-          </button>
-          <div class="step-body">
-            <div class="step-sublist">
-              ${step.items.map(x => `<div class="step-subitem"><span>ㄴ</span><span>${escapeHtml(x.title)}</span></div>`).join('') || `<div class="empty">하위 항목 없음</div>`}
-            </div>
-          </div>
-        `;
-        item.querySelector('.step-header').addEventListener('click', () => {
-          currentIndex = idx;
-          currentItemIndex = 0;
-          openStepId = openStepId === step.id ? '' : step.id;
-          saveState();
-          render();
-        });
-        stepAccordion.appendChild(item);
-      });
-      scrollCurrentStepIntoView();
-    }
-
-    function renderMain() {
-      const step = DATA[currentIndex];
-      heroChip.textContent = `STEP ${currentIndex + 1}`;
-      heroTitle.textContent = step.title;
-      heroDesc.textContent = step.desc;
-      leadText.innerHTML = convertEscapedNewlines_(step.leadHtml || '<span class="empty">리드문구가 비어 있습니다.</span>');
-
-      const checks = getChecks(step.id);
-      const checkedCount = checks.filter(Boolean).length;
-      if (currentItemIndex > step.items.length - 1) currentItemIndex = 0;
-
-      flowList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const card = document.createElement('button');
-        const theme = getProcessTheme(item.title);
-        let cls = `process-card ${theme}`;
-        if (idx < checkedCount) cls += ' done';
-        if (idx === currentItemIndex) cls += ' current';
-        card.type = 'button';
-        card.className = cls;
-        card.setAttribute('data-step', `STEP ${idx + 1}`);
-        card.innerHTML = `<span>${escapeHtml(item.title)}</span>`;
-        card.addEventListener('click', () => {
-          currentItemIndex = idx;
-          saveState();
-          renderMain();
-        });
-        flowList.appendChild(card);
-      });
-
-      detailList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const div = document.createElement('div');
-        div.className = 'detail-item' + (idx === currentItemIndex ? '' : ' hidden');
-        div.innerHTML = renderDetail(item);
-        detailList.appendChild(div);
-      });
-
-      checkArea.innerHTML = '';
-      step.checks.forEach((label, i) => {
-        const row = document.createElement('label');
-        row.className = 'check-row';
-        row.innerHTML = `<input type="checkbox" ${checks[i] ? 'checked' : ''}><span>${escapeHtml(label).replaceAll('\\n', '\n')}</span>`;
-        row.querySelector('input').addEventListener('change', (e) => {
-          checks[i] = e.target.checked;
-          saveState();
-        });
-        checkArea.appendChild(row);
-      });
-
-      prevBtn.disabled = currentIndex === 0 && currentItemIndex === 0;
-      nextBtn.disabled = currentIndex === DATA.length - 1 && currentItemIndex === step.items.length - 1;
-    }
-
-    function renderDetail(item) {
-      const title = `<h3 class="detail-title">${escapeHtml(item.title)}</h3>`;
-      const body = item.bodyHtml ? `<div class="detail-body">${wrapTables(convertEscapedNewlines_(item.bodyHtml))}</div>` : '';
-      const note = item.noteHtml ? `<div class="subnote">${convertEscapedNewlines_(item.noteHtml)}</div>` : '';
-      const warn = item.warnHtml ? `<div class="warn"><strong>주의</strong>${convertEscapedNewlines_(item.warnHtml)}</div>` : '';
-      const normalizedImageUrl = normalizeImageUrl_(item.imageUrl);
-      const image = normalizedImageUrl ? `<div class="render-image"><img src="${escapeAttr(normalizedImageUrl)}" alt="${escapeAttr(item.title)}">${item.imageCaption ? `<div class="render-caption">${escapeHtml(item.imageCaption).replaceAll('\\n', '\n')}</div>` : ''}</div>` : '';
-      if (item.type === 'path') return `${title}<div class="subnote">${escapeHtml(stripHtml(item.bodyHtml)).replaceAll('>', '→').replaceAll('\\n', '\n')}</div>${warn}`;
-      if (item.type === 'link') return `${title}${body}${warn}${item.linkUrl ? `<div style="margin-top:12px;"><a class="btn primary" href="${escapeAttr(item.linkUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.linkText || '바로가기')}</a></div>` : ''}`;
-      return `${title}${body}${image}${note}${warn}`;
-    }
-
-    function convertEscapedNewlines_(text) {
-      return String(text || '').replace(/\\n/g, '\n');
-    }
-
-    function normalizeImageUrl_(url) {
-      const raw = String(url || '').trim();
-      if (!raw) return '';
-      if (/^https?:\/\//i.test(raw) && !/drive\.google\.com/i.test(raw)) return raw;
-      const fileId = extractGoogleDriveFileId_(raw);
-      if (fileId) return `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`;
-      return raw;
-    }
-
-    function extractGoogleDriveFileId_(url) {
-      const raw = String(url || '').trim();
-      if (!raw) return '';
-      let match = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      match = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      if (/\/folders\//.test(raw)) return '';
-      if (/^[a-zA-Z0-9_-]{20,}$/.test(raw)) return raw;
-      return '';
-    }
-
-    function wrapTables(html) {
-      const temp = document.createElement('div');
-      temp.innerHTML = html;
-      temp.querySelectorAll('table').forEach(table => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'table-wrap';
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-      });
-      return temp.innerHTML;
-    }
-
-    function stripHtml(html) {
-      const div = document.createElement('div');
-      div.innerHTML = html || '';
-      return div.textContent || div.innerText || '';
-    }
-
-    function getInquiryValues() {
-      return {
+        return {
         clientCode: getClientCodeFromUrl_(),
         clientName: String(CLIENT_INFO?.['고객사명'] || '').trim(),
         inboundDate: document.getElementById('inboundDate').value,
         skuCount: document.getElementById('skuCount').value,
         pltCount: document.getElementById('pltCount').value,
+        monthlyPltCount: document.getElementById('monthlyPltCount').value,
         packType: document.getElementById('packType').value,
         returnDest: document.getElementById('returnDest').value,
         eventPlan: document.querySelector('input[name="eventPlan"]:checked')?.value || '',
+        accessEmail: document.getElementById('accessEmail').value.trim(),
         inquiryText: document.getElementById('inquiryText').value.trim()
       };
     }
@@ -974,9 +780,11 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
       if (!v.inboundDate) return '초도 입고 일정을 선택해주세요.';
       if (v.skuCount === '') return '초도 입고 SKU 종 수를 입력해주세요.';
       if (v.pltCount === '') return '초도 입고 PLT 수를 입력해주세요.';
+      if (v.monthlyPltCount === '') return '월 별 보관 예정 PLT 수를 입력해주세요.';
       if (!v.packType) return '포장 방법을 선택해주세요.';
       if (!v.returnDest) return '반품 회수지를 선택해주세요.';
       if (!v.eventPlan) return '행사 진행 여부를 선택해주세요.';
+      if (!v.accessEmail) return '품고 나우 시스템 접속 메일 주소를 입력해주세요.';
       return '';
     }
 
@@ -994,9 +802,11 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
         ['초도 입고 일정', values.inboundDate || '-'],
         ['초도 입고 SKU 종 수', values.skuCount || '-'],
         ['초도 입고 PLT 수', values.pltCount || '-'],
+        ['월 별 보관 예정 PLT 수', values.monthlyPltCount || '-'],
         ['포장 방법', values.packType || '-'],
         ['반품 회수지', values.returnDest || '-'],
-        ['행사 진행 예정 여부', values.eventPlan || '-'],
+        ['초도 입고 당월 행사 진행 여부', values.eventPlan || '-'],
+        ['품고 나우 시스템 접속 메일 주소', values.accessEmail || '-'],
         ['문의 사항', values.inquiryText || '없음']
       ];
       summaryList.innerHTML = rows.map(([k, v]) => `<div class="summary-item"><div class="summary-key">${escapeHtml(k)}</div><div class="summary-val">${escapeHtml(v).replaceAll('\\n', '\n')}</div></div>`).join('');
@@ -1047,9 +857,11 @@ N배송 세팅 가이드에 오신 것을 환영합니다</h2>
         inboundDate: values.inboundDate,
         skuCount: values.skuCount,
         pltCount: values.pltCount,
+        monthlyPltCount: values.monthlyPltCount,
         packType: values.packType,
         returnDest: values.returnDest,
         eventPlan: values.eventPlan,
+        accessEmail: values.accessEmail,
         inquiryText: values.inquiryText
       };
 
