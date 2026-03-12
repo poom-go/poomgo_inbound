@@ -1,1218 +1,474 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>N배송 세팅 가이드</title>
 
-  <link rel="stylesheet" as="style" crossorigin
-    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    :root{
-      --bg:#f4f6f8;
-      --card:#ffffff;
-      --text:#111827;
-      --muted:#6b7280;
-      --line:#e7ebf0;
-      --brand:#0040d1;
-      --brand-soft:#eef3ff;
-      --brand-line:#cddcff;
-      --naver:#03C75A;
-      --naver-soft:#effaf4;
-      --naver-line:#bdeccc;
-      --warn-bg:#fff7ed;
-      --warn-line:#fed7aa;
-      --warn-text:#9a3412;
-      --danger-bg:#fff1f2;
-      --danger-line:#fecdd3;
-      --danger-text:#be123c;
-      --shadow:0 10px 30px rgba(15,23,42,.05);
-      --shadow-soft:0 6px 18px rgba(15,23,42,.04);
-      --radius-2xl:28px;
-      --radius-xl:24px;
-      --radius-lg:18px;
-      --radius-md:14px;
-    }
+<title>N배송 세팅 가이드</title>
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;height:100%}
-    body{
-      font-family:"Pretendard Variable","Pretendard",system-ui,sans-serif;
-      background:linear-gradient(180deg,#f7f9fb 0%, #f2f5f8 100%);
-      color:var(--text);
-      line-height:1.6;
-    }
-    button,input,select,textarea{font:inherit}
-    img{max-width:100%;display:block}
-    a{text-decoration:none}
-    .hidden{display:none !important}
+<style>
 
-    .app{width:100%;min-height:100vh;padding:20px}
-    .topbar{margin-bottom:18px;padding:0 4px}
+body{
+font-family:Pretendard, sans-serif;
+background:#f6f7fb;
+margin:0;
+padding:0;
+}
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #dbe5ff;
-      color:var(--naver);
-      font-size:13px;
-      font-weight:800;
-      margin-bottom:12px;
-      box-shadow:0 4px 12px rgba(0,64,209,.06);
-    }
-    .badge-logo{
-      height:22px;
-      width:auto;
-      max-width:140px;
-      object-fit:contain;
-      flex:0 0 auto;
-      display:none;
-    }
+.container{
+max-width:760px;
+margin:auto;
+padding:40px 20px;
+}
 
-    h1{margin:0 0 8px;font-size:32px;line-height:1.18;letter-spacing:-.03em}
-    .sub{margin:0;color:var(--muted);font-size:14px}
+.logo{
+width:160px;
+margin-bottom:20px;
+}
 
-    .layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;min-height:calc(100vh - 110px)}
-    .card{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.88);border-radius:var(--radius-2xl);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.card{
+background:white;
+border-radius:14px;
+padding:32px;
+box-shadow:0 8px 24px rgba(0,0,0,0.08);
+}
 
-    .sidebar{display:flex;flex-direction:column;height:calc(100vh - 40px);position:sticky;top:20px;padding:18px}
-    .sidebar-header{flex:0 0 auto}
-    .sidebar-steps{flex:1;overflow-y:auto;margin-top:12px;margin-bottom:12px;padding-right:4px;scroll-behavior:smooth}
-    .sidebar-footer{flex:0 0 auto;margin-top:auto}
-    .sidebar-steps::-webkit-scrollbar{width:6px}
-    .sidebar-steps::-webkit-scrollbar-thumb{background:#dbe2ea;border-radius:999px}
-    .sidebar-steps::-webkit-scrollbar-track{background:transparent}
+.title{
+font-size:26px;
+font-weight:700;
+color:#03c75a;
+margin-bottom:12px;
+}
 
-    .side-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
-    .side-title{font-size:17px;font-weight:900;letter-spacing:-.02em}
-    .progress{padding:6px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:800;white-space:nowrap}
-    .accordion{display:flex;flex-direction:column;gap:10px}
-    .step-item{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;transition:all .2s ease}
-    .step-item.active{border-color:#d9e4ff;box-shadow:0 8px 24px rgba(0,64,209,.08)}
-    .step-header{width:100%;border:none;background:#fff;padding:14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer}
-    .step-item.active .step-header{background:linear-gradient(180deg,#fbfcff 0%, #f4f7ff 100%)}
-    .step-num{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:14px;font-weight:800;background:#f3f4f6;color:#374151;flex:0 0 36px}
-    .step-item.active .step-num{background:var(--brand);color:#fff}
-    .step-main{min-width:0;flex:1}
-    .step-title{margin:0 0 4px;font-size:14px;font-weight:800;letter-spacing:-.02em}
-    .step-state{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;font-weight:700}
-    .dot{width:8px;height:8px;border-radius:50%;background:#d1d5db}
-    .dot.done{background:var(--naver)}
-    .dot.current{background:var(--brand)}
-    .chev{color:#94a3b8;transition:transform .2s ease;font-size:18px}
-    .step-item.active .chev{transform:rotate(180deg)}
-    .step-body{display:none;padding:10px 14px 14px;border-top:1px solid #f0f3f6;background:#fcfdff}
-    .step-item.active .step-body{display:block}
-    .step-sublist{display:flex;flex-direction:column;gap:8px}
-    .step-subitem{display:flex;gap:8px;font-size:13px;color:#475569;word-break:break-word}
-    .side-note{padding:13px 14px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);color:var(--muted);font-size:12px}
+.subtitle{
+color:#666;
+margin-bottom:30px;
+}
 
-    .main{padding:28px;min-width:0}
-    .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap;padding:4px 0 2px}
-    .step-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:13px;font-weight:800;margin-bottom:12px}
-    .hero h2{margin:0 0 10px;font-size:30px;line-height:1.18;letter-spacing:-.03em;word-break:keep-all}
-    .hero p{margin:0;color:var(--muted);font-size:15px;word-break:keep-all;white-space:pre-line}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}
+.section{
+margin-bottom:28px;
+}
 
-    .btn{border:none;padding:12px 16px;border-radius:14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all .18s ease}
-    .btn:hover{transform:translateY(-1px)}
-    .btn.secondary{background:#fff;border:1px solid var(--line);color:#111827;box-shadow:var(--shadow-soft)}
-    .btn.primary{background:var(--brand);color:#fff;box-shadow:0 10px 20px rgba(0,64,209,.18)}
-    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.label{
+font-weight:600;
+margin-bottom:8px;
+display:block;
+}
 
-    .guide{border:1px solid #edf1f5;border-radius:24px;overflow:hidden;background:#fff}
-    .guide-section{padding:26px}
-    .guide-section + .guide-section{border-top:1px solid #eff3f6}
-    .section-label{margin:0 0 14px;font-size:12px;font-weight:900;color:#7b8794;text-transform:uppercase;letter-spacing:.08em}
-    .lead-box{background:linear-gradient(180deg,#fcfdff 0%, #f4f7ff 100%)}
-    .lead-text{margin:0;font-size:22px;line-height:1.5;font-weight:800;letter-spacing:-.025em;word-break:keep-all;white-space:pre-line}
+.input{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:14px;
+}
 
-    .process-strip-wrap{padding:16px;border-radius:22px;background:#edf4fb;border:1px solid #e4edf7}
-    .process-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-    .process-card{position:relative;min-height:76px;padding:18px 16px 14px;border-radius:16px;background:#fff;border:1px solid #ebeff5;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;color:#222;line-height:1.45;box-shadow:0 3px 10px rgba(15,23,42,.03);transition:all .18s ease;word-break:keep-all;cursor:pointer}
-    .process-card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,23,42,.06)}
-    .process-card.current{box-shadow:0 10px 24px rgba(15,23,42,.10)}
-    .process-card::before{content:attr(data-step);position:absolute;top:10px;left:12px;font-size:11px;font-weight:900;color:#94a3b8;letter-spacing:.06em}
-    .process-card.brand.current{background:linear-gradient(180deg,#f6f8ff 0%, #eef3ff 100%);border-color:var(--brand-line);color:var(--brand)}
-    .process-card.brand.done{background:#f7f9ff;border-color:#d9e3ff;color:#3553a8}
-    .process-card.naver.current{background:linear-gradient(180deg,#f5fff9 0%, #ecfff4 100%);border-color:var(--naver-line);color:#00a246}
-    .process-card.naver.done{background:#f9fcfa;border-color:#dce9e1;color:#3f4d46}
+.radio-group{
+display:flex;
+gap:16px;
+margin-top:6px;
+}
 
-    .detail-list{display:flex;flex-direction:column;gap:0}
-    .detail-item{padding:20px 0;border-bottom:1px solid #eef2f7}
-    .detail-item.hidden{display:none}
-    .detail-item:last-child{border-bottom:none;padding-bottom:0}
-    .detail-title{margin:0 0 10px;font-size:18px;font-weight:900;letter-spacing:-.02em;word-break:keep-all}
-    .detail-body{margin:0;font-size:15px;color:#374151;word-break:break-word;overflow-wrap:anywhere;white-space:pre-line}
-    .detail-body p{margin:0 0 10px}
-    .detail-body p:last-child{margin-bottom:0}
-    .detail-body table{width:100%;min-width:560px;border-collapse:collapse;background:#fff}
-    .detail-body th,.detail-body td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px;word-break:break-word}
-    .detail-body th{background:#f8fafc;font-size:13px;font-weight:800;color:#374151}
-    .detail-body .table-wrap{width:100%;overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:16px}
-    .subnote{margin-top:12px;padding:14px 16px;border-radius:16px;background:#f8fbfd;border:1px solid var(--line);font-size:14px;color:#374151;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere}
-    .warn{margin-top:12px;padding:14px 16px;border-radius:16px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-text);font-size:14px;white-space:pre-line}
-    .warn strong{display:block;margin-bottom:6px;font-size:13px}
-    .render-image{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
-    .render-image img{width:100%;height:auto;object-fit:contain;background:#fff}
-    .render-caption{padding:12px 14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);white-space:pre-line}
+.desc{
+font-size:13px;
+color:#777;
+margin-top:6px;
+}
 
-    .check-area{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .check-row{display:flex;gap:10px;align-items:flex-start;padding:15px 16px;border:1px solid var(--line);border-radius:16px;background:#fbfcfd;min-width:0;transition:all .15s ease}
-    .check-row:hover{background:#fff;box-shadow:var(--shadow-soft)}
-    .check-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--brand);flex:0 0 auto}
-    .check-row span{font-size:14px;font-weight:700;word-break:break-word;white-space:pre-line}
-    .footer-nav{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+.btn{
+background:#0040d1;
+color:white;
+padding:14px 26px;
+border:none;
+border-radius:10px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+}
 
-    .loading{padding:40px 20px;color:var(--muted);font-size:14px}
-    .error{margin-top:12px;padding:16px;border-radius:16px;background:var(--danger-bg);border:1px solid var(--danger-line);color:var(--danger-text);font-size:14px;white-space:pre-line}
-    .empty{color:var(--muted);font-size:14px}
+.center{
+text-align:center;
+margin-top:40px;
+}
 
-    .welcome-wrap{width:100%;min-height:520px;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:linear-gradient(180deg,#f5f7ff 0%, #eef2ff 100%);border-radius:var(--radius-2xl)}
-    .welcome-card{width:min(760px,100%);padding:48px 36px;border-radius:28px;background:#fff;text-align:center;box-shadow:0 20px 40px rgba(0,64,209,.08);border:1px solid #dbe5ff;margin:0 auto}
-    .welcome-chip{display:inline-flex;padding:8px 12px;border-radius:999px;background:#fff;color:var(--brand);font-size:12px;font-weight:900;letter-spacing:.04em;margin-bottom:14px;border:1px solid #d9e4ff}
-    .welcome-title{margin:0 0 12px;font-size:34px;line-height:1.2;letter-spacing:-.04em;white-space:pre-line}
-    .welcome-desc{margin:0 auto 24px;max-width:560px;font-size:16px;color:#4b5563;word-break:keep-all;white-space:pre-line}
-    .welcome-note{margin:0 auto 26px;max-width:520px;padding:16px 18px;border-radius:18px;background:#fff;border:1px solid #e5ebf7;color:#374151;font-size:14px;white-space:pre-line}
-    .welcome-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.hidden{
+display:none;
+}
 
-    .inquiry-shell{max-width:920px;margin:0 auto}
-    .form-section{padding:24px;border:1px solid #edf1f5;border-radius:24px;background:#fff;box-shadow:var(--shadow-soft)}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .field{display:flex;flex-direction:column;gap:8px}
-    .field.full{grid-column:1 / -1}
-    .field label{font-size:14px;font-weight:800;color:#1f2937;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .label-text{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-    .req{color:#dc2626;margin-left:1px}
-    .input,.select,.textarea{width:100%;border:1px solid #dbe3ee;border-radius:14px;background:#fff;padding:14px 14px;outline:none;transition:border-color .18s ease, box-shadow .18s ease;color:#111827}
-    .input:focus,.select:focus,.textarea:focus{border-color:#b5c9ff;box-shadow:0 0 0 4px rgba(0,64,209,.08)}
-    .input[readonly]{background:#f8fafc;color:#475569}
-    .textarea{min-height:120px;resize:vertical}
-    .hint{font-size:12px;color:#6b7280;white-space:pre-line}
-    .choice-row{display:flex;gap:10px;flex-wrap:wrap}
-    .choice-pill{border:1px solid #dbe3ee;background:#fff;border-radius:999px;padding:10px 14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;color:#374151}
-    .choice-pill input{accent-color:var(--brand)}
+.image-option{
+display:flex;
+gap:16px;
+margin-top:12px;
+}
 
-    .pack-card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border:1px solid #e5ebf2;border-radius:18px;background:#fbfcfe}
-    .pack-thumb{width:120px;height:120px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid #e5e7eb;cursor:pointer}
-    .pack-thumb img{width:100%;height:100%;object-fit:cover}
-    .pack-meta h4{margin:0 0 6px;font-size:15px;font-weight:900}
-    .pack-meta p{margin:0;font-size:14px;color:#4b5563;white-space:pre-line}
+.image-option img{
+width:120px;
+border-radius:8px;
+border:1px solid #ddd;
+}
 
-    .summary-box{margin-top:18px;padding:18px;border:1px solid #dbe5ff;border-radius:20px;background:linear-gradient(180deg,#fbfcff 0%, #f5f8ff 100%)}
-    .summary-box h3{margin:0 0 10px;font-size:18px}
-    .summary-list{display:grid;gap:10px}
-    .summary-item{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid #e6ecfb}
-    .summary-item:last-child{border-bottom:none}
-    .summary-key{font-size:13px;font-weight:900;color:#4b5563}
-    .summary-val{font-size:14px;color:#111827;word-break:break-word;white-space:pre-line}
+.summary{
+line-height:1.6;
+}
 
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
-    .modal.open{display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
-    .modal-panel{position:relative;width:min(760px, 100%);max-height:85vh;overflow:auto;background:#fff;border-radius:26px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(15,23,42,.20);padding:24px}
-    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
-    .modal-title{margin:0;font-size:24px;line-height:1.2;letter-spacing:-.03em}
-    .modal-sub{margin:8px 0 0;color:var(--muted);font-size:14px;white-space:pre-line}
-    .icon-btn{border:none;background:#f3f4f6;width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:20px;line-height:1}
-    .faq-list{display:flex;flex-direction:column;gap:10px}
-    .faq-item{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
-    .faq-q{width:100%;border:none;background:#fff;padding:16px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;font-weight:800;font-size:15px}
-    .faq-q:hover{background:#fafafa}
-    .faq-a{display:none;padding:0 16px 16px;color:#374151;font-size:14px;white-space:pre-line;word-break:break-word}
-    .faq-item.open .faq-a{display:block}
-    .faq-item.open .faq-arrow{transform:rotate(180deg)}
-    .faq-arrow{transition:transform .2s ease;color:#6b7280;flex:0 0 auto}
-    .image-modal-panel{width:min(720px,100%);padding:18px}
-    .image-modal-panel img{width:100%;height:auto;border-radius:18px}
+</style>
 
-    @media (max-width:1024px){
-      .layout{grid-template-columns:1fr}
-      .sidebar{position:static;height:auto}
-      .sidebar-steps{overflow:visible;max-height:none}
-      .check-area,.form-grid{grid-template-columns:1fr}
-    }
-    @media (max-width:640px){
-      .app{padding:10px}
-      .main{padding:18px}
-      h1{font-size:25px}
-      .hero h2{font-size:24px}
-      .guide-section,.form-section{padding:18px}
-      .modal-panel{padding:18px}
-      .modal-title{font-size:20px}
-      .lead-text{font-size:18px}
-      .process-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .process-card{min-height:64px;font-size:14px;padding:14px 12px}
-      .pack-card{grid-template-columns:1fr}
-      .pack-thumb{width:100%;height:180px}
-      .summary-item{grid-template-columns:1fr;gap:4px}
-      .welcome-card{padding:32px 20px}
-      .welcome-title{font-size:28px}
-      .field label{white-space:normal}
-    }
-  </style>
 </head>
+
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="badge">
-        <img id="companyLogo" class="badge-logo" alt="회사 로고">
-        <span>N배송 세팅 가이드</span>
-      </div>
-      <h1 id="pageTitle">N배송 세팅 가이드</h1>
-      <p class="sub" id="appSub">안내에 따라 순서대로 진행하면 설정을 직접 완료할 수 있어요.</p>
-    </div>
-
-    <div id="welcomeScreen" class="welcome-wrap card">
-      <div class="welcome-card">
-        <div class="welcome-chip">WELCOME</div>
-        <h2 class="welcome-title">환영합니다 🎉
-N배송 세팅 가이드에 오신 것을 환영합니다</h2>
-        <p class="welcome-desc">초도 입고부터 출고 설정까지,
-안내된 순서대로 진행하시면 빠르게 운영을 시작하실 수 있어요.</p>
-        <div class="welcome-note">N배송 설정 전 필요한 품고 문의 내용을 먼저 전달해주시면,
-제출 내용을 확인한 뒤 N배송 세팅 가이드를 오픈해드릴게요.</div>
-        <div class="welcome-actions">
-          <button class="btn primary" id="startInquiryBtn" type="button">문의 내용 작성하기</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="inquiryScreen" class="hidden">
-      <div class="inquiry-shell">
-        <div class="hero">
-          <div>
-            <div class="step-chip">사전 문의 접수</div>
-            <h2>N배송 세팅 전 필요한 정보를 입력해주세요</h2>
-            <p>입력해주신 내용을 기준으로 품고에서 확인 후 N배송 세팅 절차를 오픈합니다.</p>
-          </div>
-        </div>
-
-        <section class="form-section">
-          <div class="form-grid">
-            <div class="field">
-              <label for="inboundDate"><span class="label-text">1. 초도 입고 일정</span><span class="req">*</span></label>
-              <input class="input" id="inboundDate" type="date">
-            </div>
-
-            <div class="field">
-              <label for="skuCount"><span class="label-text">2. 초도 입고 SKU 종 수</span><span class="req">*</span></label>
-              <input class="input" id="skuCount" type="number" readonly>
-              <div class="hint">SKU 종 수는 품고에서 사전 확인 후 자동 입력됩니다.
-변경이 필요한 경우 담당자에게 문의해주세요.</div>
-            </div>
-
-            <div class="field full">
-              <label for="pltCount"><span class="label-text">3. 초도 입고 PLT 수</span><span class="req">*</span></label>
-              <input class="input" id="pltCount" type="number" min="0" placeholder="예: 10">
-              <div class="hint">초도 입고 한정으로 PLT 내 SKU 혼적이 허용되며, 이후 입고시에는 1PLT-1SKU를 준수해주셔야합니다.</div>
-            </div>
-
-            <div class="field full">
-              <label for="monthlyPltCount"><span class="label-text">4. 월 별 보관 예정 PLT 수</span><span class="req">*</span></label>
-              <input class="input" id="monthlyPltCount" type="number" min="0" placeholder="예: 20">
-            </div>
-
-            <div class="field full">
-              <label for="packType"><span class="label-text">5. 포장 방법</span><span class="req">*</span></label>
-              <select class="select" id="packType">
-                <option value="">선택해주세요</option>
-                <option value="기본 포장">기본 포장</option>
-                <option value="에어캡 포장">에어캡 포장</option>
-                <option value="버블페이퍼 포장">버블페이퍼 포장</option>
-              </select>
-              <div class="hint">포장 방식에 따라 출고 방법과 비용이 달라질 수 있습니다.</div>
-              <div id="packPreviewArea" class="hidden" style="margin-top:12px;"></div>
-            </div>
-
-            <div class="field">
-              <label for="returnDest"><span class="label-text">6. 반품 회수지</span><span class="req">*</span></label>
-              <select class="select" id="returnDest">
-                <option value="">선택해주세요</option>
-                <option value="품고">품고</option>
-                <option value="물류사">물류사</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label><span class="label-text">7. 초도 입고 당월 행사 진행 여부</span><span class="req">*</span></label>
-              <div class="choice-row">
-                <label class="choice-pill"><input type="radio" name="eventPlan" value="Y"> Y</label>
-                <label class="choice-pill"><input type="radio" name="eventPlan" value="N"> N</label>
-              </div>
-            </div>
-
-            <div class="field full">
-              <label><span class="label-text">8. 단수출고 유무</span><span class="req">*</span></label>
-              <div class="hint">합포 없이 상품(SKU) 자체에 송장을 부착하는 상품(SKU)가 있는 경우 체크해주세요.</div>
-              <div class="choice-row">
-                <label class="choice-pill"><input type="radio" name="singleShipment" value="Y"> Y</label>
-                <label class="choice-pill"><input type="radio" name="singleShipment" value="N"> N</label>
-              </div>
-            </div>
-
-            <div class="field full">
-              <label for="accessEmail"><span class="label-text">9. 품고 나우 시스템 접속 메일 주소</span><span class="req">*</span></label>
-              <input class="input" id="accessEmail" type="email" placeholder="예: example@brand.com">
-            </div>
-
-            <div class="field full">
-              <label for="inquiryText"><span class="label-text">10. 품고에 궁금한 사항</span></label>
-              <textarea class="textarea" id="inquiryText" placeholder="예: 초도 입고 후 출고 가능 예상 시점, 포장 비용 기준, 반품 프로세스 등"></textarea>
-            </div>
-          </div>
-
-          <div id="inquiryError" class="error hidden" style="margin-top:16px;"></div>
-
-          <div class="footer-nav">
-            <button class="btn secondary" id="backToWelcomeBtn" type="button">이전</button>
-            <button class="btn primary" id="openSummaryBtn" type="button">제출하기</button>
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <div id="guideScreen" class="hidden">
-      <div class="layout">
-        <aside class="card sidebar">
-          <div class="sidebar-header">
-            <div class="side-head">
-              <div class="side-title">진행 단계</div>
-              <div class="progress" id="progressText">0 / 0 완료</div>
-            </div>
-          </div>
-
-          <div class="sidebar-steps">
-            <div class="accordion" id="stepAccordion">
-              <div class="loading">불러오는 중...</div>
-            </div>
-          </div>
-
-          <div class="sidebar-footer">
-            <div class="side-note">설명 과정은 다음 버튼을 눌러야 다음 순서가 보입니다.</div>
-          </div>
-        </aside>
-
-        <main class="card main">
-          <div class="hero">
-            <div>
-              <div class="step-chip" id="heroChip">STEP</div>
-              <h2 id="heroTitle">불러오는 중...</h2>
-              <p id="heroDesc"></p>
-            </div>
-
-            <div class="actions">
-              <button class="btn secondary" id="faqBtn" type="button">자주 묻는 질문</button>
-            </div>
-          </div>
-
-          <section class="guide">
-            <div class="guide-section lead-box">
-              <div class="section-label">이번 단계에서 할 일</div>
-              <p class="lead-text" id="leadText">시트 데이터를 불러오는 중입니다.</p>
-            </div>
-
-            <div class="guide-section">
-              <div class="section-label">설정 과정</div>
-              <div class="process-strip-wrap">
-                <div class="process-strip" id="flowList"></div>
-              </div>
-            </div>
-
-            <div class="guide-section">
-              <div class="section-label">자세히 안내드릴게요</div>
-              <div class="detail-list" id="detailList"></div>
-            </div>
-
-            <div class="guide-section">
-              <div class="section-label">이것만 확인하면 돼요</div>
-              <div class="check-area" id="checkArea"></div>
-            </div>
-          </section>
-
-          <div class="footer-nav">
-            <button class="btn secondary" id="prevBtn" type="button">이전 단계</button>
-            <button class="btn primary" id="nextBtn" type="button">다음 단계</button>
-          </div>
-
-          <div id="errorBox"></div>
-        </main>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="faqModal" aria-hidden="true">
-    <div class="modal-backdrop" id="faqBackdrop"></div>
-    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="faqModalTitle">
-      <div class="modal-head">
-        <div>
-          <h3 class="modal-title" id="faqModalTitle">FAQ</h3>
-          <p class="modal-sub" id="faqModalSub">현재 단계에서 자주 막히는 항목을 정리했습니다.</p>
-        </div>
-        <button class="icon-btn" id="faqCloseBtn" type="button" aria-label="닫기">×</button>
-      </div>
-      <div class="faq-list" id="faqList"></div>
-    </div>
-  </div>
-
-  <div class="modal" id="summaryModal" aria-hidden="true">
-    <div class="modal-backdrop" id="summaryBackdrop"></div>
-    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
-      <div class="modal-head">
-        <div>
-          <h3 class="modal-title" id="summaryTitle">입력 내용 확인</h3>
-          <p class="modal-sub">제출 전에 입력하신 내용을 한 번 더 확인해주세요.</p>
-        </div>
-        <button class="icon-btn" id="summaryCloseBtn" type="button" aria-label="닫기">×</button>
-      </div>
-      <div class="summary-box">
-        <h3>요약</h3>
-        <div class="summary-list" id="summaryList"></div>
-      </div>
-      <div class="footer-nav">
-        <button class="btn secondary" id="summaryEditBtn" type="button">수정하기</button>
-        <button class="btn primary" id="summarySubmitBtn" type="button">제출 완료</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="submitModal" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="submitTitle">
-      <div class="modal-head">
-        <div>
-          <h3 class="modal-title" id="submitTitle">제출중입니다</h3>
-          <p class="modal-sub">입력하신 내용을 전송하고 있어요. 잠시만 기다려주세요.</p>
-        </div>
-      </div>
-      <div class="summary-box">제출된 내용을 품고에서 확인 후 N배송 세팅 절차 가이드가 오픈됩니다!</div>
-    </div>
-  </div>
-
-  <div class="modal" id="imageModal" aria-hidden="true">
-    <div class="modal-backdrop" id="imageBackdrop"></div>
-    <div class="modal-panel image-modal-panel" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
-      <div class="modal-head">
-        <div>
-          <h3 class="modal-title" id="imageModalTitle">포장 예시 이미지</h3>
-        </div>
-        <button class="icon-btn" id="imageCloseBtn" type="button" aria-label="닫기">×</button>
-      </div>
-      <img id="imageModalTarget" src="" alt="포장 예시 확대 이미지">
-    </div>
-  </div>
-
-  <script>
-    const CONFIG = {
-      SPREADSHEET_ID: '1JzTyCkZHBMEQiKNqIXLB8KUiVY8Y-33KICB2lwM06GQ',
-      GAS_WEBAPP_URL: 'https://script.google.com/macros/s/AKfycbwwxe5ZigCmq-tjXyGZJUK1Nomije28Fu6Ueb-pw_d2KUsTsGHE5lcEeG505gfcVV-M/exec',
-      COMPANY_LOGO_URL: 'https://drive.google.com/uc?export=view&id=1tgVRxlRQ63QkShpmz1434yuWDD9MpKjw',
-      SHEETS: {
-        steps: 'steps',
-        contents: 'contents',
-        checklists: 'checklists',
-        faqs: 'faqs',
-        clients: '고객사링크'
-      },
-      DEFAULT_SUBTITLE: '안내에 따라 순서대로 진행하면 설정을 직접 완료할 수 있어요.',
-      GUIDE_OPEN_FLAG_FIELD: '가이드오픈여부',
-      PACK_OPTIONS: {
-        '기본 포장': {
-          title: '기본 포장',
-          desc: `제품 자체에는 별도 완충 포장을 하지 않고, 박스 내부 상·하단에 에어캡을 넣어 출고하는 방식입니다.\n해당 포장은 내품 파손 발생 시 택배 사고 처리가 불가합니다.`,
-          image: 'https://drive.google.com/file/d/1tITH7c-WsVejDK2F2JsECSvHMcpDnMJt/view?usp=drive_link'
-        },
-        '에어캡 포장': {
-          title: '에어캡 포장',
-          desc: '제품을 에어캡으로 완충 포장하여 출고하는 방식입니다.\n추가 비용이 발생합니다.',
-          image: 'https://drive.google.com/file/d/110e8PsWHq-2XkOYg7bXiONNn_1XpA-ip/view?usp=drive_link'
-        },
-        '버블페이퍼 포장': {
-          title: '버블페이퍼 포장',
-          desc: '제품을 버블페이퍼로 완충 포장하여 출고하는 방식입니다.\n추가 비용이 발생합니다.',
-          image: 'https://drive.google.com/file/d/1W2CYbdHLX7Uj2InTm-0HH-CaKnmAOomg/view?usp=drive_link'
-        }
-      }
-    };
-
-    let DATA = [];
-    let CLIENT_INFO = null;
-    let currentIndex = 0;
-    let currentItemIndex = 0;
-    let openStepId = '';
-    let state = loadState();
-
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const inquiryScreen = document.getElementById('inquiryScreen');
-    const guideScreen = document.getElementById('guideScreen');
-    const stepAccordion = document.getElementById('stepAccordion');
-    const progressText = document.getElementById('progressText');
-    const heroChip = document.getElementById('heroChip');
-    const heroTitle = document.getElementById('heroTitle');
-    const heroDesc = document.getElementById('heroDesc');
-    const leadText = document.getElementById('leadText');
-    const flowList = document.getElementById('flowList');
-    const detailList = document.getElementById('detailList');
-    const checkArea = document.getElementById('checkArea');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const faqBtn = document.getElementById('faqBtn');
-    const faqModal = document.getElementById('faqModal');
-    const faqBackdrop = document.getElementById('faqBackdrop');
-    const faqCloseBtn = document.getElementById('faqCloseBtn');
-    const faqModalTitle = document.getElementById('faqModalTitle');
-    const faqModalSub = document.getElementById('faqModalSub');
-    const faqList = document.getElementById('faqList');
-    const errorBox = document.getElementById('errorBox');
-    const appSub = document.getElementById('appSub');
-    const pageTitle = document.getElementById('pageTitle');
-    const companyLogo = document.getElementById('companyLogo');
-    const startInquiryBtn = document.getElementById('startInquiryBtn');
-    const backToWelcomeBtn = document.getElementById('backToWelcomeBtn');
-    const openSummaryBtn = document.getElementById('openSummaryBtn');
-    const inquiryError = document.getElementById('inquiryError');
-    const packType = document.getElementById('packType');
-    const packPreviewArea = document.getElementById('packPreviewArea');
-    const summaryModal = document.getElementById('summaryModal');
-    const summaryBackdrop = document.getElementById('summaryBackdrop');
-    const summaryCloseBtn = document.getElementById('summaryCloseBtn');
-    const summaryEditBtn = document.getElementById('summaryEditBtn');
-    const summarySubmitBtn = document.getElementById('summarySubmitBtn');
-    const summaryList = document.getElementById('summaryList');
-    const submitModal = document.getElementById('submitModal');
-    const imageModal = document.getElementById('imageModal');
-    const imageBackdrop = document.getElementById('imageBackdrop');
-    const imageCloseBtn = document.getElementById('imageCloseBtn');
-    const imageModalTarget = document.getElementById('imageModalTarget');
-
-    google.charts.load('current');
-    google.charts.setOnLoadCallback(init);
-
-    async function init() {
-      try {
-        applyCompanyLogo_();
-        bindFormEvents();
-
-        const [stepsRows, contentsRows, checklistRows, faqRows, clientRows] = await Promise.all([
-          querySheet(CONFIG.SHEETS.steps),
-          querySheet(CONFIG.SHEETS.contents),
-          querySheet(CONFIG.SHEETS.checklists),
-          querySheet(CONFIG.SHEETS.faqs),
-          querySheet(CONFIG.SHEETS.clients)
-        ]);
-
-        const clientCode = getClientCodeFromUrl_();
-        if (!clientCode) throw new Error('고객사 코드가 없습니다. 링크에 ?client=고객사코드 형식이 필요합니다.');
-
-        CLIENT_INFO = findClientInfo_(clientRows, clientCode);
-        if (!CLIENT_INFO) throw new Error('유효하지 않은 고객사 링크입니다. 고객사코드를 확인해주세요.');
-        if (String(CLIENT_INFO['사용여부'] || '').toUpperCase() === 'N') throw new Error('현재 비활성화된 고객사 링크입니다.');
-
-        DATA = buildData(stepsRows, contentsRows, checklistRows, faqRows);
-        if (!DATA.length) throw new Error('활성화된 steps 데이터가 없습니다.');
-
-        const customerName = String(CLIENT_INFO['고객사명'] || '').trim();
-        document.title = `${customerName} | N배송 세팅 가이드`;
-        pageTitle.textContent = customerName ? `${customerName} N배송 세팅 가이드` : 'N배송 세팅 가이드';
-        appSub.textContent = customerName
-          ? `${customerName} 전용 N배송 세팅 가이드입니다. 아래 순서대로 진행해주세요.`
-          : CONFIG.DEFAULT_SUBTITLE;
-
-        const fixedSkuCount = String(CLIENT_INFO['SKU종수'] || '').trim();
-        if (fixedSkuCount) {
-          document.getElementById('skuCount').value = fixedSkuCount;
-        }
-
-        state = loadState();
-        currentIndex = Math.min(state.currentIndex ?? 0, DATA.length - 1);
-        openStepId = state.openStepId || DATA[currentIndex].id;
-        currentItemIndex = Math.max(0, state.currentItemIndex ?? 0);
-
-        routeInitialScreen();
-        render();
-      } catch (err) {
-        showError(
-          '시트 데이터를 불러오지 못했습니다.\n\n' +
-          '1) SPREADSHEET_ID가 맞는지\n' +
-          '2) 시트 탭 이름이 steps / contents / checklists / faqs / 고객사링크 인지\n' +
-          '3) 링크에 ?client=고객사코드 가 들어있는지\n' +
-          '4) 고객사링크 시트의 사용여부가 Y인지\n\n' +
-          '상세 오류:\n' + (err?.message || String(err))
-        );
-      }
-    }
-
-    function applyCompanyLogo_() {
-      const logoUrl = normalizeImageUrl_(CONFIG.COMPANY_LOGO_URL, true);
-      if (!logoUrl) {
-        companyLogo.style.display = 'none';
-        return;
-      }
-      companyLogo.onerror = () => { companyLogo.style.display = 'none'; };
-      companyLogo.onload = () => { companyLogo.style.display = 'block'; };
-      companyLogo.src = logoUrl;
-    }
-
-    function routeInitialScreen() {
-      const guideOpen = String(CLIENT_INFO?.[CONFIG.GUIDE_OPEN_FLAG_FIELD] || '').toUpperCase() === 'Y';
-      showOnly(guideOpen ? 'guide' : 'welcome');
-    }
-
-    function showOnly(screen) {
-      welcomeScreen.classList.toggle('hidden', screen !== 'welcome');
-      inquiryScreen.classList.toggle('hidden', screen !== 'inquiry');
-      guideScreen.classList.toggle('hidden', screen !== 'guide');
-    }
-
-    function bindFormEvents() {
-      startInquiryBtn.addEventListener('click', () => showOnly('inquiry'));
-      backToWelcomeBtn.addEventListener('click', () => showOnly('welcome'));
-      openSummaryBtn.addEventListener('click', handleOpenSummary);
-      packType.addEventListener('change', () => renderPackPreview(packType.value));
-      summaryBackdrop.addEventListener('click', closeSummaryModal);
-      summaryCloseBtn.addEventListener('click', closeSummaryModal);
-      summaryEditBtn.addEventListener('click', closeSummaryModal);
-      summarySubmitBtn.addEventListener('click', submitInquiry);
-      imageBackdrop.addEventListener('click', closeImageModal);
-      imageCloseBtn.addEventListener('click', closeImageModal);
-      faqBtn.addEventListener('click', openFaqModal);
-      faqCloseBtn.addEventListener('click', closeFaqModal);
-      faqBackdrop.addEventListener('click', closeFaqModal);
-    }
-
-    function querySheet(sheetName) {
-      return new Promise((resolve, reject) => {
-        const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SPREADSHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}`;
-        const query = new google.visualization.Query(url);
-        query.setQuery('select *');
-        query.send(response => {
-          if (response.isError()) {
-            reject(new Error(response.getMessage() || `시트 조회 실패: ${sheetName}`));
-            return;
-          }
-          const dt = response.getDataTable();
-          const cols = [];
-          for (let c = 0; c < dt.getNumberOfColumns(); c++) cols.push(String(dt.getColumnLabel(c) || dt.getColumnId(c) || `col_${c}`).trim());
-          const rows = [];
-          for (let r = 0; r < dt.getNumberOfRows(); r++) {
-            const row = {};
-            for (let c = 0; c < dt.getNumberOfColumns(); c++) {
-              const raw = dt.getValue(r, c);
-              const formatted = dt.getFormattedValue(r, c);
-              row[cols[c]] = formatted ?? raw ?? '';
-            }
-            rows.push(row);
-          }
-          resolve(rows);
-        });
-      });
-    }
-
-    function buildData(stepsRows, contentsRows, checklistRows, faqRows) {
-      const activeSteps = stepsRows
-        .filter(r => String(r['사용여부'] || '').toUpperCase() !== 'N')
-        .sort((a, b) => Number(a['단계순서'] || 0) - Number(b['단계순서'] || 0));
-
-      return activeSteps.map(step => {
-        const stepId = String(step['단계ID'] || '').trim();
-        const items = contentsRows
-          .filter(r => String(r['단계ID'] || '').trim() === stepId)
-          .sort((a, b) => Number(a['항목순서'] || 0) - Number(b['항목순서'] || 0))
-          .map(r => ({
-            title: r['항목명'] || '',
-            type: String(r['항목타입'] || 'section').toLowerCase(),
-            bodyHtml: r['본문HTML'] || '',
-            noteHtml: r['안내HTML'] || '',
-            warnHtml: r['주의HTML'] || '',
-            imageUrl: r['이미지URL'] || '',
-            imageCaption: r['이미지캡션'] || '',
-            linkText: r['버튼텍스트'] || '',
-            linkUrl: r['버튼링크'] || ''
-          }));
-        const checks = checklistRows
-          .filter(r => String(r['단계ID'] || '').trim() === stepId)
-          .sort((a, b) => Number(a['체크순서'] || 0) - Number(b['체크순서'] || 0))
-          .map(r => r['체크문구'] || '');
-        const faqs = faqRows
-          .filter(r => String(r['단계ID'] || '').trim() === stepId)
-          .sort((a, b) => Number(a['FAQ순서'] || 0) - Number(b['FAQ순서'] || 0))
-          .map(r => ({ q: r['질문'] || '', aHtml: r['답변HTML'] || '' }));
-        return { id: stepId, title: step['단계명'] || '', desc: step['단계설명'] || '', leadHtml: step['리드문구'] || '', items, checks, faqs };
-      });
-    }
-
-    function getClientCodeFromUrl_() {
-      const params = new URLSearchParams(window.location.search);
-      return String(params.get('client') || '').trim();
-    }
-
-    function findClientInfo_(clientRows, clientCode) {
-      return clientRows.find(r => String(r['고객사코드'] || '').trim() === clientCode) || null;
-    }
-
-    function storageKey() {
-      const clientCode = getClientCodeFromUrl_() || 'default';
-      return `poomgo_onboarding_${CONFIG.SPREADSHEET_ID}_${clientCode}`;
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(storageKey());
-        return raw ? JSON.parse(raw) : { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
-      } catch (_) {
-        return { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(storageKey(), JSON.stringify({ checks: state.checks || {}, currentIndex, currentItemIndex, openStepId }));
-    }
-
-    function getChecks(stepId) {
-      if (!state.checks) state.checks = {};
-      if (!state.checks[stepId]) state.checks[stepId] = [];
-      return state.checks[stepId];
-    }
-
-    function isStepDone(step) {
-      const arr = getChecks(step.id);
-      return step.checks.length > 0 && step.checks.every((_, i) => !!arr[i]);
-    }
-
-    function statusOf(step, idx) {
-      if (isStepDone(step)) return { text:'완료', cls:'done' };
-      if (idx === currentIndex) return { text:'진행중', cls:'current' };
-      return { text:'대기', cls:'' };
-    }
-
-    function getProcessTheme(title='') {
-      const t = String(title).replace(/\s/g, '');
-      return (t.includes('고객사등록') || t.includes('입고가이드')) ? 'brand' : 'naver';
-    }
-
-    function render() {
-      renderAccordion();
-      renderMain();
-      errorBox.innerHTML = '';
-    }
-
-    function renderAccordion() {
-      stepAccordion.innerHTML = '';
-      const doneCount = DATA.filter(isStepDone).length;
-      progressText.textContent = `${doneCount} / ${DATA.length} 완료`;
-
-      DATA.forEach((step, idx) => {
-        const s = statusOf(step, idx);
-        const item = document.createElement('div');
-        item.className = 'step-item' + (openStepId === step.id ? ' active' : '');
-        item.innerHTML = `
-          <button class="step-header" type="button">
-            <div class="step-num">${idx + 1}</div>
-            <div class="step-main">
-              <div class="step-title">${escapeHtml(step.title)}</div>
-              <div class="step-state"><span class="dot ${s.cls}"></span><span>${s.text}</span></div>
-            </div>
-            <div class="chev">⌄</div>
-          </button>
-          <div class="step-body">
-            <div class="step-sublist">
-              ${step.items.map(x => `<div class="step-subitem"><span>ㄴ</span><span>${escapeHtml(x.title)}</span></div>`).join('') || '<div class="empty">하위 항목 없음</div>'}
-            </div>
-          </div>
-        `;
-        item.querySelector('.step-header').addEventListener('click', () => {
-          currentIndex = idx;
-          currentItemIndex = 0;
-          openStepId = openStepId === step.id ? '' : step.id;
-          saveState();
-          render();
-        });
-        stepAccordion.appendChild(item);
-      });
-      scrollCurrentStepIntoView();
-    }
-
-    function renderMain() {
-      const step = DATA[currentIndex];
-      heroChip.textContent = `STEP ${currentIndex + 1}`;
-      heroTitle.textContent = step.title;
-      heroDesc.textContent = convertEscapedNewlines_(step.desc);
-      leadText.innerHTML = convertEscapedNewlines_(step.leadHtml || '<span class="empty">리드문구가 비어 있습니다.</span>');
-
-      const checks = getChecks(step.id);
-      const checkedCount = checks.filter(Boolean).length;
-      if (currentItemIndex > step.items.length - 1) currentItemIndex = 0;
-
-      flowList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const card = document.createElement('button');
-        let cls = `process-card ${getProcessTheme(item.title)}`;
-        if (idx < checkedCount) cls += ' done';
-        if (idx === currentItemIndex) cls += ' current';
-        card.type = 'button';
-        card.className = cls;
-        card.setAttribute('data-step', `STEP ${idx + 1}`);
-        card.innerHTML = `<span>${escapeHtml(item.title)}</span>`;
-        card.addEventListener('click', () => {
-          currentItemIndex = idx;
-          saveState();
-          renderMain();
-        });
-        flowList.appendChild(card);
-      });
-
-      detailList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const div = document.createElement('div');
-        div.className = 'detail-item' + (idx === currentItemIndex ? '' : ' hidden');
-        div.innerHTML = renderDetail(item);
-        detailList.appendChild(div);
-      });
-
-      checkArea.innerHTML = '';
-      step.checks.forEach((label, i) => {
-        const row = document.createElement('label');
-        row.className = 'check-row';
-        row.innerHTML = `<input type="checkbox" ${checks[i] ? 'checked' : ''}><span>${escapeHtml(label).replaceAll('\\n', '\n')}</span>`;
-        row.querySelector('input').addEventListener('change', e => {
-          checks[i] = e.target.checked;
-          saveState();
-        });
-        checkArea.appendChild(row);
-      });
-
-      prevBtn.disabled = currentIndex === 0 && currentItemIndex === 0;
-      nextBtn.disabled = currentIndex === DATA.length - 1 && currentItemIndex === step.items.length - 1;
-    }
-
-    function renderDetail(item) {
-      const title = `<h3 class="detail-title">${escapeHtml(item.title)}</h3>`;
-      const body = item.bodyHtml ? `<div class="detail-body">${wrapTables(convertEscapedNewlines_(item.bodyHtml))}</div>` : '';
-      const note = item.noteHtml ? `<div class="subnote">${convertEscapedNewlines_(item.noteHtml)}</div>` : '';
-      const warn = item.warnHtml ? `<div class="warn"><strong>주의</strong>${convertEscapedNewlines_(item.warnHtml)}</div>` : '';
-      const normalizedImageUrl = normalizeImageUrl_(item.imageUrl, false);
-      const image = normalizedImageUrl ? `<div class="render-image"><img src="${escapeAttr(normalizedImageUrl)}" alt="${escapeAttr(item.title)}">${item.imageCaption ? `<div class="render-caption">${escapeHtml(item.imageCaption).replaceAll('\\n', '\n')}</div>` : ''}</div>` : '';
-      if (item.type === 'path') return `${title}<div class="subnote">${escapeHtml(stripHtml(item.bodyHtml)).replaceAll('>', '→').replaceAll('\\n', '\n')}</div>${warn}`;
-      if (item.type === 'link') return `${title}${body}${warn}${item.linkUrl ? `<div style="margin-top:12px;"><a class="btn primary" href="${escapeAttr(item.linkUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.linkText || '바로가기')}</a></div>` : ''}`;
-      return `${title}${body}${image}${note}${warn}`;
-    }
-
-    function convertEscapedNewlines_(text) {
-      return String(text || '').replace(/\\n/g, '\n');
-    }
-
-    function normalizeImageUrl_(url, isLogo = false) {
-      const raw = String(url || '').trim();
-      if (!raw) return '';
-      if (/^https?:\/\//i.test(raw) && !/drive\.google\.com/i.test(raw)) return raw;
-      const fileId = extractGoogleDriveFileId_(raw);
-      if (fileId) {
-        return isLogo
-          ? `https://drive.google.com/uc?export=view&id=${encodeURIComponent(fileId)}`
-          : `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w1600`;
-      }
-      return raw;
-    }
-
-    function extractGoogleDriveFileId_(url) {
-      const raw = String(url || '').trim();
-      if (!raw) return '';
-      let match = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      match = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      if (/\/folders\//.test(raw)) return '';
-      if (/^[a-zA-Z0-9_-]{20,}$/.test(raw)) return raw;
-      return '';
-    }
-
-    function wrapTables(html) {
-      const temp = document.createElement('div');
-      temp.innerHTML = html;
-      temp.querySelectorAll('table').forEach(table => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'table-wrap';
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-      });
-      return temp.innerHTML;
-    }
-
-    function stripHtml(html) {
-      const div = document.createElement('div');
-      div.innerHTML = html || '';
-      return div.textContent || div.innerText || '';
-    }
-
-    function getInquiryValues() {
-      return {
-        clientCode: getClientCodeFromUrl_(),
-        clientName: String(CLIENT_INFO?.['고객사명'] || '').trim(),
-        inboundDate: document.getElementById('inboundDate').value,
-        skuCount: document.getElementById('skuCount').value,
-        pltCount: document.getElementById('pltCount').value,
-        monthlyPltCount: document.getElementById('monthlyPltCount').value,
-        packType: document.getElementById('packType').value,
-        returnDest: document.getElementById('returnDest').value,
-        eventPlan: document.querySelector('input[name="eventPlan"]:checked')?.value || '',
-        singleShipment: document.querySelector('input[name="singleShipment"]:checked')?.value || '',
-        accessEmail: document.getElementById('accessEmail').value.trim(),
-        inquiryText: document.getElementById('inquiryText').value.trim()
-      };
-    }
-
-    function validateInquiryForm() {
-      const v = getInquiryValues();
-      if (!v.inboundDate) return '초도 입고 일정을 선택해주세요.';
-      if (v.skuCount === '') return '초도 입고 SKU 종 수가 설정되어 있지 않습니다. 담당자에게 문의해주세요.';
-      if (v.pltCount === '') return '초도 입고 PLT 수를 입력해주세요.';
-      if (v.monthlyPltCount === '') return '월 별 보관 예정 PLT 수를 입력해주세요.';
-      if (!v.packType) return '포장 방법을 선택해주세요.';
-      if (!v.returnDest) return '반품 회수지를 선택해주세요.';
-      if (!v.eventPlan) return '행사 진행 여부를 선택해주세요.';
-      if (!v.singleShipment) return '단수출고 유무를 선택해주세요.';
-      if (!v.accessEmail) return '품고 나우 시스템 접속 메일 주소를 입력해주세요.';
-      return '';
-    }
-
-    function handleOpenSummary() {
-      const error = validateInquiryForm();
-      if (error) {
-        inquiryError.textContent = error;
-        inquiryError.classList.remove('hidden');
-        return;
-      }
-      inquiryError.classList.add('hidden');
-      const values = getInquiryValues();
-      const rows = [
-        ['고객사', values.clientName || '-'],
-        ['초도 입고 일정', values.inboundDate || '-'],
-        ['초도 입고 SKU 종 수', values.skuCount || '-'],
-        ['초도 입고 PLT 수', values.pltCount || '-'],
-        ['월 별 보관 예정 PLT 수', values.monthlyPltCount || '-'],
-        ['포장 방법', values.packType || '-'],
-        ['반품 회수지', values.returnDest || '-'],
-        ['초도 입고 당월 행사 진행 여부', values.eventPlan || '-'],
-        ['단수출고 유무', values.singleShipment || '-'],
-        ['품고 나우 시스템 접속 메일 주소', values.accessEmail || '-'],
-        ['문의 사항', values.inquiryText || '없음']
-      ];
-      summaryList.innerHTML = rows.map(([k, v]) => `<div class="summary-item"><div class="summary-key">${escapeHtml(k)}</div><div class="summary-val">${escapeHtml(v).replaceAll('\\n', '\n')}</div></div>`).join('');
-      summaryModal.classList.add('open');
-      summaryModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeSummaryModal() {
-      summaryModal.classList.remove('open');
-      summaryModal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    async function submitInquiry() {
-      closeSummaryModal();
-      submitModal.classList.add('open');
-      submitModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      try {
-        const values = getInquiryValues();
-        await postInquiry(values);
-        localStorage.setItem(`${storageKey()}_inquiry`, JSON.stringify(values));
-      } catch (e) {
-        inquiryError.textContent = e?.message || '제출 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
-        inquiryError.classList.remove('hidden');
-      } finally {
-        setTimeout(() => {
-          submitModal.classList.remove('open');
-          submitModal.setAttribute('aria-hidden', 'true');
-          document.body.style.overflow = '';
-          showOnly('welcome');
-        }, 1200);
-      }
-    }
-
-    async function postInquiry(values) {
-      const payload = {
-        action: 'submitInquiry',
-        clientCode: values.clientCode,
-        clientName: values.clientName,
-        inboundDate: values.inboundDate,
-        skuCount: values.skuCount,
-        pltCount: values.pltCount,
-        monthlyPltCount: values.monthlyPltCount,
-        packType: values.packType,
-        returnDest: values.returnDest,
-        eventPlan: values.eventPlan,
-        singleShipment: values.singleShipment,
-        accessEmail: values.accessEmail,
-        inquiryText: values.inquiryText
-      };
-
-      const res = await fetch(CONFIG.GAS_WEBAPP_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      });
-
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (_) {
-        throw new Error('웹앱 응답을 읽지 못했습니다. 배포 상태를 확인해주세요.');
-      }
-      if (!data.ok) throw new Error(data.message || '제출에 실패했습니다.');
-      return data;
-    }
-
-    function renderPackPreview(value) {
-      const info = CONFIG.PACK_OPTIONS[value];
-      if (!info) {
-        packPreviewArea.classList.add('hidden');
-        packPreviewArea.innerHTML = '';
-        return;
-      }
-      const normalizedImageUrl = normalizeImageUrl_(info.image, false);
-      const imagePart = normalizedImageUrl
-        ? `<button class="pack-thumb" type="button" data-image="${escapeAttr(normalizedImageUrl)}"><img src="${escapeAttr(normalizedImageUrl)}" alt="${escapeAttr(info.title)}"></button>`
-        : `<div class="pack-thumb" style="display:grid;place-items:center;color:#94a3b8;font-size:13px;">예시 이미지 준비중</div>`;
-      packPreviewArea.innerHTML = `
-        <div class="pack-card">
-          ${imagePart}
-          <div class="pack-meta">
-            <h4>${escapeHtml(info.title)}</h4>
-            <p>${escapeHtml(info.desc).replaceAll('\\n', '\n')}</p>
-          </div>
-        </div>
-      `;
-      packPreviewArea.classList.remove('hidden');
-      const thumb = packPreviewArea.querySelector('[data-image]');
-      if (thumb) thumb.addEventListener('click', () => openImageModal(thumb.getAttribute('data-image')));
-    }
-
-    function openImageModal(src) {
-      if (!src) return;
-      imageModalTarget.src = src;
-      imageModal.classList.add('open');
-      imageModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeImageModal() {
-      imageModal.classList.remove('open');
-      imageModal.setAttribute('aria-hidden', 'true');
-      imageModalTarget.src = '';
-      document.body.style.overflow = '';
-    }
-
-    function openFaqModal() {
-      const step = DATA[currentIndex];
-      faqModalTitle.textContent = `${step.title} FAQ`;
-      faqModalSub.textContent = '현재 단계에서 자주 막히는 항목을 정리했습니다.';
-      faqList.innerHTML = '';
-      if (!step.faqs.length) {
-        faqList.innerHTML = '<div class="empty">등록된 FAQ가 없습니다.</div>';
-      } else {
-        step.faqs.forEach((faq, idx) => {
-          const item = document.createElement('div');
-          item.className = 'faq-item' + (idx === 0 ? ' open' : '');
-          item.innerHTML = `<button class="faq-q" type="button"><span>${escapeHtml(faq.q)}</span><span class="faq-arrow">⌄</span></button><div class="faq-a">${convertEscapedNewlines_(faq.aHtml)}</div>`;
-          item.querySelector('.faq-q').addEventListener('click', () => item.classList.toggle('open'));
-          faqList.appendChild(item);
-        });
-      }
-      faqModal.classList.add('open');
-      faqModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeFaqModal() {
-      faqModal.classList.remove('open');
-      faqModal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    function scrollCurrentStepIntoView() {
-      const container = document.querySelector('.sidebar-steps');
-      if (!container) return;
-      const active = container.querySelector('.step-item.active');
-      if (!active) return;
-      const containerRect = container.getBoundingClientRect();
-      const activeRect = active.getBoundingClientRect();
-      const offset = activeRect.top - containerRect.top - containerRect.height / 2 + activeRect.height / 2;
-      container.scrollBy({ top: offset, behavior: 'smooth' });
-    }
-
-    function escapeHtml(str = '') {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
-    }
-    function escapeAttr(str = '') { return escapeHtml(str); }
-
-    function showError(message) {
-      errorBox.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
-      stepAccordion.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
-      heroTitle.textContent = '불러오기 실패';
-      heroDesc.textContent = '';
-      leadText.textContent = '시트 연결 상태를 확인해주세요.';
-      flowList.innerHTML = '';
-      detailList.innerHTML = '';
-      checkArea.innerHTML = '';
-    }
-
-    prevBtn.addEventListener('click', () => {
-      if (currentItemIndex > 0) {
-        currentItemIndex -= 1;
-        saveState();
-        renderMain();
-        return;
-      }
-      if (currentIndex > 0) {
-        currentIndex -= 1;
-        const prevStep = DATA[currentIndex];
-        currentItemIndex = Math.max((prevStep.items?.length || 1) - 1, 0);
-        openStepId = DATA[currentIndex].id;
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    nextBtn.addEventListener('click', () => {
-      const step = DATA[currentIndex];
-      if (currentItemIndex < step.items.length - 1) {
-        currentItemIndex += 1;
-        saveState();
-        renderMain();
-        return;
-      }
-      if (currentIndex < DATA.length - 1) {
-        currentIndex += 1;
-        currentItemIndex = 0;
-        openStepId = DATA[currentIndex].id;
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        if (faqModal.classList.contains('open')) closeFaqModal();
-        if (summaryModal.classList.contains('open')) closeSummaryModal();
-        if (imageModal.classList.contains('open')) closeImageModal();
-      }
-    });
-  </script>
+
+<div class="container">
+
+<img class="logo"
+src="https://drive.google.com/uc?export=view&id=1tgVRxlRQ63QkShpmz1434yuWDD9MpKjw">
+
+<div class="card">
+
+<div class="title">
+N배송 세팅 가이드
+</div>
+
+<div class="subtitle">
+원활한 N배송 세팅을 위해 아래 정보를 입력해주세요.
+</div>
+
+
+<form id="inquiryForm">
+
+<!-- 1 -->
+
+<div class="section">
+
+<label class="label">
+1. 품고 나우 로그인 계정 정보
+</label>
+
+<input class="input" id="email" placeholder="이메일 주소">
+
+<input class="input" id="manager"
+placeholder="담당자명"
+style="margin-top:10px">
+
+<input class="input" id="phone"
+placeholder="연락처"
+style="margin-top:10px">
+
+</div>
+
+
+<!-- 2 -->
+
+<div class="section">
+
+<label class="label">
+2. 브랜드 주소지 및 대표번호
+</label>
+
+<input class="input" id="brandAddress"
+placeholder="브랜드 주소지">
+
+<input class="input" id="brandPhone"
+placeholder="대표번호"
+style="margin-top:10px">
+
+</div>
+
+
+<!-- 3 -->
+
+<div class="section">
+
+<label class="label">
+3. 반품 회수지
+</label>
+
+<div class="radio-group">
+
+<label>
+<input type="radio" name="return" value="품고"> 품고
+</label>
+
+<label>
+<input type="radio" name="return" value="자사물류"> 자사 물류
+</label>
+
+</div>
+
+</div>
+
+
+<!-- 4 -->
+
+<div class="section">
+
+<label class="label">
+4. 초도 입고 예정일
+</label>
+
+<input class="input"
+type="date"
+id="inboundDate">
+
+</div>
+
+
+<!-- 5 -->
+
+<div class="section">
+
+<label class="label">
+5. 포장 방법
+</label>
+
+<select class="input" id="packing">
+
+<option value="기본포장">
+기본 포장
+</option>
+
+<option value="에어캡">
+에어캡 포장
+</option>
+
+<option value="버블페이퍼">
+버블페이퍼 포장
+</option>
+
+</select>
+
+<div class="image-option">
+
+<img src="https://i.imgur.com/Jnq6E1G.png">
+
+<img src="https://i.imgur.com/V3yQp0P.png">
+
+<img src="https://i.imgur.com/4k9F6fF.png">
+
+</div>
+
+<div class="desc">
+
+기본 포장 : 박스 상·하단에 에어캡을 덮어 출고  
+에어캡 포장 : 에어캡 완충 후 출고 (추가 비용 발생)  
+버블페이퍼 포장 : 버블페이퍼 완충 후 출고 (추가 비용 발생)
+
+</div>
+
+</div>
+
+
+<!-- 6 -->
+
+<div class="section">
+
+<label class="label">
+
+6. 단수 출고 상품 여부
+
+</label>
+
+<div class="radio-group">
+
+<label>
+
+<input type="radio" name="single"
+value="Y"> Y
+
+</label>
+
+<label>
+
+<input type="radio" name="single"
+value="N"> N
+
+</label>
+
+</div>
+
+<div class="desc">
+
+합포 없이 상품(SKU) 자체에 송장을 부착하는 상품이 있는 경우 체크해주세요
+
+</div>
+
+</div>
+
+
+<!-- 7 -->
+
+<div class="section">
+
+<label class="label">
+
+7. 초도 입고 예정 월에 행사 예정이 있나요?
+
+</label>
+
+<div class="radio-group">
+
+<label>
+
+<input type="radio"
+name="event"
+value="Y"
+onclick="toggleEvent(true)"> Y
+
+</label>
+
+<label>
+
+<input type="radio"
+name="event"
+value="N"
+onclick="toggleEvent(false)"> N
+
+</label>
+
+</div>
+
+<div id="eventArea" class="hidden">
+
+<input class="input"
+id="eventName"
+placeholder="행사명"
+style="margin-top:10px">
+
+<input class="input"
+type="date"
+id="eventDate"
+style="margin-top:10px">
+
+<input class="input"
+id="eventQty"
+placeholder="예상 출고 송장 건수"
+style="margin-top:10px">
+
+</div>
+
+</div>
+
+
+<!-- 8 -->
+
+<div class="section">
+
+<label class="label">
+
+8. 품고에 궁금한 사항
+
+</label>
+
+<textarea
+class="input"
+id="question"
+rows="4"
+placeholder="자유롭게 작성해주세요"></textarea>
+
+</div>
+
+
+<div class="center">
+
+<button type="button"
+class="btn"
+onclick="submitForm()">
+
+제출하기
+
+</button>
+
+</div>
+
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+const WEBAPP =
+"https://script.google.com/macros/s/AKfycbwwxe5ZigCmq-tjXyGZJUK1Nomije28Fu6Ueb-pw_d2KUsTsGHE5lcEeG505gfcVV-M/exec";
+
+
+function toggleEvent(show){
+
+const el=document.getElementById("eventArea");
+
+if(show){
+
+el.classList.remove("hidden");
+
+}else{
+
+el.classList.add("hidden");
+
+}
+
+}
+
+
+
+function submitForm(){
+
+const data={
+
+email:email.value,
+
+manager:manager.value,
+
+phone:phone.value,
+
+brandAddress:brandAddress.value,
+
+brandPhone:brandPhone.value,
+
+returnType:document.querySelector('input[name="return"]:checked')?.value,
+
+inboundDate:inboundDate.value,
+
+packing:packing.value,
+
+singleShip:document.querySelector('input[name="single"]:checked')?.value,
+
+event:document.querySelector('input[name="event"]:checked')?.value,
+
+eventName:eventName.value,
+
+eventDate:eventDate.value,
+
+eventQty:eventQty.value,
+
+question:question.value
+
+};
+
+
+
+fetch(WEBAPP,{
+
+method:"POST",
+
+body:JSON.stringify(data)
+
+})
+
+.then(r=>r.text())
+
+.then(()=>{
+
+alert("제출이 완료되었습니다.\n\n제출 내용을 확인 후 N배송 세팅 가이드를 오픈해드립니다.");
+
+});
+
+}
+
+</script>
+
+
 </body>
 </html>
