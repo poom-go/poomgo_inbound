@@ -117,10 +117,6 @@
     .step-sublist{display:flex;flex-direction:column;gap:8px}
     .step-subitem{display:flex;gap:8px;font-size:13px;color:#475569;word-break:break-word}
     .side-note{padding:13px 14px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);color:var(--muted);font-size:12px}
-    .lock-box{
-      padding:18px;border:1px solid #e5e7eb;border-radius:18px;background:#f9fafb;
-      color:#4b5563;font-size:14px;white-space:pre-line;
-    }
 
     .main{padding:28px;min-width:0}
     .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap;padding:4px 0 2px}
@@ -175,6 +171,10 @@
     .render-image{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
     .render-image img{width:100%;height:auto;object-fit:contain;background:#fff}
     .render-caption{padding:12px 14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);white-space:pre-line}
+    .lock-box{
+      padding:18px;border:1px solid #e5e7eb;border-radius:18px;background:#f9fafb;
+      color:#4b5563;font-size:14px;white-space:pre-line;
+    }
 
     .check-area{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .check-row{display:flex;gap:10px;align-items:flex-start;padding:15px 16px;border:1px solid var(--line);border-radius:16px;background:#fbfcfd;min-width:0;transition:all .15s ease}
@@ -266,7 +266,7 @@
       <p class="sub" id="appSub">원활한 N배송 세팅을 위해 아래 정보를 입력해주세요.</p>
     </div>
 
-    <div id="inquiryWrap">
+    <div id="inquiryWrap" class="hidden">
       <div class="form-section">
         <div class="form-grid">
           <div class="field full">
@@ -359,6 +359,15 @@
         <div class="footer-nav">
           <div></div>
           <button class="btn primary" id="openSummaryBtn" type="button">제출하기</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="waitingWrap" class="hidden">
+      <div class="form-section" style="text-align:center;">
+        <div style="font-size:22px;font-weight:900;line-height:1.6;letter-spacing:-.02em;">
+          제출된 내용을 품고에서 확인하고 있어요.<br>
+          N배송 세팅 가이드가 오픈되기 전까지 조금만 기다려주세요🙏
         </div>
       </div>
     </div>
@@ -482,6 +491,7 @@
       </div>
       <div class="footer-nav">
         <div></div>
+        <button class="btn primary" id="submitDoneBtn" type="button">확인</button>
       </div>
     </div>
   </div>
@@ -541,6 +551,7 @@
     const clientCode = params.get('client') || '';
 
     const inquiryWrap = document.getElementById('inquiryWrap');
+    const waitingWrap = document.getElementById('waitingWrap');
     const guideWrap = document.getElementById('guideWrap');
 
     const packType = document.getElementById('packType');
@@ -579,6 +590,7 @@
     const openSummaryBtn = document.getElementById('openSummaryBtn');
 
     const submitModal = document.getElementById('submitModal');
+    const submitDoneBtn = document.getElementById('submitDoneBtn');
 
     const imageModal = document.getElementById('imageModal');
     const imageBackdrop = document.getElementById('imageBackdrop');
@@ -617,12 +629,29 @@
 
         state = loadState();
 
+        const submitted = String(CLIENT_INFO['사전문의제출여부'] || '').trim().toUpperCase() === 'Y';
+        const guideOpened = String(CLIENT_INFO['가이드오픈여부'] || '').trim().toUpperCase() === 'Y';
+
         const maxUnlocked = getMaxUnlockedStepIndex();
         currentIndex = Math.min(state.currentIndex ?? 0, maxUnlocked);
         openStepId = state.openStepId || DATA[currentIndex].id;
         currentItemIndex = Math.max(0, state.currentItemIndex ?? 0);
 
-        render();
+        if (guideOpened) {
+          inquiryWrap.classList.add('hidden');
+          waitingWrap.classList.add('hidden');
+          guideWrap.classList.remove('hidden');
+          render();
+        } else if (submitted) {
+          inquiryWrap.classList.add('hidden');
+          guideWrap.classList.add('hidden');
+          waitingWrap.classList.remove('hidden');
+        } else {
+          guideWrap.classList.add('hidden');
+          waitingWrap.classList.add('hidden');
+          inquiryWrap.classList.remove('hidden');
+        }
+
       } catch (err) {
         showError(
           '시트 데이터를 불러오지 못했습니다.\\n\\n' +
@@ -649,6 +678,13 @@
       summaryCloseBtn.addEventListener('click', closeSummaryModal);
       summaryEditBtn.addEventListener('click', closeSummaryModal);
       summarySubmitBtn.addEventListener('click', submitInquiry);
+
+      submitDoneBtn.addEventListener('click', () => {
+        submitModal.classList.remove('open');
+        inquiryWrap.classList.add('hidden');
+        guideWrap.classList.add('hidden');
+        waitingWrap.classList.remove('hidden');
+      });
 
       imageBackdrop.addEventListener('click', closeImageModal);
       imageCloseBtn.addEventListener('click', closeImageModal);
@@ -1023,7 +1059,6 @@
           saveState();
           render();
         });
-
         stepAccordion.appendChild(item);
       });
 
@@ -1220,6 +1255,7 @@
 
     function showError(message) {
       inquiryWrap.classList.add('hidden');
+      waitingWrap.classList.add('hidden');
       guideWrap.classList.remove('hidden');
       errorBox.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
       stepAccordion.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
