@@ -27,9 +27,6 @@
       --naver-line:#bdeccc;
       --naver-deep:#00a246;
 
-      --soft:#f8fafc;
-      --soft-blue:#edf4fb;
-
       --warn-bg:#fff7ed;
       --warn-line:#fed7aa;
       --warn-text:#9a3412;
@@ -38,8 +35,8 @@
       --danger-line:#fecdd3;
       --danger-text:#be123c;
 
-      --shadow:0 10px 30px rgba(15,23,42,.05);
-      --shadow-soft:0 6px 18px rgba(15,23,42,.04);
+      --shadow:0 10px 30px rgba(15,23,42,.06);
+      --shadow-soft:0 6px 18px rgba(15,23,42,.05);
 
       --radius-2xl:28px;
       --radius-xl:24px;
@@ -74,168 +71,652 @@
     h1{margin:0 0 8px;font-size:32px;line-height:1.18;letter-spacing:-.03em}
     .sub{margin:0;color:var(--muted);font-size:14px;white-space:pre-line}
 
-    .layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;min-height:calc(100vh - 110px)}
-
-    .card{
-      background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.88);
-      border-radius:var(--radius-2xl);box-shadow:var(--shadow);backdrop-filter:blur(8px);
+    .layout{
+      display:grid;
+      grid-template-columns:320px minmax(0,1fr);
+      gap:18px;
+      min-height:calc(100vh - 110px);
     }
 
-    .sidebar{display:flex;flex-direction:column;height:calc(100vh - 40px);position:sticky;top:20px;padding:18px}
-    .sidebar-header{flex:0 0 auto}
-    .sidebar-steps{flex:1;overflow-y:auto;margin-top:12px;margin-bottom:12px;padding-right:4px;scroll-behavior:smooth}
-    .sidebar-footer{flex:0 0 auto;margin-top:auto}
-    .sidebar-steps::-webkit-scrollbar{width:6px}
-    .sidebar-steps::-webkit-scrollbar-thumb{background:#dbe2ea;border-radius:999px}
-    .sidebar-steps::-webkit-scrollbar-track{background:transparent}
+    .card{
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(255,255,255,.88);
+      border-radius:var(--radius-2xl);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+    }
 
-    .side-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0}
-    .side-title{font-size:17px;font-weight:900;letter-spacing:-.02em}
-    .progress{padding:6px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:800;white-space:nowrap}
-    .accordion{display:flex;flex-direction:column;gap:10px}
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      height:calc(100vh - 40px);
+      position:sticky;
+      top:20px;
+      padding:20px;
+    }
 
-    .step-item{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;transition:all .2s ease}
-    .step-item.active{border-color:#d9e4ff;box-shadow:0 8px 24px rgba(0,64,209,.08)}
-    .step-item.locked{opacity:.72;background:#fafbfc}
-    .step-header{width:100%;border:none;background:#fff;padding:14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer}
-    .step-item.active .step-header{background:linear-gradient(180deg,#fbfcff 0%, #f4f7ff 100%)}
-    .step-item.locked .step-header{background:#fafbfc;cursor:not-allowed}
-    .step-num{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:14px;font-weight:800;background:#f3f4f6;color:#374151;flex:0 0 36px}
-    .step-item.active .step-num{background:var(--brand);color:#fff}
-    .step-item.locked .step-num{background:#e5e7eb;color:#6b7280}
-    .step-main{min-width:0;flex:1}
-    .step-title{margin:0 0 4px;font-size:14px;font-weight:800;letter-spacing:-.02em}
-    .step-state{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;font-weight:700}
+    .side-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .side-title{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .progress-pill{
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--brand-soft);
+      color:var(--brand);
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .wizard-steps{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      overflow-y:auto;
+      padding-right:4px;
+      margin-bottom:14px;
+    }
+
+    .wizard-steps::-webkit-scrollbar{width:6px}
+    .wizard-steps::-webkit-scrollbar-thumb{background:#dbe2ea;border-radius:999px}
+    .wizard-steps::-webkit-scrollbar-track{background:transparent}
+
+    .step-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:14px;
+      transition:all .18s ease;
+      cursor:pointer;
+    }
+
+    .step-card:hover{transform:translateY(-1px)}
+    .step-card.active{
+      border-color:#d9e4ff;
+      box-shadow:0 8px 24px rgba(0,64,209,.08);
+      background:linear-gradient(180deg,#fbfcff 0%, #f4f7ff 100%);
+    }
+    .step-card.locked{
+      background:#fafbfc;
+      opacity:.72;
+      cursor:not-allowed;
+    }
+
+    .step-row-top{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+    }
+
+    .step-no{
+      width:38px;height:38px;
+      border-radius:12px;
+      display:grid;place-items:center;
+      font-size:14px;font-weight:900;
+      background:#f3f4f6;color:#374151;
+      flex:0 0 38px;
+    }
+
+    .step-card.active .step-no{background:var(--brand);color:#fff}
+    .step-card.locked .step-no{background:#e5e7eb;color:#6b7280}
+
+    .step-meta{min-width:0;flex:1}
+    .step-name{
+      margin:0 0 4px;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      word-break:keep-all;
+    }
+
+    .step-state{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
     .dot{width:8px;height:8px;border-radius:50%;background:#d1d5db}
     .dot.done{background:var(--naver)}
     .dot.current{background:var(--brand)}
     .dot.locked{background:#9ca3af}
-    .chev{color:#94a3b8;transition:transform .2s ease;font-size:18px}
-    .step-item.active .chev{transform:rotate(180deg)}
-    .step-body{display:none;padding:10px 14px 14px;border-top:1px solid #f0f3f6;background:#fcfdff}
-    .step-item.active .step-body{display:block}
-    .step-sublist{display:flex;flex-direction:column;gap:8px}
-    .step-subitem{display:flex;gap:8px;font-size:13px;color:#475569;word-break:break-word}
-    .side-note{padding:13px 14px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);color:var(--muted);font-size:12px}
 
-    .main{padding:28px;min-width:0}
-    .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap;padding:4px 0 2px}
-    .step-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:13px;font-weight:800;margin-bottom:12px}
-    .hero h2{margin:0 0 10px;font-size:30px;line-height:1.18;letter-spacing:-.03em;word-break:keep-all}
-    .hero p{margin:0;color:var(--muted);font-size:15px;word-break:keep-all;white-space:pre-line}
+    .step-sub{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px solid #f0f3f6;
+      font-size:12px;
+      color:#64748b;
+      font-weight:700;
+    }
+
+    .side-note{
+      margin-top:auto;
+      padding:14px 15px;
+      border-radius:16px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .main{
+      padding:30px;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .wizard-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .head-left{min-width:0}
+    .page-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--brand-soft);
+      color:var(--brand);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    .wizard-head h2{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.2;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+
+    .wizard-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      white-space:pre-line;
+      word-break:keep-all;
+    }
+
     .actions{display:flex;gap:10px;flex-wrap:wrap}
 
-    .btn{border:none;padding:12px 16px;border-radius:14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all .18s ease}
-    .btn:hover{transform:translateY(-1px)}
-    .btn.secondary{background:#fff;border:1px solid var(--line);color:#111827;box-shadow:var(--shadow-soft)}
-    .btn.primary{background:var(--brand);color:#fff;box-shadow:0 10px 20px rgba(0,64,209,.18)}
-    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-
-    .guide{border:1px solid #edf1f5;border-radius:24px;overflow:hidden;background:#fff}
-    .guide-section{padding:26px}
-    .guide-section + .guide-section{border-top:1px solid #eff3f6}
-    .section-label{margin:0 0 14px;font-size:12px;font-weight:900;color:#7b8794;text-transform:uppercase;letter-spacing:.08em}
-    .lead-box{background:linear-gradient(180deg,#fcfdff 0%, #f4f7ff 100%)}
-    .lead-text{margin:0;font-size:22px;line-height:1.5;font-weight:800;letter-spacing:-.025em;word-break:keep-all;white-space:pre-line}
-
-    .process-strip-wrap{padding:16px;border-radius:22px;background:var(--soft-blue);border:1px solid #e4edf7}
-    .process-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-    .process-card{
-      position:relative;min-height:76px;padding:18px 16px 14px;border-radius:16px;background:#fff;border:1px solid #ebeff5;
-      display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:800;color:#222;
-      line-height:1.45;box-shadow:0 3px 10px rgba(15,23,42,.03);transition:all .18s ease;word-break:keep-all;cursor:pointer;
+    .btn{
+      border:none;
+      padding:12px 16px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition:all .18s ease;
     }
-    .process-card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,23,42,.06)}
-    .process-card.current{box-shadow:0 10px 24px rgba(15,23,42,.10)}
-    .process-card::before{content:attr(data-step);position:absolute;top:10px;left:12px;font-size:11px;font-weight:900;color:#94a3b8;letter-spacing:.06em}
-    .process-card.brand.current{background:linear-gradient(180deg,#f6f8ff 0%, #eef3ff 100%);border-color:var(--brand-line);color:var(--brand)}
-    .process-card.brand.done{background:#f7f9ff;border-color:#d9e3ff;color:#3553a8}
-    .process-card.naver.current{background:linear-gradient(180deg,#f5fff9 0%, #ecfff4 100%);border-color:var(--naver-line);color:var(--naver-deep)}
-    .process-card.naver.done{background:#f9fcfa;border-color:#dce9e1;color:#3f4d46}
 
-    .detail-list{display:flex;flex-direction:column;gap:0}
-    .detail-item{padding:20px 0;border-bottom:1px solid #eef2f7}
-    .detail-item.hidden{display:none}
-    .detail-item:last-child{border-bottom:none;padding-bottom:0}
-    .detail-title{margin:0 0 10px;font-size:18px;font-weight:900;letter-spacing:-.02em;word-break:keep-all}
-    .detail-body{margin:0;font-size:15px;color:#374151;word-break:break-word;overflow-wrap:anywhere;white-space:pre-line}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:#111827;
+      box-shadow:var(--shadow-soft);
+    }
+    .btn.primary{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 10px 20px rgba(0,64,209,.18);
+    }
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .wizard-panel{
+      border:1px solid #edf1f5;
+      border-radius:24px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .panel-section{padding:28px}
+    .panel-section + .panel-section{border-top:1px solid #eff3f6}
+
+    .section-label{
+      margin:0 0 14px;
+      font-size:12px;
+      font-weight:900;
+      color:#7b8794;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .hero-box{
+      background:linear-gradient(180deg,#fcfdff 0%, #f4f7ff 100%);
+    }
+
+    .hero-text{
+      margin:0;
+      font-size:22px;
+      line-height:1.55;
+      font-weight:800;
+      letter-spacing:-.025em;
+      word-break:keep-all;
+      white-space:pre-line;
+    }
+
+    .screen-title{
+      margin:0 0 10px;
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      word-break:keep-all;
+    }
+
+    .detail-body{
+      margin:0;
+      font-size:15px;
+      color:#374151;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      white-space:pre-line;
+    }
+
     .detail-body p{margin:0 0 10px}
     .detail-body p:last-child{margin-bottom:0}
-    .detail-body table{width:100%;min-width:560px;border-collapse:collapse;background:#fff}
-    .detail-body th,.detail-body td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px;word-break:break-word}
-    .detail-body th{background:#f8fafc;font-size:13px;font-weight:800;color:#374151}
-    .detail-body .table-wrap{width:100%;overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:16px}
-    .subnote{margin-top:12px;padding:14px 16px;border-radius:16px;background:#f8fbfd;border:1px solid var(--line);font-size:14px;color:#374151;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere}
-    .warn{margin-top:12px;padding:14px 16px;border-radius:16px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-text);font-size:14px}
-    .warn strong{display:block;margin-bottom:6px;font-size:13px}
-    .render-image{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
-    .render-image img{width:100%;height:auto;object-fit:contain;background:#fff}
-    .render-caption{padding:12px 14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);white-space:pre-line}
-    .lock-box{
-      padding:18px;border:1px solid #e5e7eb;border-radius:18px;background:#f9fafb;
-      color:#4b5563;font-size:14px;white-space:pre-line;
+
+    .detail-body table{
+      width:100%;
+      min-width:560px;
+      border-collapse:collapse;
+      background:#fff;
     }
 
-    .check-area{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .check-row{display:flex;gap:10px;align-items:flex-start;padding:15px 16px;border:1px solid var(--line);border-radius:16px;background:#fbfcfd;min-width:0;transition:all .15s ease}
-    .check-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--brand);flex:0 0 auto}
-    .check-row span{font-size:14px;font-weight:700;word-break:break-word;white-space:pre-line}
-    .footer-nav{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .detail-body th,.detail-body td{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+      word-break:break-word;
+    }
+
+    .detail-body th{
+      background:#f8fafc;
+      font-size:13px;
+      font-weight:800;
+      color:#374151;
+    }
+
+    .table-wrap{
+      width:100%;
+      overflow-x:auto;
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+    .subnote{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:#f8fbfd;
+      border:1px solid var(--line);
+      font-size:14px;
+      color:#374151;
+      white-space:pre-line;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+    }
+
+    .warn{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:var(--warn-bg);
+      border:1px solid var(--warn-line);
+      color:var(--warn-text);
+      font-size:14px;
+      white-space:pre-line;
+    }
+
+    .warn strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:13px;
+    }
+
+    .render-image{
+      margin-top:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .render-image img{
+      width:100%;
+      height:auto;
+      object-fit:contain;
+      background:#fff;
+    }
+
+    .render-caption{
+      padding:12px 14px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      white-space:pre-line;
+    }
+
+    .screen-button{
+      margin-top:18px;
+    }
+
+    .lock-box{
+      padding:18px;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      background:#f9fafb;
+      color:#4b5563;
+      font-size:14px;
+      white-space:pre-line;
+    }
+
+    .check-area{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .check-row{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:15px 16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fbfcfd;
+      min-width:0;
+    }
+
+    .check-row input{
+      width:18px;height:18px;
+      margin-top:2px;
+      accent-color:var(--brand);
+      flex:0 0 auto;
+    }
+
+    .check-row span{
+      font-size:14px;
+      font-weight:700;
+      word-break:break-word;
+      white-space:pre-line;
+    }
+
+    .wizard-footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+
+    .footer-page{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:800;
+    }
 
     .loading{padding:40px 20px;color:var(--muted);font-size:14px}
-    .error{margin-top:12px;padding:16px;border-radius:16px;background:var(--danger-bg);border:1px solid var(--danger-line);color:var(--danger-text);font-size:14px;white-space:pre-line}
+    .error{
+      margin-top:12px;
+      padding:16px;
+      border-radius:16px;
+      background:var(--danger-bg);
+      border:1px solid var(--danger-line);
+      color:var(--danger-text);
+      font-size:14px;
+      white-space:pre-line;
+    }
     .empty{color:var(--muted);font-size:14px}
 
-    .form-section{padding:24px;border:1px solid #edf1f5;border-radius:24px;background:#fff;box-shadow:var(--shadow-soft)}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .form-section{
+      padding:24px;
+      border:1px solid #edf1f5;
+      border-radius:24px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
     .field{display:flex;flex-direction:column;gap:8px}
     .field.full{grid-column:1 / -1}
-    .field label{font-size:14px;font-weight:800;color:#1f2937;display:flex;align-items:center;gap:4px;white-space:normal}
+
+    .field label{
+      font-size:14px;
+      font-weight:800;
+      color:#1f2937;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      white-space:normal;
+    }
+
     .req{color:#dc2626}
-    .input,.select,.textarea{width:100%;border:1px solid #dbe3ee;border-radius:14px;background:#fff;padding:14px;outline:none;transition:border-color .18s ease, box-shadow .18s ease;color:#111827}
-    .input:focus,.select:focus,.textarea:focus{border-color:#b5c9ff;box-shadow:0 0 0 4px rgba(0,64,209,.08)}
+
+    .input,.select,.textarea{
+      width:100%;
+      border:1px solid #dbe3ee;
+      border-radius:14px;
+      background:#fff;
+      padding:14px;
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease;
+      color:#111827;
+    }
+
+    .input:focus,.select:focus,.textarea:focus{
+      border-color:#b5c9ff;
+      box-shadow:0 0 0 4px rgba(0,64,209,.08);
+    }
+
     .textarea{min-height:120px;resize:vertical}
     .hint{font-size:12px;color:#6b7280;white-space:pre-line}
+
     .choice-row{display:flex;gap:10px;flex-wrap:wrap}
-    .choice-pill{border:1px solid #dbe3ee;background:#fff;border-radius:999px;padding:10px 14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;color:#374151}
+    .choice-pill{
+      border:1px solid #dbe3ee;
+      background:#fff;
+      border-radius:999px;
+      padding:10px 14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      font-weight:700;
+      color:#374151;
+    }
+
     .choice-pill input{accent-color:var(--brand)}
 
-    .pack-card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border:1px solid #e5ebf2;border-radius:18px;background:#fbfcfe}
-    .pack-thumb{width:120px;height:120px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid #e5e7eb;cursor:pointer}
-    .pack-thumb img{width:100%;height:100%;object-fit:cover}
+    .pack-card{
+      display:grid;
+      grid-template-columns:120px minmax(0,1fr);
+      gap:14px;
+      align-items:start;
+      padding:14px;
+      border:1px solid #e5ebf2;
+      border-radius:18px;
+      background:#fbfcfe;
+    }
+
+    .pack-thumb{
+      width:120px;height:120px;
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      cursor:pointer;
+    }
+
+    .pack-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
     .pack-meta h4{margin:0 0 6px;font-size:15px;font-weight:900}
     .pack-meta p{margin:0;font-size:14px;color:#4b5563;white-space:pre-line}
 
-    .summary-box{margin-top:18px;padding:18px;border:1px solid #dbe5ff;border-radius:20px;background:linear-gradient(180deg,#fbfcff 0%, #f5f8ff 100%)}
+    .summary-box{
+      margin-top:18px;
+      padding:18px;
+      border:1px solid #dbe5ff;
+      border-radius:20px;
+      background:linear-gradient(180deg,#fbfcff 0%, #f5f8ff 100%);
+    }
+
     .summary-box h3{margin:0 0 10px;font-size:18px}
     .summary-list{display:grid;gap:10px}
-    .summary-item{display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid #e6ecfb}
+
+    .summary-item{
+      display:grid;
+      grid-template-columns:170px minmax(0,1fr);
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid #e6ecfb;
+    }
+
     .summary-item:last-child{border-bottom:none}
     .summary-key{font-size:13px;font-weight:900;color:#4b5563}
     .summary-val{font-size:14px;color:#111827;word-break:break-word;white-space:pre-line}
 
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:1000;
+    }
+
     .modal.open{display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
-    .modal-panel{position:relative;width:min(760px, 100%);max-height:85vh;overflow:auto;background:#fff;border-radius:26px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(15,23,42,.20);padding:24px}
-    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
-    .modal-title{margin:0;font-size:24px;line-height:1.2;letter-spacing:-.03em}
-    .modal-sub{margin:8px 0 0;color:var(--muted);font-size:14px;white-space:pre-line}
-    .icon-btn{border:none;background:#f3f4f6;width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:20px;line-height:1}
+
+    .modal-backdrop{
+      position:absolute;
+      inset:0;
+      background:rgba(15,23,42,.48);
+      backdrop-filter:blur(2px);
+    }
+
+    .modal-panel{
+      position:relative;
+      width:min(760px, 100%);
+      max-height:85vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:26px;
+      border:1px solid var(--line);
+      box-shadow:0 24px 60px rgba(15,23,42,.20);
+      padding:24px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .modal-title{
+      margin:0;
+      font-size:24px;
+      line-height:1.2;
+      letter-spacing:-.03em;
+    }
+
+    .modal-sub{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      white-space:pre-line;
+    }
+
+    .icon-btn{
+      border:none;
+      background:#f3f4f6;
+      width:40px;height:40px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:20px;
+      line-height:1;
+    }
+
     .faq-list{display:flex;flex-direction:column;gap:10px}
     .faq-item{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
-    .faq-q{width:100%;border:none;background:#fff;padding:16px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;font-weight:800;font-size:15px}
-    .faq-a{display:none;padding:0 16px 16px;color:#374151;font-size:14px;white-space:pre-line;word-break:break-word}
+    .faq-q{
+      width:100%;
+      border:none;
+      background:#fff;
+      padding:16px;
+      text-align:left;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:15px;
+    }
+
+    .faq-a{
+      display:none;
+      padding:0 16px 16px;
+      color:#374151;
+      font-size:14px;
+      white-space:pre-line;
+      word-break:break-word;
+    }
+
     .faq-item.open .faq-a{display:block}
     .faq-item.open .faq-arrow{transform:rotate(180deg)}
     .faq-arrow{transition:transform .2s ease;color:#6b7280}
+
     .image-modal-panel{width:min(720px,100%);padding:18px}
     .image-modal-panel img{width:100%;height:auto;border-radius:18px}
 
     @media (max-width:1024px){
       .layout{grid-template-columns:1fr}
       .sidebar{position:static;height:auto}
-      .sidebar-steps{overflow:visible;max-height:none}
       .check-area,.form-grid{grid-template-columns:1fr}
     }
 
@@ -243,16 +724,15 @@
       .app{padding:10px}
       .main{padding:18px}
       h1{font-size:25px}
-      .hero h2{font-size:24px}
-      .guide-section,.form-section{padding:18px}
+      .wizard-head h2{font-size:24px}
+      .panel-section,.form-section{padding:18px}
       .modal-panel{padding:18px}
       .modal-title{font-size:20px}
-      .lead-text{font-size:18px}
-      .process-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .process-card{min-height:64px;font-size:14px;padding:14px 12px}
+      .hero-text{font-size:18px}
       .pack-card{grid-template-columns:1fr}
       .pack-thumb{width:100%;height:180px}
       .summary-item{grid-template-columns:1fr;gap:4px}
+      .wizard-footer{align-items:stretch}
     }
   </style>
 </head>
@@ -356,7 +836,7 @@
 
         <div id="inquiryError" class="error hidden" style="margin-top:16px;"></div>
 
-        <div class="footer-nav">
+        <div class="wizard-footer">
           <div></div>
           <button class="btn primary" id="openSummaryBtn" type="button">제출하기</button>
         </div>
@@ -375,30 +855,26 @@
     <div id="guideWrap" class="hidden">
       <div class="layout">
         <aside class="card sidebar">
-          <div class="sidebar-header">
-            <div class="side-head">
-              <div class="side-title">진행 단계</div>
-              <div class="progress" id="progressText">0 / 0 완료</div>
-            </div>
+          <div class="side-head">
+            <div class="side-title">설치 단계</div>
+            <div class="progress-pill" id="overallProgress">0 / 0</div>
           </div>
 
-          <div class="sidebar-steps">
-            <div class="accordion" id="stepAccordion">
-              <div class="loading">불러오는 중...</div>
-            </div>
+          <div class="wizard-steps" id="wizardSteps">
+            <div class="loading">불러오는 중...</div>
           </div>
 
-          <div class="sidebar-footer">
-            <div class="side-note">설명 과정은 카드 클릭 또는 이전/다음 버튼으로 볼 수 있습니다.</div>
+          <div class="side-note">
+            화면 하단의 이전 / 다음 버튼을 눌러 순서대로 진행해주세요.
           </div>
         </aside>
 
         <main class="card main">
-          <div class="hero">
-            <div>
-              <div class="step-chip" id="heroChip">STEP</div>
-              <h2 id="heroTitle">불러오는 중...</h2>
-              <p id="heroDesc"></p>
+          <div class="wizard-head">
+            <div class="head-left">
+              <div class="page-chip" id="pageChip">STEP</div>
+              <h2 id="wizardTitle">불러오는 중...</h2>
+              <p id="wizardDesc"></p>
             </div>
 
             <div class="actions">
@@ -406,33 +882,31 @@
             </div>
           </div>
 
-          <section class="guide">
-            <div class="guide-section lead-box">
+          <section class="wizard-panel">
+            <div class="panel-section hero-box">
               <div class="section-label">이번 단계에서 할 일</div>
-              <p class="lead-text" id="leadText">시트 데이터를 불러오는 중입니다.</p>
+              <p class="hero-text" id="heroText">시트 데이터를 불러오는 중입니다.</p>
             </div>
 
-            <div class="guide-section">
-              <div class="section-label">설정 과정</div>
-              <div class="process-strip-wrap">
-                <div class="process-strip" id="flowList"></div>
+            <div class="panel-section">
+              <div class="section-label">현재 화면</div>
+              <div id="screenWrap">
+                <div class="loading">불러오는 중...</div>
               </div>
             </div>
 
-            <div class="guide-section">
-              <div class="section-label">자세히 안내드릴게요</div>
-              <div class="detail-list" id="detailList"></div>
-            </div>
-
-            <div class="guide-section">
-              <div class="section-label">이것만 확인하면 돼요</div>
+            <div class="panel-section">
+              <div class="section-label">이 단계 체크리스트</div>
               <div class="check-area" id="checkArea"></div>
             </div>
           </section>
 
-          <div class="footer-nav">
-            <button class="btn secondary" id="prevBtn" type="button">이전</button>
-            <button class="btn primary" id="nextBtn" type="button">다음</button>
+          <div class="wizard-footer">
+            <div class="footer-page" id="footerPageText">0 / 0 화면</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn secondary" id="prevBtn" type="button">이전</button>
+              <button class="btn primary" id="nextBtn" type="button">다음</button>
+            </div>
           </div>
 
           <div id="errorBox"></div>
@@ -469,7 +943,7 @@
         <h3>요약</h3>
         <div class="summary-list" id="summaryList"></div>
       </div>
-      <div class="footer-nav">
+      <div class="wizard-footer">
         <button class="btn secondary" id="summaryEditBtn" type="button">수정하기</button>
         <button class="btn primary" id="summarySubmitBtn" type="button">제출 완료</button>
       </div>
@@ -489,7 +963,7 @@
         품고에서 확인 후 N배송 세팅 가이드를 오픈해드릴게요!<br>
         오픈이 완료되면 메일로 안내해드립니다🤗
       </div>
-      <div class="footer-nav">
+      <div class="wizard-footer">
         <div></div>
         <button class="btn primary" id="submitDoneBtn" type="button">확인</button>
       </div>
@@ -542,9 +1016,8 @@
 
     let DATA = [];
     let CLIENT_INFO = null;
-    let currentIndex = 0;
-    let currentItemIndex = 0;
-    let openStepId = '';
+    let PAGES = [];
+    let currentPageIndex = 0;
     let state = loadState();
 
     const params = new URLSearchParams(location.search);
@@ -559,27 +1032,28 @@
     const eventFields = document.getElementById('eventFields');
     const inquiryError = document.getElementById('inquiryError');
 
-    const stepAccordion = document.getElementById('stepAccordion');
-    const progressText = document.getElementById('progressText');
-    const heroChip = document.getElementById('heroChip');
-    const heroTitle = document.getElementById('heroTitle');
-    const heroDesc = document.getElementById('heroDesc');
-    const leadText = document.getElementById('leadText');
-    const flowList = document.getElementById('flowList');
-    const detailList = document.getElementById('detailList');
+    const wizardSteps = document.getElementById('wizardSteps');
+    const overallProgress = document.getElementById('overallProgress');
+    const pageChip = document.getElementById('pageChip');
+    const wizardTitle = document.getElementById('wizardTitle');
+    const wizardDesc = document.getElementById('wizardDesc');
+    const heroText = document.getElementById('heroText');
+    const screenWrap = document.getElementById('screenWrap');
     const checkArea = document.getElementById('checkArea');
+    const footerPageText = document.getElementById('footerPageText');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const faqBtn = document.getElementById('faqBtn');
+    const errorBox = document.getElementById('errorBox');
+    const pageTitle = document.getElementById('pageTitle');
+    const appSub = document.getElementById('appSub');
+
     const faqModal = document.getElementById('faqModal');
     const faqBackdrop = document.getElementById('faqBackdrop');
     const faqCloseBtn = document.getElementById('faqCloseBtn');
     const faqModalTitle = document.getElementById('faqModalTitle');
     const faqModalSub = document.getElementById('faqModalSub');
     const faqList = document.getElementById('faqList');
-    const errorBox = document.getElementById('errorBox');
-    const pageTitle = document.getElementById('pageTitle');
-    const appSub = document.getElementById('appSub');
 
     const summaryModal = document.getElementById('summaryModal');
     const summaryBackdrop = document.getElementById('summaryBackdrop');
@@ -602,6 +1076,7 @@
 
     async function init() {
       bindEvents();
+
       try {
         const [stepsRows, contentsRows, checklistRows, faqRows, clientRows] = await Promise.all([
           querySheet(CONFIG.SHEETS.steps),
@@ -611,7 +1086,9 @@
           querySheet(CONFIG.SHEETS.clients)
         ]);
 
-        if (!clientCode) throw new Error('고객사 코드가 없습니다. 링크에 ?client=고객사코드 형식이 필요합니다.');
+        if (!clientCode) {
+          throw new Error('고객사 코드가 없습니다. 링크에 ?client=고객사코드 형식이 필요합니다.');
+        }
 
         CLIENT_INFO = findClientInfo_(clientRows, clientCode);
         if (!CLIENT_INFO) throw new Error('유효하지 않은 고객사 링크입니다. 고객사코드를 확인해주세요.');
@@ -627,15 +1104,13 @@
         DATA = buildData(stepsRows, contentsRows, checklistRows, faqRows);
         if (!DATA.length) throw new Error('활성화된 steps 데이터가 없습니다.');
 
-        state = loadState();
+        PAGES = buildPages(DATA);
 
         const submitted = String(CLIENT_INFO['사전문의제출여부'] || '').trim().toUpperCase() === 'Y';
         const guideOpened = String(CLIENT_INFO['가이드오픈여부'] || '').trim().toUpperCase() === 'Y';
 
-        const maxUnlocked = getMaxUnlockedStepIndex();
-        currentIndex = Math.min(state.currentIndex ?? 0, maxUnlocked);
-        openStepId = state.openStepId || DATA[currentIndex].id;
-        currentItemIndex = Math.max(0, state.currentItemIndex ?? 0);
+        state = loadState();
+        currentPageIndex = Math.min(state.currentPageIndex ?? 0, Math.max(PAGES.length - 1, 0));
 
         if (guideOpened) {
           inquiryWrap.classList.add('hidden');
@@ -651,7 +1126,6 @@
           waitingWrap.classList.add('hidden');
           inquiryWrap.classList.remove('hidden');
         }
-
       } catch (err) {
         showError(
           '시트 데이터를 불러오지 못했습니다.\\n\\n' +
@@ -715,11 +1189,13 @@
             reject(new Error(response.getMessage() || `시트 조회 실패: ${sheetName}`));
             return;
           }
+
           const dt = response.getDataTable();
           const cols = [];
           for (let c = 0; c < dt.getNumberOfColumns(); c++) {
             cols.push(String(dt.getColumnLabel(c) || dt.getColumnId(c) || `col_${c}`).trim());
           }
+
           const rows = [];
           for (let r = 0; r < dt.getNumberOfRows(); r++) {
             const row = {};
@@ -740,7 +1216,7 @@
         .filter(r => String(r['사용여부'] || '').toUpperCase() !== 'N')
         .sort((a, b) => Number(a['단계순서'] || 0) - Number(b['단계순서'] || 0));
 
-      return activeSteps.map(step => {
+      return activeSteps.map((step, stepIdx) => {
         const stepId = String(step['단계ID'] || '').trim();
 
         const items = contentsRows
@@ -773,7 +1249,7 @@
 
         return {
           id: stepId,
-          order: Number(step['단계순서'] || 0),
+          order: Number(step['단계순서'] || stepIdx + 1),
           title: step['단계명'] || '',
           desc: step['단계설명'] || '',
           leadHtml: step['리드문구'] || '',
@@ -782,6 +1258,25 @@
           faqs
         };
       });
+    }
+
+    function buildPages(data) {
+      const pages = [];
+      data.forEach((step, stepIndex) => {
+        step.items.forEach((item, itemIndex) => {
+          pages.push({
+            stepIndex,
+            itemIndex,
+            stepId: step.id,
+            stepOrder: step.order,
+            stepTitle: step.title,
+            stepDesc: step.desc,
+            stepLeadHtml: step.leadHtml,
+            item
+          });
+        });
+      });
+      return pages;
     }
 
     function findClientInfo_(clientRows, code) {
@@ -958,18 +1453,16 @@
     function loadState() {
       try {
         const raw = localStorage.getItem(storageKey());
-        return raw ? JSON.parse(raw) : { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
+        return raw ? JSON.parse(raw) : { checks: {}, currentPageIndex: 0 };
       } catch (_) {
-        return { checks: {}, currentIndex: 0, currentItemIndex: 0, openStepId: '' };
+        return { checks: {}, currentPageIndex: 0 };
       }
     }
 
     function saveState() {
       localStorage.setItem(storageKey(), JSON.stringify({
         checks: state.checks || {},
-        currentIndex,
-        currentItemIndex,
-        openStepId
+        currentPageIndex
       }));
     }
 
@@ -979,22 +1472,10 @@
       return state.checks[stepId];
     }
 
-    function isStepUnlocked(step, idx) {
-      if (idx <= 1) return true;
-      const header = `STEP${idx + 1}오픈여부`;
+    function isStepUnlocked(step, stepIndex) {
+      if (stepIndex <= 1) return true;
+      const header = `STEP${stepIndex + 1}오픈여부`;
       return String(CLIENT_INFO?.[header] || '').trim().toUpperCase() === 'Y';
-    }
-
-    function getMaxUnlockedStepIndex() {
-      let maxIndex = 0;
-      for (let i = 0; i < DATA.length; i++) {
-        if (isStepUnlocked(DATA[i], i)) {
-          maxIndex = i;
-        } else {
-          break;
-        }
-      }
-      return maxIndex;
     }
 
     function isStepDone(step) {
@@ -1002,138 +1483,140 @@
       return step.checks.length > 0 && step.checks.every((_, i) => !!arr[i]);
     }
 
-    function statusOf(step, idx) {
-      if (!isStepUnlocked(step, idx)) return { text:'오픈 전', cls:'locked' };
+    function statusOf(step, stepIndex, currentStepIndex) {
+      if (!isStepUnlocked(step, stepIndex)) return { text:'오픈 전', cls:'locked' };
       if (isStepDone(step)) return { text:'완료', cls:'done' };
-      if (idx === currentIndex) return { text:'진행중', cls:'current' };
+      if (stepIndex === currentStepIndex) return { text:'진행중', cls:'current' };
       return { text:'대기', cls:'' };
     }
 
-    function getProcessTheme(title='') {
-      const t = String(title).replace(/\s/g, '');
-      return (t.includes('고객사등록') || t.includes('입고가이드')) ? 'brand' : 'naver';
+    function getPage(idx) {
+      return PAGES[idx] || null;
+    }
+
+    function getCurrentStep() {
+      const page = getPage(currentPageIndex);
+      if (!page) return null;
+      return DATA[page.stepIndex] || null;
+    }
+
+    function getFirstPageIndexOfStep(stepIndex) {
+      return PAGES.findIndex(p => p.stepIndex === stepIndex);
+    }
+
+    function getLastUnlockedPageIndex() {
+      let last = 0;
+      for (let i = 0; i < PAGES.length; i++) {
+        const page = PAGES[i];
+        const step = DATA[page.stepIndex];
+        if (isStepUnlocked(step, page.stepIndex)) {
+          last = i;
+        } else {
+          break;
+        }
+      }
+      return last;
     }
 
     function render() {
-      const maxUnlocked = getMaxUnlockedStepIndex();
-      if (currentIndex > maxUnlocked) currentIndex = maxUnlocked;
-
-      renderAccordion();
-      renderMain();
-      errorBox.innerHTML = '';
-    }
-
-    function renderAccordion() {
-      stepAccordion.innerHTML = '';
-      const doneCount = DATA.filter(isStepDone).length;
-      progressText.textContent = `${doneCount} / ${DATA.length} 완료`;
-
-      DATA.forEach((step, idx) => {
-        const s = statusOf(step, idx);
-        const unlocked = isStepUnlocked(step, idx);
-        const item = document.createElement('div');
-        item.className = 'step-item' + (openStepId === step.id ? ' active' : '') + (unlocked ? '' : ' locked');
-        item.innerHTML = `
-          <button class="step-header" type="button" ${unlocked ? '' : 'disabled'}>
-            <div class="step-num">${idx + 1}</div>
-            <div class="step-main">
-              <div class="step-title">${escapeHtml(step.title)}</div>
-              <div class="step-state"><span class="dot ${s.cls}"></span><span>${s.text}</span></div>
-            </div>
-            <div class="chev">${unlocked ? '⌄' : '🔒'}</div>
-          </button>
-          <div class="step-body">
-            <div class="step-sublist">
-              ${unlocked
-                ? (step.items.map(x => `<div class="step-subitem"><span>ㄴ</span><span>${escapeHtml(x.title)}</span></div>`).join('') || '<div class="empty">하위 항목 없음</div>')
-                : '<div class="empty">품고에서 오픈 후 확인 가능합니다.</div>'}
-            </div>
-          </div>
-        `;
-
-        item.querySelector('.step-header').addEventListener('click', () => {
-          if (!unlocked) return;
-          currentIndex = idx;
-          currentItemIndex = 0;
-          openStepId = openStepId === step.id ? '' : step.id;
-          saveState();
-          render();
-        });
-        stepAccordion.appendChild(item);
-      });
-
-      scrollCurrentStepIntoView();
-    }
-
-    function renderMain() {
-      const step = DATA[currentIndex];
-      const unlocked = isStepUnlocked(step, currentIndex);
-
-      heroChip.textContent = `STEP ${currentIndex + 1}`;
-      heroTitle.textContent = step.title;
-      heroDesc.textContent = convertEscapedNewlines_(step.desc);
-
-      if (!unlocked) {
-        leadText.textContent = '해당 단계는 아직 오픈되지 않았습니다.';
-        flowList.innerHTML = '';
-        detailList.innerHTML = `<div class="lock-box">품고에서 확인 후 해당 단계를 오픈해드릴 예정입니다.\n오픈이 완료되면 메일로 안내드립니다.</div>`;
-        checkArea.innerHTML = '';
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = true;
+      if (!PAGES.length) {
+        showError('표시할 가이드 화면이 없습니다. contents 시트를 확인해주세요.');
         return;
       }
 
-      leadText.innerHTML = convertEscapedNewlines_(step.leadHtml || '<span class="empty">리드문구가 비어 있습니다.</span>');
+      const maxPage = getLastUnlockedPageIndex();
+      if (currentPageIndex > maxPage) currentPageIndex = maxPage;
 
-      const checks = getChecks(step.id);
-      const checkedCount = checks.filter(Boolean).length;
-      if (currentItemIndex > step.items.length - 1) currentItemIndex = 0;
-
-      flowList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const card = document.createElement('button');
-        let cls = `process-card ${getProcessTheme(item.title)}`;
-        if (idx < checkedCount) cls += ' done';
-        if (idx === currentItemIndex) cls += ' current';
-        card.type = 'button';
-        card.className = cls;
-        card.setAttribute('data-step', `STEP ${idx + 1}`);
-        card.innerHTML = `<span>${escapeHtml(item.title)}</span>`;
-        card.addEventListener('click', () => {
-          currentItemIndex = idx;
-          saveState();
-          renderMain();
-        });
-        flowList.appendChild(card);
-      });
-
-      detailList.innerHTML = '';
-      step.items.forEach((item, idx) => {
-        const div = document.createElement('div');
-        div.className = 'detail-item' + (idx === currentItemIndex ? '' : ' hidden');
-        div.innerHTML = renderDetail(item);
-        detailList.appendChild(div);
-      });
-
-      checkArea.innerHTML = '';
-      step.checks.forEach((label, i) => {
-        const row = document.createElement('label');
-        row.className = 'check-row';
-        row.innerHTML = `<input type="checkbox" ${checks[i] ? 'checked' : ''}><span>${escapeHtml(label).replaceAll('\\n', '\n')}</span>`;
-        row.querySelector('input').addEventListener('change', e => {
-          checks[i] = e.target.checked;
-          saveState();
-        });
-        checkArea.appendChild(row);
-      });
-
-      const maxUnlocked = getMaxUnlockedStepIndex();
-      prevBtn.disabled = currentIndex === 0 && currentItemIndex === 0;
-      nextBtn.disabled = (currentIndex === maxUnlocked && currentItemIndex === step.items.length - 1);
+      renderSteps();
+      renderWizard();
+      errorBox.innerHTML = '';
     }
 
-    function renderDetail(item) {
-      const title = `<h3 class="detail-title">${escapeHtml(item.title || '')}</h3>`;
+    function renderSteps() {
+      const currentPage = getPage(currentPageIndex);
+      const currentStepIndex = currentPage ? currentPage.stepIndex : 0;
+
+      wizardSteps.innerHTML = '';
+      overallProgress.textContent = `${currentStepIndex + 1} / ${DATA.length}`;
+
+      DATA.forEach((step, stepIndex) => {
+        const unlocked = isStepUnlocked(step, stepIndex);
+        const status = statusOf(step, stepIndex, currentStepIndex);
+        const firstPageIndex = getFirstPageIndexOfStep(stepIndex);
+        const currentWithinStep = currentPage && currentPage.stepIndex === stepIndex
+          ? `${currentPage.itemIndex + 1} / ${Math.max(step.items.length, 1)} 화면`
+          : `${Math.max(step.items.length, 1)}개 화면`;
+
+        const el = document.createElement('div');
+        el.className = 'step-card' + (stepIndex === currentStepIndex ? ' active' : '') + (unlocked ? '' : ' locked');
+        el.innerHTML = `
+          <div class="step-row-top">
+            <div class="step-no">${stepIndex + 1}</div>
+            <div class="step-meta">
+              <p class="step-name">${escapeHtml(step.title)}</p>
+              <div class="step-state">
+                <span class="dot ${status.cls}"></span>
+                <span>${status.text}</span>
+              </div>
+            </div>
+          </div>
+          <div class="step-sub">${unlocked ? currentWithinStep : '품고에서 오픈 후 진행 가능'}</div>
+        `;
+
+        el.addEventListener('click', () => {
+          if (!unlocked || firstPageIndex < 0) return;
+          currentPageIndex = firstPageIndex;
+          saveState();
+          render();
+        });
+
+        wizardSteps.appendChild(el);
+      });
+    }
+
+    function renderWizard() {
+      const page = getPage(currentPageIndex);
+      const step = getCurrentStep();
+
+      if (!page || !step) {
+        screenWrap.innerHTML = '<div class="empty">표시할 화면이 없습니다.</div>';
+        return;
+      }
+
+      pageChip.textContent = `STEP ${page.stepIndex + 1} · ${page.itemIndex + 1}/${Math.max(step.items.length, 1)}`;
+      wizardTitle.textContent = step.title;
+      wizardDesc.textContent = convertEscapedNewlines_(step.desc);
+      heroText.innerHTML = convertEscapedNewlines_(step.leadHtml || '안내 문구가 비어 있습니다.');
+
+      screenWrap.innerHTML = renderScreen(page.item);
+      bindScreenImageZoom();
+
+      const checks = getChecks(step.id);
+      checkArea.innerHTML = '';
+
+      if (!step.checks.length) {
+        checkArea.innerHTML = '<div class="empty">등록된 체크리스트가 없습니다.</div>';
+      } else {
+        step.checks.forEach((label, i) => {
+          const row = document.createElement('label');
+          row.className = 'check-row';
+          row.innerHTML = `<input type="checkbox" ${checks[i] ? 'checked' : ''}><span>${escapeHtml(label).replaceAll('\\n', '\n')}</span>`;
+          row.querySelector('input').addEventListener('change', e => {
+            checks[i] = e.target.checked;
+            saveState();
+            renderSteps();
+          });
+          checkArea.appendChild(row);
+        });
+      }
+
+      footerPageText.textContent = `${currentPageIndex + 1} / ${PAGES.length} 화면`;
+      prevBtn.disabled = currentPageIndex === 0;
+      nextBtn.disabled = currentPageIndex === getLastUnlockedPageIndex();
+    }
+
+    function renderScreen(item) {
+      const title = `<h3 class="screen-title">${escapeHtml(item.title || '')}</h3>`;
 
       const body = item.bodyHtml
         ? `<div class="detail-body">${wrapTables(convertEscapedNewlines_(item.bodyHtml))}</div>`
@@ -1148,35 +1631,33 @@
         : '';
 
       const imageUrl = normalizeImageUrl_(item.imageUrl);
-
       const image = imageUrl
         ? `<div class="render-image">
-            <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(item.title || '')}">
-            ${item.imageCaption
-              ? `<div class="render-caption">${escapeHtml(item.imageCaption).replaceAll('\\n','\n')}</div>`
-              : ''}
+             <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(item.title || '')}" data-zoom-src="${escapeAttr(imageUrl)}" style="cursor:pointer;">
+             ${item.imageCaption
+               ? `<div class="render-caption">${escapeHtml(item.imageCaption).replaceAll('\\n','\n')}</div>`
+               : ''}
            </div>`
         : '';
 
       const button = item.linkUrl
-        ? `<div style="margin-top:16px;">
-            <a class="btn primary"
-               href="${escapeAttr(item.linkUrl)}"
-               target="_blank"
-               rel="noopener noreferrer">
-               ${escapeHtml(item.linkText || '바로가기')}
-            </a>
+        ? `<div class="screen-button">
+             <a class="btn primary"
+                href="${escapeAttr(item.linkUrl)}"
+                target="_blank"
+                rel="noopener noreferrer">
+                ${escapeHtml(item.linkText || '바로가기')}
+             </a>
            </div>`
         : '';
 
       if (item.type === 'path') {
         return `
           ${title}
-          <div class="subnote">
-            ${escapeHtml(stripHtml(item.bodyHtml || '')).replaceAll('>', '→').replaceAll('\\n', '\n')}
-          </div>
+          <div class="subnote">${escapeHtml(stripHtml(item.bodyHtml || '')).replaceAll('>', '→').replaceAll('\\n', '\n')}</div>
           ${note}
           ${warn}
+          ${image}
           ${button}
         `;
       }
@@ -1191,13 +1672,19 @@
       `;
     }
 
+    function bindScreenImageZoom() {
+      screenWrap.querySelectorAll('[data-zoom-src]').forEach(img => {
+        img.addEventListener('click', () => openImageModal(img.getAttribute('data-zoom-src')));
+      });
+    }
+
     function convertEscapedNewlines_(text) {
       return String(text || '').replace(/\\n/g, '\n');
     }
 
     function wrapTables(html) {
       const temp = document.createElement('div');
-      temp.innerHTML = html;
+      temp.innerHTML = html || '';
       temp.querySelectorAll('table').forEach(table => {
         const wrapper = document.createElement('div');
         wrapper.className = 'table-wrap';
@@ -1214,22 +1701,26 @@
     }
 
     function openFaqModal() {
-      const step = DATA[currentIndex];
-      const unlocked = isStepUnlocked(step, currentIndex);
+      const step = getCurrentStep();
+      if (!step) return;
 
       faqModalTitle.textContent = `${step.title} FAQ`;
       faqModalSub.textContent = '현재 단계에서 자주 막히는 항목을 정리했습니다.';
       faqList.innerHTML = '';
 
-      if (!unlocked) {
-        faqList.innerHTML = '<div class="empty">해당 단계는 아직 오픈되지 않았습니다.</div>';
-      } else if (!step.faqs.length) {
+      if (!step.faqs.length) {
         faqList.innerHTML = '<div class="empty">등록된 FAQ가 없습니다.</div>';
       } else {
         step.faqs.forEach((faq, idx) => {
           const item = document.createElement('div');
           item.className = 'faq-item' + (idx === 0 ? ' open' : '');
-          item.innerHTML = `<button class="faq-q" type="button"><span>${escapeHtml(faq.q)}</span><span class="faq-arrow">⌄</span></button><div class="faq-a">${convertEscapedNewlines_(faq.aHtml)}</div>`;
+          item.innerHTML = `
+            <button class="faq-q" type="button">
+              <span>${escapeHtml(faq.q)}</span>
+              <span class="faq-arrow">⌄</span>
+            </button>
+            <div class="faq-a">${convertEscapedNewlines_(faq.aHtml)}</div>
+          `;
           item.querySelector('.faq-q').addEventListener('click', () => item.classList.toggle('open'));
           faqList.appendChild(item);
         });
@@ -1243,52 +1734,20 @@
     }
 
     function handlePrev() {
-      if (currentItemIndex > 0) {
-        currentItemIndex -= 1;
-        saveState();
-        renderMain();
-        return;
-      }
-      if (currentIndex > 0) {
-        currentIndex -= 1;
-        const prevStep = DATA[currentIndex];
-        currentItemIndex = Math.max((prevStep.items?.length || 1) - 1, 0);
-        openStepId = DATA[currentIndex].id;
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      if (currentPageIndex <= 0) return;
+      currentPageIndex -= 1;
+      saveState();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleNext() {
-      const step = DATA[currentIndex];
-      const maxUnlocked = getMaxUnlockedStepIndex();
-
-      if (currentItemIndex < step.items.length - 1) {
-        currentItemIndex += 1;
-        saveState();
-        renderMain();
-        return;
-      }
-      if (currentIndex < maxUnlocked) {
-        currentIndex += 1;
-        currentItemIndex = 0;
-        openStepId = DATA[currentIndex].id;
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
-    function scrollCurrentStepIntoView() {
-      const container = document.querySelector('.sidebar-steps');
-      if (!container) return;
-      const active = container.querySelector('.step-item.active');
-      if (!active) return;
-      const containerRect = container.getBoundingClientRect();
-      const activeRect = active.getBoundingClientRect();
-      const offset = activeRect.top - containerRect.top - containerRect.height / 2 + activeRect.height / 2;
-      container.scrollBy({ top: offset, behavior: 'smooth' });
+      const maxPage = getLastUnlockedPageIndex();
+      if (currentPageIndex >= maxPage) return;
+      currentPageIndex += 1;
+      saveState();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showError(message) {
@@ -1296,12 +1755,11 @@
       waitingWrap.classList.add('hidden');
       guideWrap.classList.remove('hidden');
       errorBox.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
-      stepAccordion.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
-      heroTitle.textContent = '불러오기 실패';
-      heroDesc.textContent = '';
-      leadText.textContent = '시트 연결 상태를 확인해주세요.';
-      flowList.innerHTML = '';
-      detailList.innerHTML = '';
+      wizardSteps.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+      wizardTitle.textContent = '불러오기 실패';
+      wizardDesc.textContent = '';
+      heroText.textContent = '시트 연결 상태를 확인해주세요.';
+      screenWrap.innerHTML = '';
       checkArea.innerHTML = '';
     }
 
