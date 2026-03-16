@@ -160,6 +160,14 @@
       margin-bottom:8px;
     }
 
+    .titlebar-step-chip{
+      margin-bottom:0;
+      padding:6px 10px;
+      font-size:12px;
+      line-height:1;
+      flex:0 0 auto;
+    }
+
     .pane-title{
       margin:0 0 4px;
       font-size:27px;
@@ -184,6 +192,48 @@
       font-weight:800;
       white-space:pre-line;
       flex:0 0 auto;
+    }
+
+    .step-blocks{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .step-block{
+      border:1px solid #dbe3ee;
+      background:#f8fafc;
+      color:#64748b;
+      border-radius:14px;
+      padding:10px 8px;
+      text-align:center;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.35;
+      transition:.18s ease;
+      white-space:pre-line;
+      min-height:54px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .step-block.active{
+      background:var(--brand-soft);
+      border-color:#bfd0ff;
+      color:var(--brand);
+      box-shadow:0 0 0 1px rgba(0,64,209,.06);
+    }
+
+    .step-block.done{
+      background:#eef6ff;
+      border-color:#cfe0ff;
+      color:#2b5fcc;
+    }
+
+    .step-block.locked{
+      opacity:.6;
     }
 
     .progress-track{
@@ -339,6 +389,10 @@
       flex:0 0 auto;
     }
 
+    .render-image.clickable{
+      cursor:zoom-in;
+    }
+
     .render-image img{
       width:100%;
       max-height:260px;
@@ -358,38 +412,6 @@
       margin-top:auto;
       padding-top:8px;
       flex:0 0 auto;
-    }
-
-    .check-area{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:10px;
-      flex:0 0 auto;
-    }
-
-    .check-row{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding:14px 15px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fbfcfd;
-      min-width:0;
-    }
-
-    .check-row input{
-      width:18px;height:18px;
-      margin-top:2px;
-      accent-color:var(--brand);
-      flex:0 0 auto;
-    }
-
-    .check-row span{
-      font-size:14px;
-      font-weight:700;
-      word-break:break-word;
-      white-space:pre-line;
     }
 
     .btn{
@@ -428,9 +450,10 @@
       border-top:1px solid #e9eef4;
       padding:14px 28px;
       display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:16px;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
       background:linear-gradient(180deg,#ffffff 0%, #fbfcfd 100%);
     }
 
@@ -439,25 +462,31 @@
       flex-direction:column;
       gap:8px;
       min-width:0;
+      width:100%;
+      align-items:center;
     }
 
     .footer-page{
       font-size:12px;
       color:var(--muted);
       font-weight:800;
+      text-align:center;
     }
 
     .footer-btns{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      justify-content:center;
+      width:100%;
     }
 
     .footer-right{
       display:flex;
       align-items:center;
+      justify-content:center;
       gap:10px;
-      flex:0 0 auto;
+      width:100%;
     }
 
     .form-grid{
@@ -747,6 +776,31 @@
     .faq-item.open .faq-arrow{transform:rotate(180deg)}
     .faq-arrow{transition:transform .2s ease;color:#6b7280}
 
+    .notice-modal-panel{
+      width:min(640px, 100%);
+    }
+
+    .image-modal-panel{
+      width:min(980px, 100%);
+    }
+
+    .image-modal-body{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .image-modal-body img{
+      max-width:100%;
+      max-height:70vh;
+      object-fit:contain;
+    }
+
     @media (max-width:768px){
       .app{padding:10px}
       .wizard-window{
@@ -757,13 +811,16 @@
       .window-sub{display:none}
       .pane-top,.pane-content,.pane-footer{padding-left:18px;padding-right:18px}
       .pane-title{font-size:24px}
-      .form-grid,.check-area,.pack-select-grid{grid-template-columns:1fr}
+      .form-grid,.pack-select-grid{grid-template-columns:1fr}
       .pack-thumb{height:210px}
       .pane-footer{
         flex-direction:column;
-        align-items:stretch;
+        align-items:center;
       }
-      .footer-right{justify-content:flex-end}
+      .footer-right{justify-content:center}
+      .step-blocks{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
     }
   </style>
 </head>
@@ -774,6 +831,7 @@
         <div class="titlebar-left">
           <img src="./logo.png" class="top-logo" alt="회사 로고">
           <div class="window-title" id="windowTitleText">N배송 세팅 가이드</div>
+          <div class="step-chip titlebar-step-chip hidden" id="pageChip">STEP 1</div>
         </div>
         <div class="window-sub" id="windowSubText">N배송 세팅 가이드</div>
       </div>
@@ -783,12 +841,13 @@
           <div class="pane-top">
             <div class="progress-row">
               <div class="progress-left">
-                <div class="step-chip" id="pageChip">STEP</div>
-                <h1 class="pane-title" id="wizardTitle">불러오는 중...</h1>
-                <p class="pane-desc" id="wizardDesc"></p>
+                <h1 class="pane-title hidden" id="wizardTitle">불러오는 중...</h1>
+                <p class="pane-desc hidden" id="wizardDesc"></p>
               </div>
               <div class="progress-right" id="progressStat">진행 중</div>
             </div>
+
+            <div class="step-blocks" id="stepBlocks"></div>
 
             <div class="progress-track">
               <div class="progress-fill" id="progressBarFill"></div>
@@ -803,7 +862,7 @@
 
           <div class="pane-footer">
             <div class="footer-left">
-              <div class="footer-page" id="footerPageText">0 / 0 화면</div>
+              <div class="footer-page hidden" id="footerPageText">0 / 0 화면</div>
               <div class="footer-btns" id="footerBtnsLeft"></div>
             </div>
 
@@ -834,12 +893,27 @@
       <div class="modal-head">
         <div>
           <h3 class="modal-title" id="lockedTitle">다음 단계 준비 중</h3>
-          <p class="modal-sub">품고에서 확인 후 다음 단계를 오픈해드려요.<br>확인까지 최대 1~2시간이 소요될 수 있습니다.</p>
+          <p class="modal-sub" id="lockedSub">품고에서 확인 후 다음 단계를 오픈해드려요.<br>확인까지 최대 1~2시간이 소요될 수 있습니다.</p>
         </div>
         <button class="icon-btn" id="lockedCloseBtn" type="button" aria-label="닫기">×</button>
       </div>
-      <div class="subnote">
+      <div class="subnote" id="lockedBody">
         단계 확인이 완료되면 이어서 다음 세팅을 진행하실 수 있습니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="imageModal" aria-hidden="true">
+    <div class="modal-backdrop" id="imageBackdrop"></div>
+    <div class="modal-panel image-modal-panel" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title" id="imageModalTitle">이미지 보기</h3>
+        </div>
+        <button class="icon-btn" id="imageCloseBtn" type="button" aria-label="닫기">×</button>
+      </div>
+      <div class="image-modal-body">
+        <img id="imageModalImg" src="" alt="확대 이미지">
       </div>
     </div>
   </div>
@@ -882,6 +956,7 @@
     let currentGuidePageIndex = 0;
     let inquiryStep = 0;
     let inquirySubmitting = false;
+    let pendingAfterNotice = null;
 
     const params = new URLSearchParams(location.search);
     const clientCode = params.get('client') || '';
@@ -898,6 +973,7 @@
     const footerPageText = document.getElementById('footerPageText');
     const footerBtnsLeft = document.getElementById('footerBtnsLeft');
     const footerBtnsRight = document.getElementById('footerBtnsRight');
+    const stepBlocks = document.getElementById('stepBlocks');
 
     const faqModal = document.getElementById('faqModal');
     const faqBackdrop = document.getElementById('faqBackdrop');
@@ -909,6 +985,14 @@
     const lockedModal = document.getElementById('lockedModal');
     const lockedBackdrop = document.getElementById('lockedBackdrop');
     const lockedCloseBtn = document.getElementById('lockedCloseBtn');
+    const lockedTitle = document.getElementById('lockedTitle');
+    const lockedSub = document.getElementById('lockedSub');
+    const lockedBody = document.getElementById('lockedBody');
+
+    const imageModal = document.getElementById('imageModal');
+    const imageBackdrop = document.getElementById('imageBackdrop');
+    const imageCloseBtn = document.getElementById('imageCloseBtn');
+    const imageModalImg = document.getElementById('imageModalImg');
 
     google.charts.load('current');
     google.charts.setOnLoadCallback(init);
@@ -954,20 +1038,50 @@
       lockedBackdrop.addEventListener('click', closeLockedModal);
       lockedCloseBtn.addEventListener('click', closeLockedModal);
 
+      imageBackdrop.addEventListener('click', closeImageModal);
+      imageCloseBtn.addEventListener('click', closeImageModal);
+
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
           if (faqModal.classList.contains('open')) closeFaqModal();
           if (lockedModal.classList.contains('open')) closeLockedModal();
+          if (imageModal.classList.contains('open')) closeImageModal();
         }
       });
     }
 
     function openLockedModal() {
+      lockedTitle.textContent = '다음 단계 준비 중';
+      lockedSub.innerHTML = '품고에서 확인 후 다음 단계를 오픈해드려요.<br>확인까지 최대 1~2시간이 소요될 수 있습니다.';
+      lockedBody.textContent = '단계 확인이 완료되면 이어서 다음 세팅을 진행하실 수 있습니다.';
+      pendingAfterNotice = null;
+      lockedModal.classList.add('open');
+    }
+
+    function openNoticeModal(message, onConfirm) {
+      lockedTitle.textContent = '안내';
+      lockedSub.innerHTML = String(message || '').replace(/\n/g, '<br>');
+      lockedBody.textContent = '내용 확인 후 다음 단계로 이동해주세요.';
+      pendingAfterNotice = typeof onConfirm === 'function' ? onConfirm : null;
       lockedModal.classList.add('open');
     }
 
     function closeLockedModal() {
       lockedModal.classList.remove('open');
+      const callback = pendingAfterNotice;
+      pendingAfterNotice = null;
+      if (callback) callback();
+    }
+
+    function openImageModal(src) {
+      if (!src) return;
+      imageModalImg.src = src;
+      imageModal.classList.add('open');
+    }
+
+    function closeImageModal() {
+      imageModal.classList.remove('open');
+      imageModalImg.src = '';
     }
 
     function renderRoot() {
@@ -1053,6 +1167,12 @@
           title: step['단계명'] || '',
           desc: step['단계설명'] || '',
           leadHtml: step['리드문구'] || '',
+          noticeHtml:
+            step['다음버튼안내팝업HTML'] ||
+            step['다음버튼안내팝업'] ||
+            step['팝업안내HTML'] ||
+            step['팝업안내'] ||
+            '',
           items,
           checks,
           faqs
@@ -1104,12 +1224,6 @@
       }));
     }
 
-    function getChecks(stepId) {
-      if (!state.checks) state.checks = {};
-      if (!state.checks[stepId]) state.checks[stepId] = [];
-      return state.checks[stepId];
-    }
-
     function isStepUnlocked(step, stepIndex) {
       if (stepIndex <= 1) return true;
       const header = `STEP${stepIndex + 1}오픈여부`;
@@ -1118,6 +1232,32 @@
 
     function getPage(idx) {
       return PAGES[idx] || null;
+    }
+
+    function getInquiryTotalPages() {
+      return 2;
+    }
+
+    function getTotalFlowPages() {
+      return getInquiryTotalPages() + PAGES.length;
+    }
+
+    function getInquiryProgressPercent(stepIndex) {
+      const total = getTotalFlowPages();
+      const current = Math.min(stepIndex + 1, getInquiryTotalPages());
+      return total ? (current / total) * 100 : 0;
+    }
+
+    function getWaitingProgressPercent() {
+      const total = getTotalFlowPages();
+      const current = getInquiryTotalPages();
+      return total ? (current / total) * 100 : 0;
+    }
+
+    function getGuideProgressPercent() {
+      const total = getTotalFlowPages();
+      const current = getInquiryTotalPages() + currentGuidePageIndex + 1;
+      return total ? (current / total) * 100 : 0;
     }
 
     function getCurrentStep() {
@@ -1135,6 +1275,42 @@
         else break;
       }
       return last;
+    }
+
+    function getStepPagePosition(stepIndex, itemIndex) {
+      const stepPages = PAGES.filter(p => p.stepIndex === stepIndex);
+      const currentPos = stepPages.findIndex(p => p.itemIndex === itemIndex) + 1;
+      return {
+        current: currentPos > 0 ? currentPos : 1,
+        total: stepPages.length || 1
+      };
+    }
+
+    function renderStepBlocks(currentStepIndex = 0) {
+      if (!stepBlocks) return;
+
+      const blockCount = Math.max(DATA.length, 5);
+      stepBlocks.innerHTML = '';
+
+      for (let i = 0; i < blockCount; i++) {
+        const block = document.createElement('div');
+        block.className = 'step-block';
+
+        const step = DATA[i];
+
+        if (step) {
+          if (i < currentStepIndex) block.classList.add('done');
+          else if (i === currentStepIndex) block.classList.add('active');
+          else if (!isStepUnlocked(step, i) && i > 1) block.classList.add('locked');
+
+          block.textContent = `STEP ${i + 1}`;
+        } else {
+          block.classList.add('locked');
+          block.textContent = `STEP ${i + 1}`;
+        }
+
+        stepBlocks.appendChild(block);
+      }
     }
 
     function setShellTexts({badge, title, desc, stat, percent, footer, subText='N배송 세팅 가이드'}) {
@@ -1180,18 +1356,19 @@
 
     function renderInquiryWizard() {
       const totalSteps = 2;
-      windowTitleText.textContent = '원활한 운영을 위해 아래 양식을 모두 기입하여 제출해주세요.';
+      windowTitleText.textContent = 'N배송 세팅 가이드';
 
-      const remain = Math.max(totalSteps - inquiryStep - 1, 0);
       setShellTexts({
-        badge: '',
+        badge: `STEP 1 (${inquiryStep + 1}/${totalSteps})`,
         title: '',
         desc: '',
-        stat: remain === 0 ? '마지막 단계!' : `앞으로 ${remain}단계 남음`,
-        percent: ((inquiryStep + 1) / totalSteps) * 100,
+        stat: `STEP 1 (${inquiryStep + 1}/${totalSteps})`,
+        percent: getInquiryProgressPercent(inquiryStep),
         footer: '',
         subText: 'N배송 세팅 가이드'
       });
+
+      renderStepBlocks(0);
 
       paneContent.innerHTML = '';
       const card = document.createElement('div');
@@ -1214,7 +1391,7 @@
               renderInquiryWizard();
             }
           },
-          inquiryStep < 1 ? {
+          inquiryStep < (totalSteps - 1) ? {
             label: '다음',
             kind: 'primary',
             disabled: inquirySubmitting,
@@ -1606,14 +1783,16 @@
       windowTitleText.textContent = `${customerName} 사전 문의 접수 완료`;
 
       setShellTexts({
-        badge: '접수 완료',
-        title: '사전 문의가 접수되었습니다',
-        desc: '품고에서 내용을 확인한 뒤 다음 단계를 오픈해드릴게요.',
-        stat: '확인 중',
-        percent: 100,
-        footer: '대기 중',
+        badge: 'STEP 1 (2/2)',
+        title: '',
+        desc: '',
+        stat: '접수 완료',
+        percent: getWaitingProgressPercent(),
+        footer: '',
         subText: 'N배송 세팅 가이드'
       });
+
+      renderStepBlocks(0);
 
       paneContent.innerHTML = `
         <div class="screen-card">
@@ -1650,29 +1829,27 @@
         return;
       }
 
-      const totalPages = PAGES.length;
-      const totalSteps = DATA.length;
-      const currentStepNo = page.stepIndex + 1;
-      const remainingSteps = Math.max(totalSteps - currentStepNo, 0);
       const customerName = String(CLIENT_INFO?.['고객사명'] || '').trim() || '고객사';
+      const pagePos = getStepPagePosition(page.stepIndex, page.itemIndex);
 
-      windowTitleText.textContent = `${customerName} · ${step.title}`;
+      windowTitleText.textContent = `${customerName} N배송 세팅 가이드`;
 
       setShellTexts({
-        badge: `STEP ${currentStepNo}`,
-        title: step.title,
-        desc: convertEscapedNewlines_(step.desc),
-        stat: remainingSteps === 0 ? '마지막 단계!' : `앞으로 ${remainingSteps}단계 남음`,
-        percent: ((currentGuidePageIndex + 1) / totalPages) * 100,
-        footer: `${currentGuidePageIndex + 1} / ${totalPages} 화면`,
+        badge: `STEP ${page.stepIndex + 1} (${pagePos.current}/${pagePos.total})`,
+        title: '',
+        desc: '',
+        stat: `STEP ${page.stepIndex + 1} (${pagePos.current}/${pagePos.total})`,
+        percent: getGuideProgressPercent(),
+        footer: '',
         subText: 'N배송 세팅 가이드'
       });
+
+      renderStepBlocks(page.stepIndex);
 
       paneContent.innerHTML = `
         <div class="screen-card">
           <div class="screen-body">
             ${renderGuideScreen(page.item)}
-            ${renderChecklist(step)}
           </div>
         </div>
       `;
@@ -1708,10 +1885,22 @@
                 return;
               }
 
-              currentGuidePageIndex = Math.min(PAGES.length - 1, currentGuidePageIndex + 1);
-              state.currentGuidePageIndex = currentGuidePageIndex;
-              saveState();
-              renderGuideWizard();
+              const moveNext = () => {
+                currentGuidePageIndex = Math.min(PAGES.length - 1, currentGuidePageIndex + 1);
+                state.currentGuidePageIndex = currentGuidePageIndex;
+                saveState();
+                renderGuideWizard();
+              };
+
+              if (page.stepIndex >= 1) {
+                const noticeMessage = getStepNoticeMessage(page.stepIndex);
+                if (noticeMessage) {
+                  openNoticeModal(noticeMessage, moveNext);
+                  return;
+                }
+              }
+
+              moveNext();
             }
           }
         ],
@@ -1725,14 +1914,28 @@
       );
     }
 
+    function getStepNoticeMessage(stepIndex) {
+      const step = DATA[stepIndex];
+      const custom = stripHtml(step?.noticeHtml || '').trim();
+      if (custom) return convertEscapedNewlines_(custom);
+
+      const defaults = {
+        1: '다음 화면으로 이동합니다.\n안내된 내용을 먼저 확인한 뒤 진행해주세요.',
+        2: '품고에서 확인 후 다음 단계를 오픈해드려요.\n확인까지 최대 1~2시간이 소요될 수 있습니다.',
+        3: '다음 단계 진행 전, 현재 단계 내용을 먼저 확인해주세요.',
+        4: '마지막 단계까지 순서대로 진행 부탁드립니다.'
+      };
+      return defaults[stepIndex] || '안내 내용을 확인한 뒤 다음 단계로 이동해주세요.';
+    }
+
     function renderGuideScreen(item) {
       const title = `<h3 class="screen-title">${escapeHtml(item.title || '')}</h3>`;
       const body = item.bodyHtml ? `<div class="detail-body">${wrapTables(convertEscapedNewlines_(item.bodyHtml))}</div>` : '';
       const note = item.noteHtml ? `<div class="subnote">${convertEscapedNewlines_(item.noteHtml)}</div>` : '';
       const warn = item.warnHtml ? `<div class="warn"><strong>주의</strong>${convertEscapedNewlines_(item.warnHtml)}</div>` : '';
-      const imageUrl = String(item.imageUrl || '').trim();
+      const imageUrl = normalizeDriveImageUrl(item.imageUrl || '');
       const image = imageUrl
-        ? `<div class="render-image">
+        ? `<div class="render-image clickable" data-fullsrc="${escapeAttr(imageUrl)}">
              <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(item.title || '')}">
              ${item.imageCaption ? `<div class="render-caption">${escapeHtml(item.imageCaption).replaceAll('\\n','\n')}</div>` : ''}
            </div>`
@@ -1759,34 +1962,11 @@
       return `${title}${body}${image}${note}${warn}${button}`;
     }
 
-    function renderChecklist(step) {
-      const checks = getChecks(step.id);
-      if (!step.checks.length) return '<div class="subnote">등록된 체크리스트가 없습니다.</div>';
-
-      return `
-        <div>
-          <div class="check-area">
-            ${step.checks.map((label, i) => `
-              <label class="check-row">
-                <input type="checkbox" data-check-index="${i}" ${checks[i] ? 'checked' : ''}>
-                <span>${escapeHtml(label).replaceAll('\\n','\n')}</span>
-              </label>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
     function bindGuideScreenEvents() {
-      const step = getCurrentStep();
-      if (!step) return;
-
-      paneContent.querySelectorAll('[data-check-index]').forEach(input => {
-        input.addEventListener('change', e => {
-          const idx = Number(e.target.getAttribute('data-check-index') || 0);
-          const checks = getChecks(step.id);
-          checks[idx] = e.target.checked;
-          saveState();
+      paneContent.querySelectorAll('.render-image.clickable').forEach(el => {
+        el.addEventListener('click', () => {
+          const src = el.getAttribute('data-fullsrc') || '';
+          openImageModal(src);
         });
       });
     }
@@ -1805,6 +1985,30 @@
         q: r['질문'] || '',
         aHtml: r['답변HTML'] || ''
       }));
+    }
+
+    function normalizeDriveImageUrl(url='') {
+      const raw = String(url || '').trim();
+      if (!raw) return '';
+
+      if (/drive\.google\.com\/thumbnail\?id=/.test(raw)) return raw;
+
+      const patterns = [
+        /[?&]id=([a-zA-Z0-9_-]{20,})/,
+        /\/file\/d\/([a-zA-Z0-9_-]{20,})\//,
+        /\/d\/([a-zA-Z0-9_-]{20,})\//,
+        /\/uc\?export=view&id=([a-zA-Z0-9_-]{20,})/,
+        /^([a-zA-Z0-9_-]{20,})$/
+      ];
+
+      for (const pattern of patterns) {
+        const match = raw.match(pattern);
+        if (match && match[1]) {
+          return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+        }
+      }
+
+      return raw;
     }
 
     function convertEscapedNewlines_(text) {
@@ -1920,6 +2124,8 @@
         footer: '',
         subText: 'N배송 세팅 가이드'
       });
+
+      stepBlocks.innerHTML = '';
 
       paneContent.innerHTML = `
         <div class="screen-card">
