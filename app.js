@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbweXsPBao0-wELhpfnBsSgU_J4IPGUCXY571lUHkAC4e2PYAHlmz_Alv-P6T7nM3KAq/exec';
+const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxx/exec';
 
 const state = {
   code: '',
@@ -61,11 +61,12 @@ async function init() {
     state.faqs = data.faqs || state.faqs;
     state.steps = data.steps || state.steps;
     state.assets = data.assets || state.assets;
+    state.currentStep = 1;
 
     renderByState();
   } catch (err) {
     console.error(err);
-    renderError(err && err.message ? err.message : '페이지를 불러오지 못했습니다.');
+    renderError(err?.message || '페이지를 불러오지 못했습니다.');
   }
 }
 
@@ -90,7 +91,6 @@ function renderByState() {
     return;
   }
 
-  state.currentStep = 1;
   renderGuide();
 }
 
@@ -218,7 +218,7 @@ function renderPreSurveyForm() {
               ${radioChip('eventYn', 'N', '없음', r.eventYn)}
             </div>
             <div class="help">
-              예시) 초도 입고일이 4/1인 경우, 4월 내 예정된 스마트스토어 행사 유무를 전달해주세요.<br/>
+              예시) 초도 입고일이 4/1인 경우, 4월 내 예정된 스마트스토어 행사 유무를 전달해주세요.<br>
               행사 예시: 오늘끝딜, 슈퍼위크, 슈퍼적립, 브랜드데이, 라이브 등
             </div>
           </div>
@@ -227,17 +227,17 @@ function renderPreSurveyForm() {
             <div class="form-grid">
               <div class="form-group">
                 <label>행사명 <span class="req">*</span></label>
-                <input type="text" name="eventName" value="${escapeAttr(r.eventName || '')}" placeholder="예: 브랜드데이" />
+                <input type="text" name="eventName" value="${escapeAttr(r.eventName || '')}" placeholder="예: 브랜드데이">
               </div>
 
               <div class="form-group">
                 <label>예상 송장건수 <span class="req">*</span></label>
-                <input type="number" name="expectedOrders" value="${escapeAttr(r.expectedOrders || '')}" placeholder="예: 500" />
+                <input type="number" name="expectedOrders" value="${escapeAttr(r.expectedOrders || '')}" placeholder="예: 500">
               </div>
 
               <div class="form-group full">
                 <label>행사 일시 <span class="req">*</span></label>
-                <input type="text" name="eventDatetime" value="${escapeAttr(r.eventDatetime || '')}" placeholder="예: 2026-04-15 19:00 ~ 2026-04-16 23:59" />
+                <input type="text" name="eventDatetime" value="${escapeAttr(r.eventDatetime || '')}" placeholder="예: 2026-04-15 19:00 ~ 2026-04-16 23:59">
               </div>
             </div>
           </div>
@@ -249,7 +249,7 @@ function renderPreSurveyForm() {
               ${renderPackCard('에어캡 포장', '에어캡 포장', '상품 전체를 에어캡으로 감싸 보호하는 포장 방식입니다.', r.packingMethod)}
               ${renderPackCard('버블페이퍼 포장', '버블페이퍼 포장', '상품 외부를 벌집형 완충지로 감싸 보호하는 포장 방식입니다.', r.packingMethod)}
             </div>
-            <input type="hidden" name="packingMethod" id="packingMethod" value="${escapeAttr(r.packingMethod || '')}" />
+            <input type="hidden" name="packingMethod" id="packingMethod" value="${escapeAttr(r.packingMethod || '')}">
           </div>
         </div>
       </section>
@@ -375,7 +375,7 @@ function renderWizardHeader(stepNo, stepTitle) {
   return `
     <div class="wizard-header">
       <div class="wizard-header-left">
-        <img class="wizard-logo" src="${state.assets.logoUrl || './logo.png'}" alt="logo" />
+        <img class="wizard-logo" src="${state.assets.logoUrl || './logo.png'}" alt="logo">
         <div class="wizard-title">
           ${escapeHtml(state.client.name)}_STEP ${stepNo}. ${escapeHtml(stepTitle)}
         </div>
@@ -410,9 +410,9 @@ function renderWizardProgress(currentStep) {
 function renderWizardBody(stepNo) {
   const stepKey = `step${stepNo}`;
   const items = state.steps[stepKey] || [];
-  const isOpen = isStepOpen(stepNo);
+  const isOpenNow = isStepOpen(stepNo);
 
-  if (!isOpen && stepNo >= 3) {
+  if (!isOpenNow && stepNo >= 3) {
     return `
       <div class="wizard-body">
         <div class="wizard-locked">
@@ -442,19 +442,16 @@ function renderWizardBody(stepNo) {
 }
 
 function renderWizardContentBlock(item) {
-  const layout = item.layout || 'text-media';
   const mediaType = (item.mediaType || '').toLowerCase();
+  const layout = item.layout || 'text-media';
   const media = renderStepMedia(item);
 
-  // HTML 타입은 내부에서 이미 레이아웃을 다 잡는다고 보고
-  // 바깥 2열을 만들지 않고 전체 너비로 그대로 노출
+  // HTML은 내부에서 레이아웃을 다 잡는다고 보고 풀폭 렌더
   if (mediaType === 'html') {
     return `
-      <section class="wizard-block wizard-block-full">
-        <div class="wizard-col wizard-col-full">
-          <div class="wizard-media-card wizard-media-card-html-only">
-            ${media}
-          </div>
+      <section class="wizard-block-full">
+        <div class="wizard-html-stage">
+          ${media}
         </div>
       </section>
     `;
@@ -511,7 +508,7 @@ function renderStepMedia(item) {
   }
 
   if (mediaType === 'html') {
-    return `<div class="wizard-media-html">${mediaValue}</div>`;
+    return mediaValue;
   }
 
   return `<div class="wizard-media-empty">지원하지 않는 미디어 타입입니다.</div>`;
@@ -579,10 +576,9 @@ function bindWizardNav() {
             token: state.token,
             step: String(nextStep)
           });
-
           toast(result.message || '품고에서 확인중입니다.');
         } catch (err) {
-          toast(err.message || '요청 처리에 실패했습니다.');
+          toast(err?.message || '요청 처리에 실패했습니다.');
         }
         return;
       }
@@ -653,7 +649,7 @@ function bindSummaryModalButtons(data) {
         renderWaitingGuideOpen();
       }
     } catch (err) {
-      toast(err.message || '제출에 실패했습니다.');
+      toast(err?.message || '제출에 실패했습니다.');
       confirmBtn.disabled = false;
       confirmBtn.textContent = '제출하기';
     }
@@ -735,31 +731,31 @@ function readForm(form) {
 }
 
 function validateFormData(data) {
-  if (!data.email) return { ok:false, message:'이메일을 입력해주세요.' };
-  if (!data.managerName) return { ok:false, message:'담당자명을 입력해주세요.' };
-  if (!data.phone) return { ok:false, message:'연락처를 입력해주세요.' };
-  if (!data.brandAddress) return { ok:false, message:'브랜드 사업자 주소를 입력해주세요.' };
-  if (!data.csPhone) return { ok:false, message:'CS 대표번호를 입력해주세요.' };
-  if (!data.firstInboundDate) return { ok:false, message:'초도 입고일을 입력해주세요.' };
-  if (!data.inboundType) return { ok:false, message:'입고 방식을 선택해주세요.' };
-  if (!data.singleSkuYn) return { ok:false, message:'단수 출고 SKU 유무를 선택해주세요.' };
-  if (!data.returnDest) return { ok:false, message:'반품 회수지를 선택해주세요.' };
-  if (!data.eventYn) return { ok:false, message:'행사 유무를 선택해주세요.' };
-  if (!data.packingMethod) return { ok:false, message:'포장 방법을 선택해주세요.' };
+  if (!data.email) return { ok: false, message: '이메일을 입력해주세요.' };
+  if (!data.managerName) return { ok: false, message: '담당자명을 입력해주세요.' };
+  if (!data.phone) return { ok: false, message: '연락처를 입력해주세요.' };
+  if (!data.brandAddress) return { ok: false, message: '브랜드 사업자 주소를 입력해주세요.' };
+  if (!data.csPhone) return { ok: false, message: 'CS 대표번호를 입력해주세요.' };
+  if (!data.firstInboundDate) return { ok: false, message: '초도 입고일을 입력해주세요.' };
+  if (!data.inboundType) return { ok: false, message: '입고 방식을 선택해주세요.' };
+  if (!data.singleSkuYn) return { ok: false, message: '단수 출고 SKU 유무를 선택해주세요.' };
+  if (!data.returnDest) return { ok: false, message: '반품 회수지를 선택해주세요.' };
+  if (!data.eventYn) return { ok: false, message: '행사 유무를 선택해주세요.' };
+  if (!data.packingMethod) return { ok: false, message: '포장 방법을 선택해주세요.' };
 
   if (data.eventYn === 'Y') {
-    if (!data.eventName) return { ok:false, message:'행사명을 입력해주세요.' };
-    if (!data.expectedOrders) return { ok:false, message:'예상 송장건수를 입력해주세요.' };
-    if (!data.eventDatetime) return { ok:false, message:'행사 일시를 입력해주세요.' };
+    if (!data.eventName) return { ok: false, message: '행사명을 입력해주세요.' };
+    if (!data.expectedOrders) return { ok: false, message: '예상 송장건수를 입력해주세요.' };
+    if (!data.eventDatetime) return { ok: false, message: '행사 일시를 입력해주세요.' };
   }
 
-  return { ok:true };
+  return { ok: true };
 }
 
 function renderTopbar() {
   return `
     <div class="topbar">
-      <img class="logo" src="${state.assets.logoUrl || './logo.png'}" alt="logo" />
+      <img class="logo" src="${state.assets.logoUrl || './logo.png'}" alt="logo">
     </div>
   `;
 }
@@ -797,7 +793,7 @@ function renderPackCard(value, title, desc, selectedValue) {
           loading="lazy"
           referrerpolicy="no-referrer"
           onerror="this.style.display='none'; if(!this.parentElement.querySelector('.pack-photo-fallback')){ this.parentElement.classList.add('pack-photo-error'); this.parentElement.insertAdjacentHTML('beforeend', '<div class=\\'pack-photo-fallback\\'>이미지를 불러오지 못했습니다.</div>'); }"
-        />
+        >
       </div>
 
       <div class="pack-desc">${escapeHtml(desc)}</div>
@@ -860,7 +856,7 @@ function buildGoogleDriveImageUrl(url = '') {
 function radioChip(name, value, label, selected) {
   return `
     <label class="choice-chip">
-      <input type="radio" name="${name}" value="${value}" ${selected === value ? 'checked' : ''} />
+      <input type="radio" name="${name}" value="${value}" ${selected === value ? 'checked' : ''}>
       <span>${label}</span>
     </label>
   `;
