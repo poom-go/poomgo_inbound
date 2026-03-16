@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbweXsPBao0-wELhpfnBsSgU_J4IPGUCXY571lUHkAC4e2PYAHlmz_Alv-P6T7nM3KAq/exec';
+const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxx/exec';
 
 const state = {
   code: '',
@@ -10,25 +10,33 @@ const state = {
   }
 };
 
+const PACKAGING_IMAGE_LINKS = {
+  '기본 포장': 'https://drive.google.com/file/d/1tITH7c-WsVejDK2F2JsECSvHMcpDnMJt/view?usp=drive_link',
+  '에어캡 포장': 'https://drive.google.com/file/d/110e8PsWHq-2XkOYg7bXiONNn_1XpA-ip/view?usp=drive_link',
+  '버블페이퍼 포장': 'https://drive.google.com/file/d/1W2CYbdHLX7Uj2InTm-0HH-CaKnmAOomg/view?usp=drive_link'
+};
+
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-  const params = new URLSearchParams(location.search);
-  state.code = params.get('code') || '';
-  state.token = params.get('token') || '';
-
-  if (!state.code || !state.token) {
-    renderError('유효하지 않은 접속 링크입니다.');
-    return;
-  }
-
   try {
+    const params = new URLSearchParams(location.search);
+    state.code = params.get('code') || '';
+    state.token = params.get('token') || '';
+
+    if (!state.code || !state.token) {
+      renderError('유효하지 않은 접속 링크입니다.');
+      return;
+    }
+
     const data = await apiGet('bootstrap', {
       code: state.code,
       token: state.token
     });
 
-    if (!data.ok) throw new Error(data.message || '초기화 실패');
+    if (!data.ok) {
+      throw new Error(data.message || '초기화 실패');
+    }
 
     state.client = data.client;
     state.response = data.response;
@@ -36,7 +44,8 @@ async function init() {
 
     renderByState();
   } catch (err) {
-    renderError(err.message || '페이지를 불러오지 못했습니다.');
+    console.error(err);
+    renderError(err && err.message ? err.message : '페이지를 불러오지 못했습니다.');
   }
 }
 
@@ -211,7 +220,7 @@ function renderPreSurveyForm() {
           <div class="form-group full">
             <label>포장 방법 <span class="req">*</span></label>
             <div class="pack-grid" id="packGrid">
-              ${renderPackCard('기본 포장', '기본 포장', '박스 내부에 완충재를 넣고 상품을 출고하는 기본 포장 방식입니다.', r.packingMethod)}
+              ${renderPackCard('기본 포장', '기본 포장', '상품을 박스 내부 완충재와 함께 출고하는 기본 포장 방식입니다.', r.packingMethod)}
               ${renderPackCard('에어캡 포장', '에어캡 포장', '상품 전체를 에어캡으로 감싸 보호하는 포장 방식입니다.', r.packingMethod)}
               ${renderPackCard('버블페이퍼 포장', '버블페이퍼 포장', '상품 외부를 벌집형 완충지로 감싸 보호하는 포장 방식입니다.', r.packingMethod)}
             </div>
@@ -649,24 +658,24 @@ function readForm(form) {
 }
 
 function validateFormData(data) {
-  if (!data.email) return { ok:false, message:'이메일을 입력해주세요.' };
-  if (!data.managerName) return { ok:false, message:'담당자명을 입력해주세요.' };
-  if (!data.phone) return { ok:false, message:'연락처를 입력해주세요.' };
-  if (!data.brandAddress) return { ok:false, message:'브랜드 사업자 주소를 입력해주세요.' };
-  if (!data.csPhone) return { ok:false, message:'CS 대표번호를 입력해주세요.' };
-  if (!data.firstInboundDate) return { ok:false, message:'초도 입고일을 입력해주세요.' };
-  if (!data.inboundType) return { ok:false, message:'입고 방식을 선택해주세요.' };
-  if (!data.singleSkuYn) return { ok:false, message:'단수 출고 SKU 유무를 선택해주세요.' };
-  if (!data.eventYn) return { ok:false, message:'행사 유무를 선택해주세요.' };
-  if (!data.packingMethod) return { ok:false, message:'포장 방법을 선택해주세요.' };
+  if (!data.email) return { ok: false, message: '이메일을 입력해주세요.' };
+  if (!data.managerName) return { ok: false, message: '담당자명을 입력해주세요.' };
+  if (!data.phone) return { ok: false, message: '연락처를 입력해주세요.' };
+  if (!data.brandAddress) return { ok: false, message: '브랜드 사업자 주소를 입력해주세요.' };
+  if (!data.csPhone) return { ok: false, message: 'CS 대표번호를 입력해주세요.' };
+  if (!data.firstInboundDate) return { ok: false, message: '초도 입고일을 입력해주세요.' };
+  if (!data.inboundType) return { ok: false, message: '입고 방식을 선택해주세요.' };
+  if (!data.singleSkuYn) return { ok: false, message: '단수 출고 SKU 유무를 선택해주세요.' };
+  if (!data.eventYn) return { ok: false, message: '행사 유무를 선택해주세요.' };
+  if (!data.packingMethod) return { ok: false, message: '포장 방법을 선택해주세요.' };
 
   if (data.eventYn === 'Y') {
-    if (!data.eventName) return { ok:false, message:'행사명을 입력해주세요.' };
-    if (!data.expectedOrders) return { ok:false, message:'예상 송장건수를 입력해주세요.' };
-    if (!data.eventDatetime) return { ok:false, message:'행사 일시를 입력해주세요.' };
+    if (!data.eventName) return { ok: false, message: '행사명을 입력해주세요.' };
+    if (!data.expectedOrders) return { ok: false, message: '예상 송장건수를 입력해주세요.' };
+    if (!data.eventDatetime) return { ok: false, message: '행사 일시를 입력해주세요.' };
   }
 
-  return { ok:true };
+  return { ok: true };
 }
 
 function renderTopbar() {
@@ -692,15 +701,8 @@ function renderError(message) {
 
 function renderPackCard(value, title, desc, selectedValue) {
   const selected = value === selectedValue ? 'selected' : '';
-
-  let svg = '';
-  if (value === '기본 포장') {
-    svg = getPackingSvgBasic_();
-  } else if (value === '에어캡 포장') {
-    svg = getPackingSvgAircap_();
-  } else if (value === '버블페이퍼 포장') {
-    svg = getPackingSvgHoneycomb_();
-  }
+  const rawLink = PACKAGING_IMAGE_LINKS[value] || '';
+  const imgSrc = buildGoogleDriveImageUrl(rawLink);
 
   return `
     <div class="pack-card ${selected}" data-value="${escapeAttr(value)}">
@@ -709,8 +711,15 @@ function renderPackCard(value, title, desc, selectedValue) {
         <span class="pack-radio"></span>
       </div>
 
-      <div class="pack-figure pack-figure-svg">
-        ${svg}
+      <div class="pack-figure pack-figure-photo">
+        <img
+          class="pack-photo"
+          src="${escapeAttr(imgSrc)}"
+          alt="${escapeAttr(title)}"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          onerror="this.style.display='none'; if(!this.parentElement.querySelector('.pack-photo-fallback')){ this.parentElement.classList.add('pack-photo-error'); this.parentElement.insertAdjacentHTML('beforeend', '<div class=\\'pack-photo-fallback\\'>이미지를 불러오지 못했습니다.</div>'); }"
+        />
       </div>
 
       <div class="pack-desc">${escapeHtml(desc)}</div>
@@ -718,153 +727,29 @@ function renderPackCard(value, title, desc, selectedValue) {
   `;
 }
 
-function getPackingSvgBasic_() {
-  return `
-  <svg viewBox="0 0 220 220" class="pack-svg" xmlns="http://www.w3.org/2000/svg" aria-label="기본 포장">
-    <defs>
-      <linearGradient id="boxTopBasic" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#cc9866"/>
-        <stop offset="100%" stop-color="#b87a45"/>
-      </linearGradient>
+function extractGoogleDriveFileId(url = '') {
+  const s = String(url || '').trim();
+  if (!s) return '';
 
-      <linearGradient id="boxInnerBasic" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#b67b47"/>
-        <stop offset="100%" stop-color="#9c6337"/>
-      </linearGradient>
+  let m = s.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m && m[1]) return m[1];
 
-      <linearGradient id="pinkBodyBasic" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#f4d2d9"/>
-        <stop offset="100%" stop-color="#efbcc8"/>
-      </linearGradient>
+  m = s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m && m[1]) return m[1];
 
-      <pattern id="bubblePatternBasic" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
-        <circle cx="6" cy="6" r="5.2" fill="rgba(255,255,255,0.72)"/>
-        <circle cx="6" cy="6" r="5.2" fill="none" stroke="rgba(205,211,220,0.75)" stroke-width="1"/>
-        <circle cx="15" cy="15" r="5.2" fill="rgba(255,255,255,0.72)"/>
-        <circle cx="15" cy="15" r="5.2" fill="none" stroke="rgba(205,211,220,0.75)" stroke-width="1"/>
-      </pattern>
+  m = s.match(/uc\?[^#]*id=([a-zA-Z0-9_-]+)/);
+  if (m && m[1]) return m[1];
 
-      <filter id="shadowBasic" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.18)"/>
-      </filter>
-    </defs>
+  m = s.match(/^([a-zA-Z0-9_-]{20,})$/);
+  if (m && m[1]) return m[1];
 
-    <polygon points="55,8 165,8 178,38 42,38" fill="url(#boxTopBasic)"/>
-    <polygon points="42,182 178,182 165,212 55,212" fill="url(#boxTopBasic)"/>
-    <polygon points="6,48 36,60 36,160 6,172" fill="url(#boxTopBasic)"/>
-    <polygon points="214,48 184,60 184,160 214,172" fill="url(#boxTopBasic)"/>
-
-    <rect x="36" y="38" width="148" height="144" rx="4" fill="url(#boxInnerBasic)"/>
-
-    <rect x="49" y="48" width="122" height="124" rx="8" fill="url(#bubblePatternBasic)" opacity="0.96"/>
-
-    <g filter="url(#shadowBasic)">
-      <rect x="77" y="54" width="66" height="118" rx="24" fill="url(#pinkBodyBasic)"/>
-      <rect x="89" y="45" width="42" height="18" rx="9" fill="#efc1cb"/>
-      <ellipse cx="110" cy="45" rx="21" ry="6" fill="#f6dde2" opacity="0.8"/>
-      <ellipse cx="110" cy="172" rx="24" ry="5" fill="rgba(0,0,0,0.10)"/>
-    </g>
-  </svg>
-  `;
+  return '';
 }
 
-function getPackingSvgAircap_() {
-  return `
-  <svg viewBox="0 0 220 220" class="pack-svg" xmlns="http://www.w3.org/2000/svg" aria-label="에어캡 포장">
-    <defs>
-      <linearGradient id="boxTopAir" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#cc9866"/>
-        <stop offset="100%" stop-color="#b87a45"/>
-      </linearGradient>
-
-      <linearGradient id="boxInnerAir" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#b67b47"/>
-        <stop offset="100%" stop-color="#9c6337"/>
-      </linearGradient>
-
-      <linearGradient id="productWrapAir" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="100%" stop-color="#eef1f5" stop-opacity="0.92"/>
-      </linearGradient>
-
-      <linearGradient id="pinkInnerAir" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#f6d4db"/>
-        <stop offset="100%" stop-color="#efb9c5"/>
-      </linearGradient>
-
-      <pattern id="bubblePatternAir" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
-        <circle cx="6" cy="6" r="5.2" fill="rgba(255,255,255,0.68)"/>
-        <circle cx="6" cy="6" r="5.2" fill="none" stroke="rgba(196,203,212,0.7)" stroke-width="1"/>
-        <circle cx="15" cy="15" r="5.2" fill="rgba(255,255,255,0.68)"/>
-        <circle cx="15" cy="15" r="5.2" fill="none" stroke="rgba(196,203,212,0.7)" stroke-width="1"/>
-      </pattern>
-
-      <filter id="shadowAir" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.18)"/>
-      </filter>
-    </defs>
-
-    <polygon points="55,8 165,8 178,38 42,38" fill="url(#boxTopAir)"/>
-    <polygon points="42,182 178,182 165,212 55,212" fill="url(#boxTopAir)"/>
-    <polygon points="6,48 36,60 36,160 6,172" fill="url(#boxTopAir)"/>
-    <polygon points="214,48 184,60 184,160 214,172" fill="url(#boxTopAir)"/>
-
-    <rect x="36" y="38" width="148" height="144" rx="4" fill="url(#boxInnerAir)"/>
-
-    <g filter="url(#shadowAir)">
-      <rect x="70" y="48" width="80" height="130" rx="18" fill="url(#productWrapAir)"/>
-      <rect x="82" y="60" width="56" height="106" rx="20" fill="url(#pinkInnerAir)" opacity="0.86"/>
-      <rect x="76" y="50" width="68" height="126" rx="18" fill="url(#bubblePatternAir)" opacity="0.95"/>
-      <ellipse cx="110" cy="179" rx="26" ry="5" fill="rgba(0,0,0,0.12)"/>
-    </g>
-  </svg>
-  `;
-}
-
-function getPackingSvgHoneycomb_() {
-  return `
-  <svg viewBox="0 0 220 220" class="pack-svg" xmlns="http://www.w3.org/2000/svg" aria-label="버블페이퍼 포장">
-    <defs>
-      <linearGradient id="boxTopHoney" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#cc9866"/>
-        <stop offset="100%" stop-color="#b87a45"/>
-      </linearGradient>
-
-      <linearGradient id="boxInnerHoney" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#b67b47"/>
-        <stop offset="100%" stop-color="#9c6337"/>
-      </linearGradient>
-
-      <linearGradient id="pinkBottleHoney" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#f4cfd6"/>
-        <stop offset="100%" stop-color="#ebafbc"/>
-      </linearGradient>
-
-      <pattern id="honeyPattern" x="0" y="0" width="16" height="14" patternUnits="userSpaceOnUse">
-        <polygon points="4,1 12,1 15,7 12,13 4,13 1,7" fill="none" stroke="#d9bf8b" stroke-width="1.8"/>
-      </pattern>
-
-      <filter id="shadowHoney" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.18)"/>
-      </filter>
-    </defs>
-
-    <polygon points="55,8 165,8 178,38 42,38" fill="url(#boxTopHoney)"/>
-    <polygon points="42,182 178,182 165,212 55,212" fill="url(#boxTopHoney)"/>
-    <polygon points="6,48 36,60 36,160 6,172" fill="url(#boxTopHoney)"/>
-    <polygon points="214,48 184,60 184,160 214,172" fill="url(#boxTopHoney)"/>
-
-    <rect x="36" y="38" width="148" height="144" rx="4" fill="url(#boxInnerHoney)"/>
-
-    <g filter="url(#shadowHoney)">
-      <rect x="74" y="52" width="72" height="118" rx="24" fill="url(#pinkBottleHoney)"/>
-      <rect x="88" y="40" width="44" height="18" rx="9" fill="#efbcc8"/>
-      <ellipse cx="110" cy="171" rx="24" ry="5" fill="rgba(0,0,0,0.12)"/>
-    </g>
-
-    <rect x="66" y="76" width="88" height="74" rx="8" fill="url(#honeyPattern)" opacity="0.96"/>
-  </svg>
-  `;
+function buildGoogleDriveImageUrl(url = '') {
+  const fileId = extractGoogleDriveFileId(url);
+  if (!fileId) return '';
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
 }
 
 function radioChip(name, value, label, selected) {
