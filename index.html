@@ -828,6 +828,22 @@
     </div>
   </div>
 
+  <div class="modal" id="lockedModal" aria-hidden="true">
+    <div class="modal-backdrop" id="lockedBackdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title" id="lockedTitle">다음 단계 준비 중</h3>
+          <p class="modal-sub">품고에서 확인 후 다음 단계를 오픈해드려요.<br>확인까지 최대 1~2시간이 소요될 수 있습니다.</p>
+        </div>
+        <button class="icon-btn" id="lockedCloseBtn" type="button" aria-label="닫기">×</button>
+      </div>
+      <div class="subnote">
+        단계 확인이 완료되면 이어서 다음 세팅을 진행하실 수 있습니다.
+      </div>
+    </div>
+  </div>
+
   <script>
     const CONFIG = {
       SPREADSHEET_ID: '1JzTyCkZHBMEQiKNqIXLB8KUiVY8Y-33KICB2lwM06GQ',
@@ -890,6 +906,10 @@
     const faqModalSub = document.getElementById('faqModalSub');
     const faqList = document.getElementById('faqList');
 
+    const lockedModal = document.getElementById('lockedModal');
+    const lockedBackdrop = document.getElementById('lockedBackdrop');
+    const lockedCloseBtn = document.getElementById('lockedCloseBtn');
+
     google.charts.load('current');
     google.charts.setOnLoadCallback(init);
 
@@ -931,9 +951,23 @@
       faqBackdrop.addEventListener('click', closeFaqModal);
       faqCloseBtn.addEventListener('click', closeFaqModal);
 
+      lockedBackdrop.addEventListener('click', closeLockedModal);
+      lockedCloseBtn.addEventListener('click', closeLockedModal);
+
       document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && faqModal.classList.contains('open')) closeFaqModal();
+        if (e.key === 'Escape') {
+          if (faqModal.classList.contains('open')) closeFaqModal();
+          if (lockedModal.classList.contains('open')) closeLockedModal();
+        }
       });
+    }
+
+    function openLockedModal() {
+      lockedModal.classList.add('open');
+    }
+
+    function closeLockedModal() {
+      lockedModal.classList.remove('open');
     }
 
     function renderRoot() {
@@ -1308,6 +1342,7 @@
 
           <div class="field full">
             <label>단수 상품(SKU) 운영 유무 <span class="req">*</span></label>
+            <div class="hint">운영 예정 상품(SKU) 중 상품 자체에 송장을 부착하여 출고해야 하는 SKU가 있다면 Y를 선택해주세요.</div>
             <div class="choice-row">
               <label class="choice-pill"><input type="radio" name="singleShipment" value="Y"> Y</label>
               <label class="choice-pill"><input type="radio" name="singleShipment" value="N"> N</label>
@@ -1644,6 +1679,10 @@
 
       bindGuideScreenEvents();
 
+      const hasMorePages = currentGuidePageIndex < PAGES.length - 1;
+      const nextPage = hasMorePages ? getPage(currentGuidePageIndex + 1) : null;
+      const nextPageUnlocked = nextPage ? isStepUnlocked(DATA[nextPage.stepIndex], nextPage.stepIndex) : false;
+
       renderButtons(
         [
           {
@@ -1660,9 +1699,16 @@
           {
             label: '다음',
             kind: 'primary',
-            disabled: currentGuidePageIndex === maxPage,
+            disabled: !hasMorePages,
             onClick: () => {
-              currentGuidePageIndex = Math.min(maxPage, currentGuidePageIndex + 1);
+              if (!hasMorePages) return;
+
+              if (!nextPageUnlocked) {
+                openLockedModal();
+                return;
+              }
+
+              currentGuidePageIndex = Math.min(PAGES.length - 1, currentGuidePageIndex + 1);
               state.currentGuidePageIndex = currentGuidePageIndex;
               saveState();
               renderGuideWizard();
