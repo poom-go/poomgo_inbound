@@ -706,7 +706,7 @@ function fitHtmlStages() {
     if (!content) return;
 
     content.style.transform = 'scale(1)';
-    content.style.width = 'auto';
+    content.style.width = '100%';
 
     const availableWidth = stage.clientWidth;
     const availableHeight = stage.clientHeight;
