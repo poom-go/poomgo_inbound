@@ -26,10 +26,10 @@ body{min-height:100vh}
 }
 
 .container{
-  width:calc(100% - 40px);
-  max-width:none;
+  width:calc(100% - 28px);
+  max-width:1180px;
   margin:0 auto;
-  padding:20px 0 24px;
+  padding:16px 0 20px;
 }
 
 .loading-wrap{
@@ -457,11 +457,12 @@ textarea{
 
 /* GUIDE / WIZARD */
 .guide-shell{
+  width:calc(100% - 40px);
+  max-width:none;
   display:flex;
   justify-content:center;
-  width:100%;
-  height:calc(100dvh - 40px);
-  min-height:calc(100dvh - 40px);
+  height:calc(100dvh - 36px);
+  min-height:calc(100dvh - 36px);
   padding-bottom:0;
 }
 
@@ -985,10 +986,11 @@ textarea{
 }
 
 @media (max-width: 720px){
-  .container{
-    width:calc(100% - 16px);
-    padding-top:12px;
-  }
+.container{
+  width:calc(100% - 16px);
+  max-width:1180px;
+  padding-top:12px;
+}
 
   .hero{
     padding:34px 18px;
