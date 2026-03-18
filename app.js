@@ -36,6 +36,7 @@ const PACKAGING_IMAGE_LINKS = {
 };
 
 document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('resize', scheduleHtmlStageFit);
 
 async function init() {
   try {
@@ -369,6 +370,7 @@ function renderGuide() {
 
   bindWizardNav();
   bindHelpDrawer();
+  scheduleHtmlStageFit();
 }
 
 function renderWizardHeader(stepNo, stepTitle) {
@@ -411,6 +413,7 @@ function renderWizardBody(stepNo) {
   const stepKey = `step${stepNo}`;
   const items = state.steps[stepKey] || [];
   const isOpenNow = isStepOpen(stepNo);
+  const hasHtml = items.some(item => (item.mediaType || '').toLowerCase() === 'html');
 
   if (!isOpenNow && stepNo >= 3) {
     return `
@@ -435,7 +438,7 @@ function renderWizardBody(stepNo) {
   }
 
   return `
-    <div class="wizard-body">
+    <div class="wizard-body ${hasHtml ? 'wizard-body-has-html' : ''}">
       ${items.map(item => renderWizardContentBlock(item)).join('')}
     </div>
   `;
@@ -446,12 +449,13 @@ function renderWizardContentBlock(item) {
   const layout = item.layout || 'text-media';
   const media = renderStepMedia(item);
 
-  // HTML은 내부에서 레이아웃을 다 잡는다고 보고 풀폭 렌더
   if (mediaType === 'html') {
     return `
-      <section class="wizard-block-full">
-        <div class="wizard-html-stage">
-          ${media}
+      <section class="wizard-block-full wizard-block-html">
+        <div class="wizard-html-stage wizard-html-stage-fit">
+          <div class="wizard-html-content">
+            ${media}
+          </div>
         </div>
       </section>
     `;
@@ -465,7 +469,7 @@ function renderWizardContentBlock(item) {
         ${
           item.buttonText
             ? `<div class="wizard-inline-btn-wrap">
-                <a href="${escapeAttr(item.buttonLink || '#')}" class="screen-link">${escapeHtml(item.buttonText)}</a>
+                <a href="${escapeAttr(item.buttonLink || '#')}" class="screen-link" target="_blank" rel="noopener noreferrer">${escapeHtml(item.buttonText)}</a>
               </div>`
             : ''
         }
@@ -508,10 +512,24 @@ function renderStepMedia(item) {
   }
 
   if (mediaType === 'html') {
-    return mediaValue;
+    return normalizeStepHtml(mediaValue);
   }
 
   return `<div class="wizard-media-empty">지원하지 않는 미디어 타입입니다.</div>`;
+}
+
+function normalizeStepHtml(html = '') {
+  let s = String(html || '');
+
+  s = s.replace(/height\s*:\s*720px/gi, 'height:100%');
+  s = s.replace(/height\s*:\s*760px/gi, 'height:100%');
+  s = s.replace(/height\s*:\s*800px/gi, 'height:100%');
+  s = s.replace(/min-height\s*:\s*720px/gi, 'min-height:0');
+  s = s.replace(/white-space\s*:\s*nowrap\s*;?/gi, '');
+  s = s.replace(/max-width\s*:\s*1120px/gi, 'max-width:none');
+  s = s.replace(/max-width\s*:\s*1200px/gi, 'max-width:none');
+
+  return s;
 }
 
 function renderWizardFooter(currentStep) {
@@ -546,7 +564,7 @@ function renderStepFaqContent(stepNo) {
   return items.map(item => `
     <div class="help-faq-item">
       <div class="help-faq-q">${escapeHtml(item.question)}</div>
-      <div class="help-faq-a">${escapeHtml(item.answer)}</div>
+      <div class="help-faq-a">${nl2br(escapeHtml(item.answer))}</div>
     </div>
   `).join('');
 }
@@ -606,6 +624,46 @@ function bindHelpDrawer() {
   if (helpBtn) helpBtn.addEventListener('click', openDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
+}
+
+function scheduleHtmlStageFit() {
+  cancelAnimationFrame(scheduleHtmlStageFit._raf1);
+  cancelAnimationFrame(scheduleHtmlStageFit._raf2);
+
+  scheduleHtmlStageFit._raf1 = requestAnimationFrame(() => {
+    scheduleHtmlStageFit._raf2 = requestAnimationFrame(() => {
+      fitHtmlStages();
+    });
+  });
+}
+
+function fitHtmlStages() {
+  const stages = document.querySelectorAll('.wizard-html-stage-fit');
+  if (!stages.length) return;
+
+  stages.forEach(stage => {
+    const content = stage.querySelector('.wizard-html-content');
+    if (!content) return;
+
+    content.style.transform = 'scale(1)';
+    content.style.width = 'auto';
+
+    const availableWidth = stage.clientWidth;
+    const availableHeight = stage.clientHeight;
+
+    if (!availableWidth || !availableHeight) return;
+
+    const contentWidth = content.scrollWidth;
+    const contentHeight = content.scrollHeight;
+
+    if (!contentWidth || !contentHeight) return;
+
+    const widthScale = availableWidth / contentWidth;
+    const heightScale = availableHeight / contentHeight;
+    const scale = Math.min(widthScale, heightScale, 1);
+
+    content.style.transform = `scale(${scale})`;
+  });
 }
 
 function isStepOpen(stepNo) {
@@ -819,7 +877,7 @@ function renderFaqSection(title, items = [], compact = false) {
               <span class="faq-icon">+</span>
             </button>
             <div class="faq-a" id="faq-${compact ? 'g' : 'p'}-${idx}">
-              ${escapeHtml(item.answer)}
+              ${nl2br(escapeHtml(item.answer))}
             </div>
           </div>
         `).join('')}
