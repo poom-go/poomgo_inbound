@@ -32,6 +32,29 @@ body{min-height:100vh}
   padding:16px 0 20px;
 }
 
+.loading-wrap{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  color:#6b7280;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  border:4px solid #e5e7eb;
+  border-top-color:#111827;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
 .topbar{
   display:flex;
   align-items:center;
@@ -89,6 +112,20 @@ body{min-height:100vh}
   background:#fff;
   color:#111827;
   border:1px solid var(--line);
+}
+
+.screen-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:0 18px;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+  background:#111827;
+  color:#fff;
 }
 
 .section-card{
@@ -426,6 +463,7 @@ textarea{
   width:100%;
   height:calc(100dvh - 36px);
   min-height:calc(100dvh - 36px);
+  padding-bottom:0;
 }
 
 .guide-wizard{
@@ -551,6 +589,10 @@ textarea{
   min-height:0;
 }
 
+.wizard-body-has-html{
+  padding:10px 14px;
+}
+
 .wizard-block{
   display:grid;
   grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
@@ -574,11 +616,28 @@ textarea{
   min-height:0;
 }
 
+.wizard-block-html{
+  flex:1;
+  min-height:0;
+}
+
 .wizard-html-stage{
   width:100%;
   height:100%;
   min-height:0;
+}
+
+.wizard-html-stage-fit{
+  position:relative;
   overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.wizard-html-content{
+  transform-origin:top center;
+  will-change:transform;
 }
 
 .wizard-col{
@@ -867,6 +926,10 @@ textarea{
   .wizard-content-card,
   .wizard-media-card{
     height:auto;
+  }
+
+  .wizard-html-content{
+    transform:none !important;
   }
 }
 
