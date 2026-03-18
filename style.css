@@ -457,12 +457,12 @@ textarea{
 
 /* GUIDE / WIZARD */
 .guide-shell{
-  width:calc(100% - 40px);
+  width:calc(100% - 20px);
   max-width:none;
   display:flex;
   justify-content:center;
-  height:calc(100dvh - 36px);
-  min-height:calc(100dvh - 36px);
+  height:calc(100dvh - 24px);
+  min-height:calc(100dvh - 24px);
   padding-bottom:0;
 }
 
@@ -581,7 +581,7 @@ textarea{
 
 .wizard-body{
   flex:1;
-  padding:24px 28px 18px;
+  padding:20px 18px 16px;
   background:#fff;
   overflow:hidden;
   display:flex;
@@ -590,7 +590,7 @@ textarea{
 }
 
 .wizard-body-has-html{
-  padding:20px 24px 16px;
+  padding:16px 14px 12px;
 }
 
 .wizard-block{
@@ -629,14 +629,16 @@ textarea{
 
 .wizard-html-stage-fit{
   position:relative;
-  overflow:auto;
+  overflow:hidden;
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  padding:8px 4px 8px;
+  padding:0;
 }
 
 .wizard-html-content{
+  width:100%;
+  max-width:none;
   transform-origin:top center;
   will-change:transform;
 }
@@ -961,10 +963,10 @@ textarea{
     min-height:0;
   }
 
-  .wizard-html-stage-fit{
-    overflow:visible;
-    padding:0;
-  }
+.wizard-html-stage-fit{
+  overflow:hidden;
+  padding:0;
+}
 
   .wizard-html-content{
     transform:none !important;
