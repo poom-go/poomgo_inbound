@@ -16,17 +16,12 @@ const state = {
       step5: []
     }
   },
-  steps: {
-    step1: [],
-    step2: [],
-    step3: [],
-    step4: [],
-    step5: []
-  },
+  steps: {},
   assets: {
     logoUrl: './logo.png'
   },
-  currentStep: 1
+  currentStep: 1,
+  currentSubStep: 1
 };
 
 const PACKAGING_IMAGE_LINKS = {
@@ -60,15 +55,77 @@ async function init() {
     state.response = data.response || null;
     state.ui = data.ui || {};
     state.faqs = data.faqs || state.faqs;
-    state.steps = data.steps || state.steps;
+    state.steps = buildGithubStepMap();
     state.assets = data.assets || state.assets;
     state.currentStep = 1;
+    state.currentSubStep = 1;
 
     renderByState();
   } catch (err) {
     console.error(err);
     renderError(err?.message || '페이지를 불러오지 못했습니다.');
   }
+}
+
+function buildGithubStepMap() {
+  return {
+    step1: [
+      {
+        title: '품고 나우 로그인',
+        desc: '품고 나우에 로그인해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step1.html',
+        layout: 'text-media'
+      }
+    ],
+    step2: [
+      {
+        title: '판매처 등록 (1/2)',
+        desc: '판매처 등록 1단계를 진행해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step2-1.html',
+        layout: 'text-media',
+        subStep: 1,
+        totalSubSteps: 2
+      },
+      {
+        title: '판매처 등록 (2/2)',
+        desc: '판매처 등록 2단계를 진행해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step2-2.html',
+        layout: 'text-media',
+        subStep: 2,
+        totalSubSteps: 2
+      }
+    ],
+    step3: [
+      {
+        title: 'SKU 등록',
+        desc: 'SKU 등록을 진행해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step3.html',
+        layout: 'text-media'
+      }
+    ],
+    step4: [
+      {
+        title: '입고 준비',
+        desc: '입고 준비 사항을 확인해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step4.html',
+        layout: 'text-media'
+      }
+    ],
+    step5: [
+      {
+        title: 'N배송 설정하기',
+        desc: '최종 N배송 설정을 진행해주세요.',
+        mediaType: 'html',
+        mediaValue: './steps/step5.html',
+        layout: 'text-media'
+      }
+    ]
+  };
 }
 
 function renderByState() {
@@ -371,17 +428,19 @@ function renderGuide() {
   bindWizardNav();
   bindHelpDrawer();
   bindFaqToggle();
-  initManualSteps(app);
+  hydrateCurrentStepHtml();
   scheduleHtmlStageFit();
 }
 
 function renderWizardHeader(stepNo, stepTitle) {
+  const subLabel = stepNo === 2 ? `<span class="wizard-substep-badge">${state.currentSubStep}/2</span>` : '';
+
   return `
     <div class="wizard-header">
       <div class="wizard-header-left">
         <img class="wizard-logo" src="${state.assets.logoUrl || './logo.png'}" alt="logo">
         <div class="wizard-title">
-          ${escapeHtml(state.client.name)}_STEP ${stepNo}. ${escapeHtml(stepTitle)}
+          ${escapeHtml(state.client.name)}_STEP ${stepNo}. ${escapeHtml(stepTitle)} ${subLabel}
         </div>
       </div>
     </div>
@@ -411,69 +470,20 @@ function renderWizardProgress(currentStep) {
   `;
 }
 
-function initManualSteps(scope) {
-  const roots = (scope || document).querySelectorAll('.poomgo-step1-wrap');
+function getCurrentGuideItem(stepNo) {
+  const stepKey = `step${stepNo}`;
+  const items = state.steps[stepKey] || [];
 
-  roots.forEach((root) => {
-    if (!root || root.dataset.manualInitialized === 'true') return;
-    root.dataset.manualInitialized = 'true';
+  if (stepNo === 2) {
+    return items.find(item => Number(item.subStep || 1) === Number(state.currentSubStep)) || items[0] || null;
+  }
 
-    let current = 1;
-    const views = Array.from(root.querySelectorAll('.manual-step-view'));
-    const stepBtns = Array.from(root.querySelectorAll('[data-manual-step]'));
-    const prevBtns = Array.from(root.querySelectorAll('[data-manual-prev]'));
-    const nextBtns = Array.from(root.querySelectorAll('[data-manual-next]'));
-    const max = views.length || 1;
-
-    function render(step) {
-      current = Math.max(1, Math.min(step, max));
-
-      views.forEach((view) => {
-        const isActive = Number(view.dataset.stepView) === current;
-        view.style.display = isActive ? 'flex' : 'none';
-      });
-
-      stepBtns.forEach((btn) => {
-        const isActive = Number(btn.dataset.manualStep) === current;
-        btn.classList.toggle('active', isActive);
-      });
-
-      prevBtns.forEach((btn) => {
-        btn.disabled = current === 1;
-      });
-
-      nextBtns.forEach((btn) => {
-        btn.disabled = current === max;
-      });
-    }
-
-    stepBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        render(Number(btn.dataset.manualStep));
-      });
-    });
-
-    prevBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        render(current - 1);
-      });
-    });
-
-    nextBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        render(current + 1);
-      });
-    });
-
-    render(1);
-  });
+  return items[0] || null;
 }
 
 function renderWizardBody(stepNo) {
-  const stepKey = `step${stepNo}`;
-  const items = state.steps[stepKey] || [];
   const isOpenNow = isStepOpen(stepNo);
-  const hasHtml = items.some(item => (item.mediaType || '').toLowerCase() === 'html');
+  const item = getCurrentGuideItem(stepNo);
 
   if (!isOpenNow && stepNo >= 3) {
     return `
@@ -486,40 +496,46 @@ function renderWizardBody(stepNo) {
     `;
   }
 
-  if (!items.length) {
+  if (!item) {
     return `
       <div class="wizard-body">
         <div class="wizard-empty">
           <h2>콘텐츠 준비중</h2>
-          <p>시트의 STEP콘텐츠 탭에서 내용을 추가해주세요.</p>
+          <p>GitHub의 STEP HTML 파일을 확인해주세요.</p>
         </div>
       </div>
     `;
   }
 
+  const mediaType = (item.mediaType || '').toLowerCase();
+  const hasHtml = mediaType === 'html';
+
   return `
     <div class="wizard-body ${hasHtml ? 'wizard-body-has-html' : ''}">
-      ${items.map(item => renderWizardContentBlock(item)).join('')}
+      ${renderWizardContentBlock(item, stepNo)}
     </div>
   `;
 }
 
-function renderWizardContentBlock(item) {
+function renderWizardContentBlock(item, stepNo) {
   const mediaType = (item.mediaType || '').toLowerCase();
-  const layout = item.layout || 'text-media';
-  const media = renderStepMedia(item);
 
   if (mediaType === 'html') {
+    const subStepGuide = stepNo === 2
+      ? `<div class="wizard-substep-guide">판매처 등록 ${state.currentSubStep}/2</div>`
+      : '';
+
     return `
       <section class="wizard-block-full wizard-block-html">
+        ${subStepGuide}
         <div class="wizard-html-stage wizard-html-stage-fit">
-          <div class="wizard-html-content">
-            ${media}
-          </div>
+          <div class="wizard-html-content" id="guideHtmlMount"></div>
         </div>
       </section>
     `;
   }
+
+  const media = renderStepMedia(item);
 
   const textCol = `
     <div class="wizard-col wizard-text">
@@ -546,10 +562,38 @@ function renderWizardContentBlock(item) {
   `;
 
   return `
-    <section class="wizard-block ${layout === 'media-text' ? 'reverse' : ''}">
-      ${layout === 'media-text' ? mediaCol + textCol : textCol + mediaCol}
+    <section class="wizard-block ${item.layout === 'media-text' ? 'reverse' : ''}">
+      ${item.layout === 'media-text' ? mediaCol + textCol : textCol + mediaCol}
     </section>
   `;
+}
+
+async function hydrateCurrentStepHtml() {
+  const mount = document.getElementById('guideHtmlMount');
+  if (!mount) return;
+
+  const item = getCurrentGuideItem(state.currentStep);
+  if (!item) {
+    mount.innerHTML = `<div class="wizard-media-empty">콘텐츠가 없습니다.</div>`;
+    return;
+  }
+
+  const mediaType = (item.mediaType || '').toLowerCase();
+  if (mediaType !== 'html') return;
+
+  try {
+    const res = await fetch(item.mediaValue, { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error(`HTML 파일 로드 실패: ${item.mediaValue}`);
+    }
+
+    const html = await res.text();
+    mount.innerHTML = normalizeStepHtml(html);
+    scheduleHtmlStageFit();
+  } catch (err) {
+    console.error(err);
+    mount.innerHTML = `<div class="wizard-media-empty">HTML 파일을 불러오지 못했습니다.</div>`;
+  }
 }
 
 function renderStepMedia(item) {
@@ -572,7 +616,7 @@ function renderStepMedia(item) {
   }
 
   if (mediaType === 'html') {
-    return normalizeStepHtml(mediaValue);
+    return `<div class="wizard-media-empty">HTML 콘텐츠는 별도 영역에 표시됩니다.</div>`;
   }
 
   return `<div class="wizard-media-empty">지원하지 않는 미디어 타입입니다.</div>`;
@@ -593,7 +637,7 @@ function normalizeStepHtml(html = '') {
 }
 
 function renderWizardFooter(currentStep) {
-  const prevDisabled = currentStep === 1;
+  const prevDisabled = currentStep === 1 && state.currentSubStep === 1;
   const nextDisabled = currentStep === 5;
 
   return `
@@ -635,8 +679,21 @@ function bindWizardNav() {
 
   if (prevBtn) {
     prevBtn.addEventListener('click', () => {
+      if (state.currentStep === 2 && state.currentSubStep === 2) {
+        state.currentSubStep = 1;
+        renderGuide();
+        return;
+      }
+
       if (state.currentStep > 1) {
         state.currentStep -= 1;
+
+        if (state.currentStep === 2) {
+          state.currentSubStep = 2;
+        } else {
+          state.currentSubStep = 1;
+        }
+
         renderGuide();
       }
     });
@@ -644,6 +701,12 @@ function bindWizardNav() {
 
   if (nextBtn) {
     nextBtn.addEventListener('click', async () => {
+      if (state.currentStep === 2 && state.currentSubStep === 1) {
+        state.currentSubStep = 2;
+        renderGuide();
+        return;
+      }
+
       const nextStep = state.currentStep + 1;
       if (nextStep > 5) return;
 
@@ -662,6 +725,7 @@ function bindWizardNav() {
       }
 
       state.currentStep = nextStep;
+      state.currentSubStep = 1;
       renderGuide();
     });
   }
@@ -762,6 +826,7 @@ function bindSummaryModalButtons(data) {
       if (result.guideOpen) {
         state.client.guideOpen = 'Y';
         state.currentStep = 1;
+        state.currentSubStep = 1;
         renderGuide();
       } else {
         renderWaitingGuideOpen();
@@ -1022,6 +1087,8 @@ function nl2br(str = '') {
 
 function toast(message) {
   const el = document.getElementById('toast');
+  if (!el) return;
+
   el.textContent = message;
   el.classList.remove('hidden');
 
